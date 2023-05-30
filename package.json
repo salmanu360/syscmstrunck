@@ -16,6 +16,8 @@
     "react-dom": "^18.2.0",
     "react-flatpickr": "^3.10.13",
     "react-hook-form": "^7.38.0",
+    "react-icons": "^4.9.0",
+    "react-responsive-modal": "^6.4.1",
     "react-router-dom": "^6.4.1",
     "react-scripts": "5.0.1",
     "react-select": "^5.5.4",

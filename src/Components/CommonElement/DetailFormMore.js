@@ -76,7 +76,7 @@ function DetailFormMore(props) {
       attachmentModel=transferFromModel
     }
 
-    console.log(attachmentModel)
+    // console.log(attachmentModel)
 
     if (id) {
       $.ajax({
