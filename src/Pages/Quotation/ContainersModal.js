@@ -9,6 +9,7 @@ const ContainersModal = ({
   setOpenModal,
   selectedValue,
   setSelectedValue,
+  register,
 }) => {
   const [defaultValue, setDefaultValue] = useState("");
   const [singleSelectValue, setSingleSelectValue] = useState("");
@@ -29,7 +30,11 @@ const ContainersModal = ({
     <>
       <Modal open={openModal} onClose={handleCloseModal} center>
         <div className="row flex-column">
+          <label className="control-label has-error-label">POD Port Code</label>
           <Select
+            {...register("DynamicModel[PODPortCode]", {
+              required: "POD Port Code cannot be blank.",
+            })}
             options={port}
             onChange={(singleData) => setSingleSelectValue(singleData)}
             defaultValue={defaultValue}

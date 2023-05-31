@@ -71,7 +71,10 @@ function QuickFormContainer(props) {
   const [openModal, setOpenModal] = useState(false);
   const [selectedChosen, setSelectedChosen] = useState([]);
   const [selectedValue, setSelectedValue] = useState([]);
-  const [secondModal, setSecondModal] = useState(false);
+  const [secondModal, setSecondModal] = useState({
+    isShow: false,
+    isRemove: "",
+  });
 
   let removeItemId;
 
@@ -2780,14 +2783,14 @@ function QuickFormContainer(props) {
     e.preventDefault();
     setOpenModal(true);
   };
-  const handleSecondModalOpen = (e) => {
-    e.preventDefault();
-    let id = document.querySelector(".remove-btn").getAttribute("id");
-    sessionStorage.setItem("id", JSON.stringify(id));
-    setSecondModal(true);
-  };
 
-  // console.log("removeItemId", removeItemId);
+  const handleSecondModalOpen = (e, index) => {
+    e.preventDefault();
+    setSecondModal({
+      isShow: true,
+      isRemove: index,
+    });
+  };
 
   return (
     <>
@@ -2842,7 +2845,6 @@ function QuickFormContainer(props) {
               <div className="row pl-2">
                 {selectedValue
                   ? selectedValue?.map((item, index) => {
-                      const { value, label } = item;
                       return (
                         <div
                           key={index}
@@ -2851,8 +2853,7 @@ function QuickFormContainer(props) {
                           <p className="pl-1 pr-1 m-0">{item.label}</p>
                           <button
                             className="remove-btn btn btn-danger btn-md text-white p-1"
-                            id={value}
-                            onClick={(e) => handleSecondModalOpen(e)}
+                            onClick={(e) => handleSecondModalOpen(e, index)}
                           >
                             <IoClose />
                           </button>
@@ -2880,6 +2881,7 @@ function QuickFormContainer(props) {
               setOpenModal={setOpenModal}
               selectedValue={selectedValue}
               setSelectedValue={setSelectedValue}
+              register={props.register}
             />
             <div className="card">
               <div className="card-body">
