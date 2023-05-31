@@ -40,6 +40,7 @@ import { IoClose } from "react-icons/io5";
 import ContainersModal from "../../Pages/Quotation/ContainersModal.js";
 import "../../index.css";
 import RemoveModal from "../../Pages/Quotation/RemoveModal.js";
+import ListModal from "../../Pages/Quotation/ListModal.js";
 
 function QuickFormContainer(props) {
   const ContainerRef = useRef(null);
@@ -75,8 +76,7 @@ function QuickFormContainer(props) {
     isShow: false,
     isRemove: "",
   });
-
-  let removeItemId;
+  const [isListModal, setIsListModal] = useState(false);
 
   const OwnershipType = [
     {
@@ -2792,6 +2792,10 @@ function QuickFormContainer(props) {
     });
   };
 
+  const handleOpenListModal = () => {
+    setIsListModal(true);
+  };
+
   return (
     <>
       <div className={`${props.ContainerItem.cardLength}`}>
@@ -2817,7 +2821,7 @@ function QuickFormContainer(props) {
                     id="clearTableData"
                     type="button"
                     className="btn btn-success btn-xs mb-2 ml-2"
-                    onClick={resetHandle}
+                    onClick={handleOpenListModal}
                   >
                     Clear
                   </button>
@@ -2882,6 +2886,12 @@ function QuickFormContainer(props) {
               selectedValue={selectedValue}
               setSelectedValue={setSelectedValue}
               register={props.register}
+            />
+            <ListModal
+              isListModal={isListModal}
+              setIsListModal={setIsListModal}
+              selectedValue={selectedValue}
+              setSelectedValue={setSelectedValue}
             />
             <div className="card">
               <div className="card-body">
