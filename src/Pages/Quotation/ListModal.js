@@ -9,7 +9,7 @@ const ListModal = ({
   setSelectedValue,
 }) => {
   const [selectId, setSelectId] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
+  const [selectAll, setSelectAll] = useState(true);
 
   const handleCloseModal = () => {
     setIsListModal(false);
@@ -58,7 +58,9 @@ const ListModal = ({
                       <label className="d-flex items-center" key={index}>
                         <input
                           type="checkbox"
-                          checked={selectId.includes(item.value)}
+                          checked={
+                            selectAll ? true : selectId.includes(item.value)
+                          }
                           onChange={() => handleRadioChange(item.value)}
                         />
                         {item.label}
@@ -69,7 +71,7 @@ const ListModal = ({
             </div>
             <div className="btn-container d-flex align-items-center justify-content-end">
               <button
-                className="remove-item-btn btn btn-success"
+                className="remove-item-btn btn btn-success mr-2"
                 onClick={handleDelete}
               >
                 Confirm

@@ -35,7 +35,7 @@ import { ShareContainerModel } from "../BootstrapTableModal&Dropdown/ShareContai
 import NestedTableCharges from "./NestedTableCharges.js";
 import NestedTableChargesINV from "./NestedTableChargesINV.js";
 import QuickFormTotalCard from "./QuickFormTotalCard.js";
-import { BsPlus } from "react-icons/bs";
+import { FaPlus } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import ContainersModal from "../../Pages/Quotation/ContainersModal.js";
 import "../../index.css";
@@ -2856,7 +2856,7 @@ function QuickFormContainer(props) {
                         >
                           <p className="pl-1 pr-1 m-0">{item.label}</p>
                           <button
-                            className="remove-btn btn btn-danger btn-md text-white p-1"
+                            className="remove-btn border-0 bg-transparent text-danger p-1"
                             onClick={(e) => handleSecondModalOpen(e, index)}
                           >
                             <IoClose />
@@ -2873,10 +2873,10 @@ function QuickFormContainer(props) {
                 />
               </div>
               <button
-                className="btn btn-success p-1 ml-2"
+                className="border-0 bg-transparent p-1 ml-2"
                 onClick={(e) => handleOpenSelectionModal(e)}
               >
-                <BsPlus className="text-lg" />
+                <FaPlus className="text-md" />
               </button>
             </div>
             <ContainersModal

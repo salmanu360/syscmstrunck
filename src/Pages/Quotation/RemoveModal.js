@@ -35,7 +35,7 @@ const RemoveModal = ({ open, setOpen, selectedValue, setSelectedValue }) => {
 
           <div className="btn-container d-flex align-items-center justify-content-end">
             <button
-              className="remove-item-btn btn btn-success"
+              className="remove-item-btn btn btn-success mr-2"
               onClick={handleRemove}
             >
               Confirm
