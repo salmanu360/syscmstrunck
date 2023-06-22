@@ -1202,271 +1202,311 @@ function BoostrapTableMovement(props) {
     })
 
 
-    window.$("#releaseReplace").unbind().bind().click(async function () {
-        var ids = getIdSelections()
-        var getContainerByContainerType;
-        var replacedBookingReservation;
-        var replacedBookingConfirmation;
+    window
+			.$("#releaseReplace")
+			.unbind()
+			.bind()
+			.click(async function () {
+				var ids = getIdSelections();
+				var getContainerByContainerType;
+				var replacedBookingReservation;
+				var replacedBookingConfirmation;
 
-        var getData = selectedRow;
-        var ArrayContainerList = []
-        var Depot = window.$(`input[name='DynamicModel[Depot]'`).val()
+				var getData = selectedRow;
+				var ArrayContainerList = [];
+				var Depot = window.$(`input[name='DynamicModel[Depot]'`).val();
 
-        if (selectedRow.length > 0) {
-            if (Depot == null || Depot == "") {
-                Depot = ""
-                alert("Please select depot company.");
-                return false;
-            }
+				if (selectedRow.length > 0) {
+					if (Depot == null || Depot == "") {
+						Depot = "";
+						alert("Please select depot company.");
+						return false;
+					}
 
-            await getContainerByContainerTypeDepot(Depot, props.host).then(res => {
+					await getContainerByContainerTypeDepot(Depot, props.host).then(
+						(res) => {
+							ContainerByContainerType = res.data;
+						}
+					);
 
-                ContainerByContainerType = res.data
-            })
+					var filters = {
+						"Container.VerificationStatus": "Approved",
+						"Container.Valid": "1",
+						"Container.Status": "Available",
+					};
 
-            var filters = {
-                "Container.VerificationStatus": "Approved",
-                "Container.Valid": "1",
-                "Container.Status": "Available",
+					await getContainers(Depot, filters, props.host).then((res) => {
+						window.$.each(res, function (key, value) {
+							ArrayContainerList.push(value);
+						});
+					});
 
-            };
+					// window.$('#releaseReplaceRecordTable').empty().append();
+					var html =
+						"<thead>" +
+						"<tr>" +
+						"<th>BR No</th>" +
+						"<th>Container Code</th>" +
+						"<th>Container Type</th>" +
+						"<th>Replace</th>" +
+						"</tr>" +
+						"</thead>" +
+						"<tbody>";
+					var ReplaceContainerArray = [];
 
-            await getContainers(Depot, filters, props.host).then(res => {
+					window.$.each(getData, function (i, item) {
+						var ArrayContainerListGet = [];
+						replacedBookingReservation = replaceNull(
+							item.BookingReservation,
+							""
+						);
+						replacedBookingConfirmation = replaceNull(
+							item.BookingConfirmation,
+							""
+						);
+						getContainerByContainerType =
+							ContainerByContainerType[item.ContainerType];
+						if (getContainerByContainerType != undefined) {
+							getContainerByContainerType =
+								getContainerByContainerType.replaceAll(
+									"</option>",
+									"</option>,"
+								);
+							getContainerByContainerType =
+								getContainerByContainerType.split(",");
+						} else {
+							getContainerByContainerType = [];
+						}
+						var result = ArrayContainerList.filter(function (oneArray) {
+							return oneArray.OwnershipType == item.OwnershipType;
+						});
 
-                window.$.each(res, function (key, value) {
+						window.$.each(getContainerByContainerType, function (key, value) {
+							window.$.each(result, function (key2, value2) {
+								if (value.includes(value2.ContainerUUID)) {
+									ArrayContainerListGet.push(value2);
+								}
+							});
+						});
+						var htmlContainer = "";
+						var tempArrayContainerList = [];
+						//redo the updated container selection
+						window.$.each(ArrayContainerListGet, function (key, value) {
+							tempArrayContainerList.push({
+								value: value.ContainerUUID,
+								label: value.ContainerCode,
+							});
+							htmlContainer +=
+								"<option value='" +
+								value.ContainerUUID +
+								"'>" +
+								value.ContainerCode +
+								"</option>";
+						});
 
-                    ArrayContainerList.push(value)
+						if (item.BookingReservationDocNum === undefined) {
+							window.$("#releaseReplaceConfirm").prop("disabled", true);
+						} else {
+							window.$("#releaseReplaceConfirm").prop("disabled", false);
+						}
+						html +=
+							'<tr><td style="padding: 0px !important;">' +
+							item.BookingReservationDocNum +
+							'</td><td style="padding: 0px !important;">' +
+							item.ContainerCode +
+							'</td><td style="padding: 0px !important;">' +
+							item.ContainerTypeContainerType +
+							'</td><td style="padding: 0px !important;">' +
+							'<select className="js-example-basic-single containerReplace form-control" id="replacedContainerCode-' +
+							i +
+							'" style="width: 100%;" name="container"><option value="">Select...</option> ' +
+							htmlContainer +
+							"</select></td></tr>";
 
-                })
-            })
+						ReplaceContainerArray.push({
+							ContainerList: tempArrayContainerList,
+							BRDocNum: item.BookingReservationDocNum,
+							ContainerCode: item.ContainerCode,
+							Containertype: item.ContainerTypeContainerType,
+						});
+					});
+					html += "</tbody>";
 
-            // window.$('#releaseReplaceRecordTable').empty().append();
-            var html = '<thead>' +
-                '<tr>' +
-                '<th>BR No</th>' +
-                '<th>Container Code</th>' +
-                '<th>Container Type</th>' +
-                '<th>Replace</th>' +
-                '</tr>' +
-                '</thead>' +
-                '<tbody>';
-            var ReplaceContainerArray=[];
+					window
+						.$("#replaceDataList")
+						.val(JSON.stringify(ReplaceContainerArray));
+					// window.$('#releaseReplaceRecordTable').append(html);
 
-            window.$.each(getData, function (i, item) {
-                var ArrayContainerListGet = []
-                replacedBookingReservation = replaceNull(item.BookingReservation, "")
-                replacedBookingConfirmation = replaceNull(item.BookingConfirmation, "")
-                getContainerByContainerType = ContainerByContainerType[item.ContainerType]
-                if (getContainerByContainerType != undefined) {
-                    getContainerByContainerType = getContainerByContainerType.replaceAll("</option>", "</option>,")
-                    getContainerByContainerType = getContainerByContainerType.split(",")
-                }
-                else {
-                    getContainerByContainerType = [];
-                }
-                var result = ArrayContainerList.filter(function (oneArray) {
-                    return oneArray.OwnershipType == item.OwnershipType
-                });
+					window.$("#releaseReplaceModal").modal();
+				}
+			});
 
-                window.$.each(getContainerByContainerType, function (key, value) {
+		window
+			.$("#releaseReplaceConfirm")
+			.unbind()
+			.click(function () {
+				var getReplaced = window.$(".containerReplace");
+				var getData = selectedRow;
+				var replacedIds = [];
+				var ContainerReplaced = [];
+				var FindRow = "";
 
-                    window.$.each(result, function (key2, value2) {
-                        if (value.includes(value2.ContainerUUID)) {
-                            ArrayContainerListGet.push(value2)
-                        }
-                    })
+				window.$.each(getReplaced, function (i, item) {
+					replacedIds.push(
+						window.$(`input[name='ContainerReplace[${i}]']`).val()
+					);
+				});
 
-                })
-                var htmlContainer = "";
-                var tempArrayContainerList=[]
-                //redo the updated container selection
-                window.$.each(ArrayContainerListGet, function (key, value) {
-                    tempArrayContainerList.push({value:value.ContainerUUID,label:value.ContainerCode})
-                    htmlContainer += "<option value='" + value.ContainerUUID + "'>" + value.ContainerCode + "</option>";
-                });
+				window.$.each(getData, function (i, item) {
+					var replacedBookingReservation = replaceNull(
+						item.BookingReservationUUID,
+						""
+					);
 
+					ContainerReplaced.push({
+						BookingReservation: replacedBookingReservation,
+						ContainerUUID: item.ContainerUUID,
+						ContainerReplaced: replacedIds[i],
+					});
 
-                if (item.BookingReservationDocNum === undefined) {
-                    window.$('#releaseReplaceConfirm').prop("disabled", true)
-                } else {
-                    window.$('#releaseReplaceConfirm').prop("disabled", false)
-                }
-                html += '<tr><td style="padding: 0px !important;">' + item.BookingReservationDocNum + '</td><td style="padding: 0px !important;">'
-                    + item.ContainerCode + '</td><td style="padding: 0px !important;">'
-                    + item.ContainerTypeContainerType + '</td><td style="padding: 0px !important;">'
-                    + '<select class="js-example-basic-single containerReplace form-control" id="replacedContainerCode-' + i + '" style="width: 100%;" name="container"><option value="">Select...</option> ' + htmlContainer + '</select></td></tr>'
+					if (!replacedIds[i]) {
+						FindRow += i + 1 + ", ";
+					}
+				});
 
-                ReplaceContainerArray.push({
-                    ContainerList:tempArrayContainerList,
-                    BRDocNum:item.BookingReservationDocNum,
-                    ContainerCode:item.ContainerCode,
-                    Containertype:item.ContainerTypeContainerType
-                })
-            })
-            html += '</tbody>';
-            
-            window.$('#replaceDataList').val(JSON.stringify(ReplaceContainerArray));
-            // window.$('#releaseReplaceRecordTable').append(html);
+				releaseReplaceContainer(ContainerReplaced, props.host).then((res) => {
+					if (res.message == "Container Replaced successfully.") {
+						window.$("#" + props.tableId).bootstrapTable("refresh");
+						ToastNotify("success", "Container successfully replaced");
+						window.$("#releaseReplaceModal").modal("toggle");
+					}
+				});
+				// if (FindRow) {
+				//     alert("There is a missing value at row " + FindRow.replace(/,\s*$/, ""))
+				// } else {
+				//     $.ajax({
+				//         type: "POST",
+				//         url: "./replace-release-container",
+				//         data: { ContainerReplaced: ContainerReplaced },
+				//         dataType: "json",
+				//         success: function (data) {
+				//             $releaseReplace.prop('disabled', true)
+				//         }
+				//     })
+				// }
+			});
 
-            window.$("#releaseReplaceModal").modal();
-        }
+		window
+			.$("#update")
+			.unbind()
+			.click(function () {
+				var id = getIdSelections();
+				props.navigate(props.routeName + "/id=" + id[0], {
+					state: {id: id[0], formType: "Update"},
+				});
+			});
 
-    })
+		window.$("#trash").click(function () {
+			var object = {};
+			if (props.selectedId == "PortUUIDs") {
+				props.selectedId = "AreaUUIDs";
+			}
+			if (props.selectedId == "TerminalUUIDs") {
+				props.selectedId = "PortDetailsUUIDs";
+			}
 
-    window.$("#releaseReplaceConfirm").unbind().click(function () {
-        var getReplaced = window.$(".containerReplace");
-        var getData = selectedRow
-        var replacedIds = []
-        var ContainerReplaced = []
-        var FindRow = ""
+			object[props.selectedId] = selections;
+			if (selections.length > 0) {
+				Throw(props.host, props.tableId, object).then((res) => {
+					if (res.ThrowSuccess.length > 0) {
+						ToastNotify("success", "Successfully Threw");
+						window.$("#" + props.tableSelector).bootstrapTable("refresh");
+						window.$("#" + props.tableSelector).bootstrapTable("uncheckAll");
+					}
 
-        window.$.each(getReplaced, function (i, item) {
-            replacedIds.push(window.$(`input[name='ContainerReplace[${i}]']`).val())
-        })
+					if (res.RetrieveSuccess.length > 0) {
+						ToastNotify("success", "Successfully Retrieved");
+						window.$("#" + props.tableSelector).bootstrapTable("refresh");
+						window.$("#" + props.tableSelector).bootstrapTable("uncheckAll");
+					}
+				});
+			}
+		});
 
-        window.$.each(getData, function (i, item) {
-            var replacedBookingReservation = replaceNull(item.BookingReservationUUID, "")
+		window.$("#Realremove").click(function () {
+			var object = {};
+			if (props.selectedId == "PortUUIDs") {
+				props.selectedId = "AreaUUIDs";
+			}
+			if (props.selectedId == "TerminalUUIDs") {
+				props.selectedId = "PortDetailsUUIDs";
+			}
+			object[props.selectedId] = selections;
+			if (selections.length > 0) {
+				Remove(props.host, props.tableId, object).then((res) => {
+					if (res.Success.length > 0) {
+						ToastNotify("success", "Successfully Removed");
+						window.$("#" + props.tableSelector).bootstrapTable("refresh");
+						window.$("#" + props.tableSelector).bootstrapTable("uncheckAll");
+					}
 
-            ContainerReplaced.push({
-                "BookingReservation": replacedBookingReservation,
-                "ContainerUUID": item.ContainerUUID,
-                "ContainerReplaced": replacedIds[i]
-            })
+					if (res.Failed.length > 0) {
+						ToastNotify("error", "Cannot Remove");
+						window.$("#" + props.tableSelector).bootstrapTable("refresh");
+						window.$("#" + props.tableSelector).bootstrapTable("uncheckAll");
+					}
+				});
+			}
+			window.$("#ButtonRemoveModal").modal("toggle");
+		});
 
-            if (!replacedIds[i]) {
-                FindRow += i + 1 + ', ';
+		return (
+			<div>
+				<table id={props.tableId} className='bootstrap_table'></table>
 
-            }
-        })  
-
-        releaseReplaceContainer(ContainerReplaced, props.host).then(res => {
-            if (res.message == "Container Replaced successfully.") {
-                window.$("#" + props.tableId).bootstrapTable("refresh")
-                ToastNotify("success", "Container successfully replaced")
-                window.$("#releaseReplaceModal").modal("toggle");
-            }
-        })
-        // if (FindRow) {
-        //     alert("There is a missing value at row " + FindRow.replace(/,\s*$/, ""))
-        // } else {
-        //     $.ajax({
-        //         type: "POST",
-        //         url: "./replace-release-container",
-        //         data: { ContainerReplaced: ContainerReplaced },
-        //         dataType: "json",
-        //         success: function (data) {
-        //             $releaseReplace.prop('disabled', true)
-        //         }
-        //     })
-        // }
-
-    });
-
-
-
-
-    window.$("#update").unbind().click(function () {
-        var id = getIdSelections()
-        props.navigate(props.routeName + '/id=' + id[0], { state: { id: id[0], formType: "Update" } })
-
-    });
-
-
-    window.$("#trash").click(function () {
-        var object = {}
-        if (props.selectedId == "PortUUIDs") {
-            props.selectedId = "AreaUUIDs"
-        }
-        if (props.selectedId == "TerminalUUIDs") {
-            props.selectedId = "PortDetailsUUIDs"
-        }
-
-
-        object[props.selectedId] = selections
-        if (selections.length > 0) {
-            Throw(props.host, props.tableId, object).then(res => {
-                if (res.ThrowSuccess.length > 0) {
-                    ToastNotify("success", "Successfully Threw")
-                    window.$("#" + props.tableSelector).bootstrapTable('refresh')
-                    window.$("#" + props.tableSelector).bootstrapTable('uncheckAll')
-                }
-
-                if (res.RetrieveSuccess.length > 0) {
-                    ToastNotify("success", "Successfully Retrieved")
-                    window.$("#" + props.tableSelector).bootstrapTable('refresh')
-                    window.$("#" + props.tableSelector).bootstrapTable('uncheckAll')
-                }
-            })
-        }
-
-    })
-
-    window.$("#Realremove").click(function () {
-        var object = {}
-        if (props.selectedId == "PortUUIDs") {
-            props.selectedId = "AreaUUIDs"
-        }
-        if (props.selectedId == "TerminalUUIDs") {
-            props.selectedId = "PortDetailsUUIDs"
-        }
-        object[props.selectedId] = selections
-        if (selections.length > 0) {
-            Remove(props.host, props.tableId, object).then(res => {
-                if (res.Success.length > 0) {
-                    ToastNotify("success", "Successfully Removed")
-                    window.$("#" + props.tableSelector).bootstrapTable('refresh')
-                    window.$("#" + props.tableSelector).bootstrapTable('uncheckAll')
-                }
-
-                if (res.Failed.length > 0) {
-                    ToastNotify("error", "Cannot Remove")
-                    window.$("#" + props.tableSelector).bootstrapTable('refresh')
-                    window.$("#" + props.tableSelector).bootstrapTable('uncheckAll')
-                }
-            })
-        }
-        window.$("#ButtonRemoveModal").modal('toggle')
-
-    });
-
-
-
-
-
-
-    return (
-
-        <div>
-
-            <table id={props.tableId} className="bootstrap_table">
-
-            </table>
-
-
-            <div class="modal fade" id="ButtonRemoveModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Remove</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <h5>Are you sure you want to remove these records?</h5>
-                        </div>
-                        <div class="modal-footer">
-                            <button id="Realremove" type="button" class="btn btn-success AvoidUnbindClass">Remove</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-        </div >
-    )
+				<div
+					className='modal fade'
+					id='ButtonRemoveModal'
+					tabIndex='-1'
+					role='dialog'
+					aria-labelledby='exampleModalLabel'
+					aria-hidden='true'>
+					<div className='modal-dialog' role='document'>
+						<div className='modal-content'>
+							<div className='modal-header'>
+								<h5 className='modal-title' id='exampleModalLabel'>
+									Remove
+								</h5>
+								<button
+									type='button'
+									className='close'
+									data-dismiss='modal'
+									aria-label='Close'>
+									<span aria-hidden='true'>&times;</span>
+								</button>
+							</div>
+							<div className='modal-body'>
+								<h5>Are you sure you want to remove these records?</h5>
+							</div>
+							<div className='modal-footer'>
+								<button
+									id='Realremove'
+									type='button'
+									className='btn btn-success AvoidUnbindClass'>
+									Remove
+								</button>
+								<button
+									type='button'
+									className='btn btn-secondary'
+									data-dismiss='modal'>
+									Close
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
 }
 
 export default BoostrapTableMovement

@@ -98,12 +98,20 @@ function Instruction(props) {
 
 
     return (
-        <div className={`DetailFormDetails Instructions`}>
-            <div className="billoflading-instruction-form">
-                <DetailFormInstruction register={props.register} control={props.control} errors={props.errors} InstructionItem={InstructionItem} setValue={props.setValue} port={props.port} getValues={props.getValues} />
-            </div>
-        </div>
-    )
+			<div className={`DetailFormDetails Instructions`}>
+				<div className='billoflading-instruction-form'>
+					<DetailFormInstruction
+						register={props.register}
+						control={props.control}
+						errors={props.errors}
+						InstructionItem={InstructionItem}
+						setValue={props.setValue}
+						port={props.port}
+						getValues={props.getValues}
+					/>
+				</div>
+			</div>
+		);
 }
 
 export default Instruction

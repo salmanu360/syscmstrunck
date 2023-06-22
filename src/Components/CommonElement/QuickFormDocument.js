@@ -477,156 +477,349 @@ useEffect(() => {
                 <div className="row">
                     {props.DocumentItem.element.map((res, index) => {
                         var name = res.name
-                        return (res.type === "input-text")?
-                        (
-                            <div key={index} className={res.gridSize}>
-                                <div className="form-group">
-                                    <label className="control-label">{res.title}</label>
-                                    {res.specialFeature.includes("required") ? 
-                                        <input {...props.register(name,{required: `${res.title} cannot be blank.`})} className={`form-control ${res.className}`} defaultValue={res.defaultValue?res.defaultValue:""} data-target={res.dataTarget} readOnly={res.specialFeature.includes("readonly")?true:false}/>
-                                        :
-                                        <input {...props.register(name)} className={`form-control ${res.className}`} data-target={res.dataTarget}  defaultValue={res.defaultValue?res.defaultValue:""} readOnly={res.specialFeature.includes("readonly")?true:false}/>
-                                    }
-                                </div>
-                            </div>
-                        ):
-                        (res.type === "input-number")?
-                        (
-                            <div key={index} className={res.gridSize}>
-                                <div className="form-group">
-                                    <label className="control-label">{res.title}</label>
-                                    {res.specialFeature.includes("required") ? 
-                                    <input type={"number"} {...props.register(name,{required: `${res.title} cannot be blank.`})} className={`form-control ${res.className}`} defaultValue={res.defaultValue?res.defaultValue:""} data-target={res.dataTarget}/>
-                                     :   
-                                    <input type={"number"} {...props.register(name)} className={`form-control ${res.className}`} defaultValue={res.defaultValue?res.defaultValue:""} data-target={res.dataTarget}/>
-                                    }
-                                    {/* {console.log(props.errors)} */}
-                                </div>
-                            </div>
-                        ):
-                        (res.type === "flatpickr-input")?
-                        (
-                            <div key={index} className={`${res.gridSize} ${res.specialFeature.includes("hidden")?"d-none":""}`}>
-                                <div className="form-group">
-                                    <label className={`control-label`}>{res.title}</label>
-                                    <Controller 
-                                        name={name}
-                                        id={res.id}
-                                        control={props.control}
-                                        render={({ field: { onChange, value } }) => (
-                                            <>
-                                                <Flatpickr
-                                                    {...props.register(name)}
-                                                    data-target={res.dataTarget}
-                                                    style={{ backgroundColor: "white" }}
-                                                    value={res.value ? res.value : ""}
-                                                    onChange={val => {
-                                                        val == null ? onChange(null) :onChange(moment(val[0]).format("DD/MM/YYYY"),res.dataTarget);
-                                                        val == null ? formContext.setStateHandle(null,res.dataTarget): formContext.setStateHandle(moment(val[0]).format("DD/MM/YYYY"),res.dataTarget)
-                                                    }}
-                                                    className={`form-control c-date-picker ${res.className}`}
-                                                    options={{
-                                                        dateFormat: "d/m/Y"
-                                                    }}
-                                                />
-                                            </>
-                                        )}
-                                    />
-                                </div>
-                            </div>
-                        ):
-                        (res.type === "dropdown-WithModal")?
-                        (
-                            <div key={index} className={res.gridSize}>
-                                <div className="form-group">
-                                    <label className="control-label">{res.title}</label>
-                                    { props.DocumentItem.formName=="ContainerReleaseOrder"? res.title=="BR No."? <button type="button" className="BookingLink" style={{"padding": "0px 2px"}}><i class="fa fa-link"></i></button>:"":"" }
-                                    { props.DocumentItem.formName=="BookingReservation"? res.title=="QT No."? <button type="button" className="QuotationLink" style={{"padding": "0px 2px"}}><i class="fa fa-link"></i></button>:"":"" }
-                                    <div className={"input-group-append"}>
-                                        <Controller
-                                            name={name}
-                                            control={props.control}
-                                            defaultValue={res.defaultValue?res.defaultValue:""}
-                                            render={({ field: { onChange, value } }) => (
-                                                <Select
-                                                    {...props.register(name)}
-                                                    isClearable={true}
-                                                    value={
-                                                        value
-                                                        ? formContext.QTOption?formContext.QTOption.find((c) => c.value === value)
-                                                        : null
-                                                        : null
-                                                    }
-                                                    onChange={(val) =>{
-                                                        val == null ? onChange(null) : onChange(val.value);
-                                                        val == null ? formContext.setStateHandle(null,res.dataTarget): formContext.setStateHandle(val.value,res.dataTarget);
-                                                        res.onChange && res.onChange(val);
-                                                    }}
-                                                    options={formContext.QTOption?formContext.QTOption:""}
-                                                    className={`form-control ${res.className}`}
-                                                    onKeyDown={handleKeydown}
-                                                    classNamePrefix="select"
-                                                    menuPortalTarget={document.body}
-                                                    onMenuOpen={val => FindQuotation(val)}
-                                                    styles={props.verificationStatus ? globalContext.customStylesReadonly : globalContext.customStyles}
-                                                />
-                                            )}
-                                        />
-                                        <div className={`input-group-append`} style={{ cursor: "pointer" }}><button type="button" className="btn btn-outline-secondary openModalQuotation"><i className="fa fa-search"></i></button></div>
-                                    </div>    
-                                </div>    
-                            </div>
-                        ):
-                        (res.type === "textarea")?
-                        (
-                            <div key={index} className={res.gridSize}>
-                                <div className="form-group">
-                                    <label className="control-label">{res.title}</label>
-                                    {res.specialFeature.includes("required") ? 
-                                    <textarea {...props.register(name,{required: `${res.title} cannot be blank.`})} className={`form-control ${res.className}`} readOnly={res.specialFeature.includes("readonly")?true:false}/>
-                                        :   
-                                    <textarea {...props.register(name)} className={`form-control ${res.className}`} readOnly={res.specialFeature.includes("readonly")?true:false}/>
-                                    }
-                                </div>
-                            </div>
-                        ):
-                        (
-                            <div key={index} className={res.gridSize}>
-                                <div className="form-group">
-                                    <label className="control-label">{res.title}</label>
-                                    { props.DocumentItem.formName=="ContainerReleaseOrder"? res.title=="BR No."? <button type="button" className="BookingLink" style={{"padding": "0px 2px"}}><i class="fa fa-link"></i></button>:"":"" }
-                                    { props.DocumentItem.formName=="BookingReservation"? res.title=="QT No."? <button type="button" className="QuotationLink" style={{"padding": "0px 2px"}}><i class="fa fa-link"></i></button>:"":"" }
-                                    <Controller
-                                        name={name}
-                                        control={props.control}
-                                        defaultValue={res.defaultValue?res.defaultValue:""}
-                                        render={({ field: { onChange, value } }) => (
-                                            <Select
-                                                {...props.register(name)}
-                                                isClearable={true}
-                                                value={
-                                                    value
-                                                    ? res.option?res.option.find((c) => c.value === value)
-                                                    : null
-                                                    : null
-                                                }
-                                                onChange={(val) =>{
-                                                    val == null ? onChange(null) : onChange(val.value);
-                                                    val == null ? formContext.setStateHandle(null,res.dataTarget): formContext.setStateHandle(val.value,res.dataTarget);
-                                                    res.onChange && res.onChange(val);
-                                                }}
-                                                onKeyDown={handleKeydown}
-                                                options={res.option?res.option:""}
-                                                className={`form-control ${res.className}`}
-                                                classNamePrefix="select"
-                                                menuPortalTarget={document.body}
-                                                styles={props.verificationStatus ? globalContext.customStylesReadonly : globalContext.customStyles}
-                                            />
-                                        )}
-                                    />               
-                                </div>    
-                            </div>
-                        )
+                        return res.type === "input-text" ? (
+													<div key={index} className={res.gridSize}>
+														<div className='form-group'>
+															<label className='control-label'>
+																{res.title}
+															</label>
+															{res.specialFeature.includes("required") ? (
+																<input
+																	{...props.register(name, {
+																		required: `${res.title} cannot be blank.`,
+																	})}
+																	className={`form-control ${res.className}`}
+																	defaultValue={
+																		res.defaultValue ? res.defaultValue : ""
+																	}
+																	data-target={res.dataTarget}
+																	readOnly={
+																		res.specialFeature.includes("readonly")
+																			? true
+																			: false
+																	}
+																/>
+															) : (
+																<input
+																	{...props.register(name)}
+																	className={`form-control ${res.className}`}
+																	data-target={res.dataTarget}
+																	defaultValue={
+																		res.defaultValue ? res.defaultValue : ""
+																	}
+																	readOnly={
+																		res.specialFeature.includes("readonly")
+																			? true
+																			: false
+																	}
+																/>
+															)}
+														</div>
+													</div>
+												) : res.type === "input-number" ? (
+													<div key={index} className={res.gridSize}>
+														<div className='form-group'>
+															<label className='control-label'>
+																{res.title}
+															</label>
+															{res.specialFeature.includes("required") ? (
+																<input
+																	type={"number"}
+																	{...props.register(name, {
+																		required: `${res.title} cannot be blank.`,
+																	})}
+																	className={`form-control ${res.className}`}
+																	defaultValue={
+																		res.defaultValue ? res.defaultValue : ""
+																	}
+																	data-target={res.dataTarget}
+																/>
+															) : (
+																<input
+																	type={"number"}
+																	{...props.register(name)}
+																	className={`form-control ${res.className}`}
+																	defaultValue={
+																		res.defaultValue ? res.defaultValue : ""
+																	}
+																	data-target={res.dataTarget}
+																/>
+															)}
+															{/* {console.log(props.errors)} */}
+														</div>
+													</div>
+												) : res.type === "flatpickr-input" ? (
+													<div
+														key={index}
+														className={`${res.gridSize} ${
+															res.specialFeature.includes("hidden")
+																? "d-none"
+																: ""
+														}`}>
+														<div className='form-group'>
+															<label className={`control-label`}>
+																{res.title}
+															</label>
+															<Controller
+																name={name}
+																id={res.id}
+																control={props.control}
+																render={({field: {onChange, value}}) => (
+																	<>
+																		<Flatpickr
+																			{...props.register(name)}
+																			data-target={res.dataTarget}
+																			style={{backgroundColor: "white"}}
+																			value={res.value ? res.value : ""}
+																			onChange={(val) => {
+																				val == null
+																					? onChange(null)
+																					: onChange(
+																							moment(val[0]).format(
+																								"DD/MM/YYYY"
+																							),
+																							res.dataTarget
+																					  );
+																				val == null
+																					? formContext.setStateHandle(
+																							null,
+																							res.dataTarget
+																					  )
+																					: formContext.setStateHandle(
+																							moment(val[0]).format(
+																								"DD/MM/YYYY"
+																							),
+																							res.dataTarget
+																					  );
+																			}}
+																			className={`form-control c-date-picker ${res.className}`}
+																			options={{
+																				dateFormat: "d/m/Y",
+																			}}
+																		/>
+																	</>
+																)}
+															/>
+														</div>
+													</div>
+												) : res.type === "dropdown-WithModal" ? (
+													<div key={index} className={res.gridSize}>
+														<div className='form-group'>
+															<label className='control-label'>
+																{res.title}
+															</label>
+															{props.DocumentItem.formName ==
+															"ContainerReleaseOrder" ? (
+																res.title == "BR No." ? (
+																	<button
+																		type='button'
+																		className='BookingLink'
+																		style={{padding: "0px 2px"}}>
+																		<i className='fa fa-link'></i>
+																	</button>
+																) : (
+																	""
+																)
+															) : (
+																""
+															)}
+															{props.DocumentItem.formName ==
+															"BookingReservation" ? (
+																res.title == "QT No." ? (
+																	<button
+																		type='button'
+																		className='QuotationLink'
+																		style={{padding: "0px 2px"}}>
+																		<i className='fa fa-link'></i>
+																	</button>
+																) : (
+																	""
+																)
+															) : (
+																""
+															)}
+															<div className={"input-group-append"}>
+																<Controller
+																	name={name}
+																	control={props.control}
+																	defaultValue={
+																		res.defaultValue ? res.defaultValue : ""
+																	}
+																	render={({field: {onChange, value}}) => (
+																		<Select
+																			{...props.register(name)}
+																			isClearable={true}
+																			value={
+																				value
+																					? formContext.QTOption
+																						? formContext.QTOption.find(
+																								(c) => c.value === value
+																						  )
+																						: null
+																					: null
+																			}
+																			onChange={(val) => {
+																				val == null
+																					? onChange(null)
+																					: onChange(val.value);
+																				val == null
+																					? formContext.setStateHandle(
+																							null,
+																							res.dataTarget
+																					  )
+																					: formContext.setStateHandle(
+																							val.value,
+																							res.dataTarget
+																					  );
+																				res.onChange && res.onChange(val);
+																			}}
+																			options={
+																				formContext.QTOption
+																					? formContext.QTOption
+																					: ""
+																			}
+																			className={`form-control ${res.className}`}
+																			onKeyDown={handleKeydown}
+																			classNamePrefix='select'
+																			menuPortalTarget={document.body}
+																			onMenuOpen={(val) => FindQuotation(val)}
+																			styles={
+																				props.verificationStatus
+																					? globalContext.customStylesReadonly
+																					: globalContext.customStyles
+																			}
+																		/>
+																	)}
+																/>
+																<div
+																	className={`input-group-append`}
+																	style={{cursor: "pointer"}}>
+																	<button
+																		type='button'
+																		className='btn btn-outline-secondary openModalQuotation'>
+																		<i className='fa fa-search'></i>
+																	</button>
+																</div>
+															</div>
+														</div>
+													</div>
+												) : res.type === "textarea" ? (
+													<div key={index} className={res.gridSize}>
+														<div className='form-group'>
+															<label className='control-label'>
+																{res.title}
+															</label>
+															{res.specialFeature.includes("required") ? (
+																<textarea
+																	{...props.register(name, {
+																		required: `${res.title} cannot be blank.`,
+																	})}
+																	className={`form-control ${res.className}`}
+																	readOnly={
+																		res.specialFeature.includes("readonly")
+																			? true
+																			: false
+																	}
+																/>
+															) : (
+																<textarea
+																	{...props.register(name)}
+																	className={`form-control ${res.className}`}
+																	readOnly={
+																		res.specialFeature.includes("readonly")
+																			? true
+																			: false
+																	}
+																/>
+															)}
+														</div>
+													</div>
+												) : (
+													<div key={index} className={res.gridSize}>
+														<div className='form-group'>
+															<label className='control-label'>
+																{res.title}
+															</label>
+															{props.DocumentItem.formName ==
+															"ContainerReleaseOrder" ? (
+																res.title == "BR No." ? (
+																	<button
+																		type='button'
+																		className='BookingLink'
+																		style={{padding: "0px 2px"}}>
+																		<i className='fa fa-link'></i>
+																	</button>
+																) : (
+																	""
+																)
+															) : (
+																""
+															)}
+															{props.DocumentItem.formName ==
+															"BookingReservation" ? (
+																res.title == "QT No." ? (
+																	<button
+																		type='button'
+																		className='QuotationLink'
+																		style={{padding: "0px 2px"}}>
+																		<i className='fa fa-link'></i>
+																	</button>
+																) : (
+																	""
+																)
+															) : (
+																""
+															)}
+															<Controller
+																name={name}
+																control={props.control}
+																defaultValue={
+																	res.defaultValue ? res.defaultValue : ""
+																}
+																render={({field: {onChange, value}}) => (
+																	<Select
+																		{...props.register(name)}
+																		isClearable={true}
+																		value={
+																			value
+																				? res.option
+																					? res.option.find(
+																							(c) => c.value === value
+																					  )
+																					: null
+																				: null
+																		}
+																		onChange={(val) => {
+																			val == null
+																				? onChange(null)
+																				: onChange(val.value);
+																			val == null
+																				? formContext.setStateHandle(
+																						null,
+																						res.dataTarget
+																				  )
+																				: formContext.setStateHandle(
+																						val.value,
+																						res.dataTarget
+																				  );
+																			res.onChange && res.onChange(val);
+																		}}
+																		onKeyDown={handleKeydown}
+																		options={res.option ? res.option : ""}
+																		className={`form-control ${res.className}`}
+																		classNamePrefix='select'
+																		menuPortalTarget={document.body}
+																		styles={
+																			props.verificationStatus
+																				? globalContext.customStylesReadonly
+																				: globalContext.customStyles
+																		}
+																	/>
+																)}
+															/>
+														</div>
+													</div>
+												);
                     })}
                 </div>
             </div>

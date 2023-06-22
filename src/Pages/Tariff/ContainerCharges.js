@@ -415,101 +415,195 @@ function ContainerCharges(props) {
     });
     
     return (
-        <div className="card Ports lvl1 col-xs-12 col-md-12">
-            <div className="card-header">
-                <h3 className="card-title">Containers & Charges</h3>
+			<div className='card Ports lvl1 col-xs-12 col-md-12'>
+				<div className='card-header'>
+					<h3 className='card-title'>Containers & Charges</h3>
+				</div>
+				<div className='card-body'>
+					<div className='table_wrap'>
+						<div className='table_wrap_inner'>
+							<table
+								className='table table-bordered commontable'
+								style={{width: "100%"}}
+								ref={ContainerRef}>
+								<thead>
+									<tr>
+										<th>Container Type</th>
+									</tr>
+								</thead>
+								<tbody>
+									{fields.map((item, index) => {
+										return (
+											<>
+												<tr key={item.id}>
+													<td>
+														<div className='row'>
+															<div className='col-md-1'>
+																<div className='row'>
+																	<button
+																		type='button'
+																		style={{
+																			position: "relative",
+																			left: "2px",
+																			top: "1px",
+																		}}
+																		className='btn btn-xs ChargesDisplay'>
+																		<i
+																			className='fas fa-plus'
+																			data-toggle='tooltip'
+																			title='Expand'></i>
+																	</button>
 
-            </div>
-            <div className="card-body">
+																	<div className='dropdown float-left dropdownbar'>
+																		<button
+																			style={{
+																				position: "relative",
+																				left: "0px",
+																				top: "1px",
+																			}}
+																			className='btn btn-xs btn-secondary dropdown-toggle float-right'
+																			type='button'
+																			data-toggle='dropdown'
+																			aria-haspopup='true'
+																			aria-expanded='false'>
+																			<i
+																				className='fa fa-ellipsis-v'
+																				data-hover='tooltip'
+																				data-placement='top'
+																				title='Options'></i>
+																		</button>
+																		<div
+																			className='dropdown-menu'
+																			aria-labelledby='dropdownMenuButton'>
+																			<button
+																				data-repeater-delete
+																				className='dropdown-item RemoveContainer'
+																				type='button'
+																				onClick={() =>
+																					BasicRemoveHandle(index)
+																				}>
+																				Remove
+																			</button>
+																		</div>
+																	</div>
+																</div>
+															</div>
 
-                <div class="table_wrap">
-                    <div class="table_wrap_inner">
-                        <table className="table table-bordered commontable" style={{ width: "100%" }} ref={ContainerRef}>
-                            <thead>
-                                <tr>
-                                    <th>Container Type</th>
+															<input
+																{...register(
+																	"Tariff" + "[" + index + "]" + "[TariffUUID]"
+																)}
+																className={`form-control d-none DynamicTariffUUID`}
+															/>
+															<div
+																className='col-md-11'
+																style={{
+																	paddingLeft: "0px",
+																	paddingRight: "0px",
+																}}>
+																<Controller
+																	name={
+																		"Tariff" +
+																		"[" +
+																		index +
+																		"]" +
+																		"[ContainerType]"
+																	}
+																	className='ContainerType'
+																	control={control}
+																	render={({field: {onChange, value, val}}) => (
+																		<Select
+																			isClearable={true}
+																			{...register(
+																				"Tariff" +
+																					"[" +
+																					index +
+																					"]" +
+																					"[ContainerType]"
+																			)}
+																			value={
+																				value
+																					? selectedValue.find(
+																							(c) => c.value === value
+																					  )
+																					: null
+																			}
+																			onChange={(val) => {
+																				val == null
+																					? onChange(null)
+																					: onChange(val.value);
+																				handleChangeContainerType(val, index);
+																			}}
+																			onMenuOpen={() => {
+																				handleOpenMenu();
+																			}}
+																			options={selectedValue}
+																			isOptionDisabled={(selectedValue) =>
+																				selectedValue.selected == true
+																			}
+																			menuPortalTarget={document.body}
+																			className='basic-single ContainerType'
+																			classNamePrefix='select'
+																			styles={globalContext.customStyles}
+																		/>
+																	)}
+																/>
+															</div>
+														</div>
+													</td>
+												</tr>
+												<tr className='d-none'>
+													<NestedContainerCharges
+														trigger={props.trigger}
+														resetContainerChargesData={
+															resetContainerChargesData
+														}
+														cookies={props.cookies}
+														formState={props.formState}
+														chargesByContainer={chargesByContainer}
+														containerChangeIndex={containerIndex}
+														onChangeCurrencyTypeCharges={
+															onChangeCurrencyTypeCharges
+														}
+														onChangeContainerTypeCharges={
+															onChangeContainerTypeCharges
+														}
+														containerIndex={index}
+														chargesTypeOption={props.chargesTypeOption}
+														currencyTypeOption={props.currencyTypeOption}
+														freightTermOption={props.freightTermOption}
+														taxCodeOption={props.taxCodeOption}
+														removeRerenderChargesData={
+															removeRerenderChargesData
+														}
+														removeChargesState={removeChargesState}
+														setRemoveChargesState={setRemoveChargesState}
+														data={
+															props.data.length > 0
+																? props.data[`${index}`]
+																: ""
+														}
+													/>
+												</tr>
+											</>
+										);
+									})}
+								</tbody>
+							</table>
+						</div>
+					</div>
 
-                                </tr>
-
-                            </thead>
-                            <tbody>
-                                {fields.map((item, index) => {
-                                    return (
-                                        <>
-                                            <tr key={item.id}>
-                                                <td>
-                                                    <div className="row">
-
-                                                        <div className="col-md-1">
-                                                            <div className="row">
-                                                                <button type="button" style={{ position: "relative", left: "2px", top: "1px" }} className="btn btn-xs ChargesDisplay"><i className="fas fa-plus" data-toggle="tooltip" title="Expand"></i>
-                                                                </button>
-
-                                                                <div className="dropdown float-left dropdownbar">
-                                                                    <button style={{ position: "relative", left: "0px", top: "1px" }} className="btn btn-xs btn-secondary dropdown-toggle float-right" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                        <i className="fa fa-ellipsis-v" data-hover="tooltip" data-placement="top" title="Options"></i></button>
-                                                                    <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-
-                                                                        <button data-repeater-delete className="dropdown-item RemoveContainer" type="button" onClick={() => BasicRemoveHandle(index)}>Remove</button>
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-
-
-                                                        </div>
-
-                                                        <input  {...register("Tariff" + '[' + index + ']' + '[TariffUUID]')} className={`form-control d-none DynamicTariffUUID`} />
-                                                        <div className="col-md-11" style={{ paddingLeft: "0px", paddingRight: "0px" }}>
-                                                            <Controller
-                                                                name={("Tariff" + '[' + index + ']' + '[ContainerType]')}
-                                                                className="ContainerType"
-                                                                control={control}
-
-                                                                render={({ field: { onChange, value, val } }) => (
-                                                                    <Select
-                                                                        isClearable={true}
-
-                                                                        {...register("Tariff" + '[' + index + ']' + '[ContainerType]')}
-                                                                        value={value ? selectedValue.find(c => c.value === value) : null}
-                                                                        onChange={val => { val == null ? onChange(null) : onChange(val.value); handleChangeContainerType(val, index) }}
-                                                                        onMenuOpen={() => { handleOpenMenu() }}
-                                                                        options={selectedValue}
-                                                                        isOptionDisabled={(selectedValue) => selectedValue.selected == true}
-                                                                        menuPortalTarget={document.body}
-                                                                        className="basic-single ContainerType"
-                                                                        classNamePrefix="select"
-                                                                        styles={globalContext.customStyles}
-
-                                                                    />
-                                                                )}
-                                                            />
-                                                        </div>
-
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr className="d-none" >
-
-                                                <NestedContainerCharges trigger={props.trigger} resetContainerChargesData={resetContainerChargesData} cookies={props.cookies} formState={props.formState} chargesByContainer={chargesByContainer} containerChangeIndex={containerIndex} onChangeCurrencyTypeCharges={onChangeCurrencyTypeCharges} onChangeContainerTypeCharges={onChangeContainerTypeCharges} containerIndex={index} chargesTypeOption={props.chargesTypeOption} currencyTypeOption={props.currencyTypeOption} freightTermOption={props.freightTermOption} taxCodeOption={props.taxCodeOption} removeRerenderChargesData={removeRerenderChargesData} removeChargesState={removeChargesState} setRemoveChargesState={setRemoveChargesState} data={props.data.length > 0 ? props.data[`${index}`] : ""} />
-
-                                            </tr>
-
-                                        </>
-                                    )
-                                })}
-                            </tbody>
-
-
-
-                        </table>
-                    </div>
-                </div>
-
-                <button type="button" className="add-container btn btn-success btn-xs mb-2 mt-2" onClick={() => { append({ Name: "", Options: props.options }) }} ><span class="fa fa-plus"></span>Add Container Type</button>
-            </div>
-        </div>
-    )
+					<button
+						type='button'
+						className='add-container btn btn-success btn-xs mb-2 mt-2'
+						onClick={() => {
+							append({Name: "", Options: props.options});
+						}}>
+						<span className='fa fa-plus'></span>Add Container Type
+					</button>
+				</div>
+			</div>
+		);
 }
 
 export default ContainerCharges

@@ -457,675 +457,875 @@ function Form(props) {
     }
 
     function portCard() {
-        return (
-
-            <div className="card Ports lvl1 col-xs-12 col-md-12 d-none">
-                <div className="card-header">
-                    <h3 className="card-title">Ports</h3>
-
-                </div>
-                <div className="card-body">
-                    <div class="table_wrap">
-                        <div class="table_wrap_inner">
-                            <table className="table table-bordered commontable" style={{ width: "100%" }}>
-                                <thead>
-                                    <tr>
-                                        <th>Container Type</th>
-                                        <th>Vessel Type</th>
-                                        <th>GL Code</th>
-                                        <th>Port Code</th>
-                                        <th>Currency Type</th>
-                                        <th>UOM</th>
-                                        <th>Reference Price</th>
-                                        <th>Min Price</th>
-                                        <th>Tax Code</th>
-                                        <th>Tax Rate</th>
-                                    </tr>
-
-                                </thead>
-                                <tbody className="portList">
-                                    {fields.map((item, index) => (
-
-                                        <tr key={item.id}>
-                                            <td>
-
-                                                <div className="row">
-                                                    <div className="col-md-2">
-                                                        <div className="dropdownbar float-left ml-1">
-                                                            <button style={{ position: "relative", left: "0px", top: "-5px", padding: "0px 3px 0px 3px" }} className="btn btn-xs mt-2 btn-secondary dropdown-toggle float-right mr-1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                <i className="fa fa-ellipsis-v"></i></button>
-                                                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                <button className="dropdown-item remove-container" type="button" onClick={() => remove(index)}>Remove</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <input  {...register("Charges" + '[' + index + ']' + '[ChargesUUID]')} className={`form-control  ChargesUUID d-none`} />
-                                                    <div className="col-md-10">
-                                                        <Controller
-                                                            name={("Charges" + '[' + index + ']' + '[ContainerType]')}
-
-                                                            control={control}
-
-                                                            render={({ field: { onChange, value } }) => (
-                                                                <Select
-                                                                    isClearable={true}
-                                                                    {...register("Charges" + '[' + index + ']' + '[ContainerType]')}
-                                                                    value={value ? containerType.find(c => c.value === value) : null}
-                                                                    onChange={val => val == null ? onChange(null) : onChange(val.value)}
-                                                                    options={containerType}
-                                                                    menuPortalTarget={document.body}
-                                                                    className="basic-single"
-                                                                    classNamePrefix="select"
-                                                                    styles={globalContext.customStyles}
-
-                                                                />
-                                                            )}
-                                                        />
-                                                    </div>
-
-                                                </div>
-                                            </td>
-                                            <td>
-
-                                                <Controller
-                                                    name={("Charges" + '[' + index + ']' + '[VesselType]')}
-
-                                                    control={control}
-
-                                                    render={({ field: { onChange, value } }) => (
-                                                        <Select
-                                                            isClearable={true}
-                                                            {...register("Charges" + '[' + index + ']' + '[VesselType]')}
-                                                            value={value ? vesselType.find(c => c.value === value) : null}
-                                                            onChange={val => val == null ? onChange(null) : onChange(val.value)}
-                                                            options={vesselType}
-                                                            menuPortalTarget={document.body}
-                                                            className="basic-single"
-                                                            classNamePrefix="select"
-                                                            styles={globalContext.customStyles}
-
-                                                        />
-                                                    )}
-                                                />
-
-                                            </td>
-                                            <td><input  {...register("Charges" + '[' + index + ']' + '[AccountCode]')} className={`form-control`} /></td>
-                                            <td>
-
-                                                {checkDisabledAllPort == false ?
-                                                    <Controller
-                                                        name={("Charges" + '[' + index + ']' + '[PortCode]')}
-
-                                                        control={control}
-
-                                                        render={({ field: { onChange, value } }) => (
-                                                            <Select
-                                                                isClearable={true}
-                                                                {...register("Charges" + '[' + index + ']' + '[PortCode]',{ required: "Port Code cannot be blank." })}
-                                                                value={value ? port.find(c => c.value === value) : null}
-                                                                onChange={val => val == null ? onChange(null) : onChange(val.value)}
-                                                                options={port}
-                                                                menuPortalTarget={document.body}
-                                                                className={`basic-single PortCode ${errors.Charges ? errors.Charges[`${index}`] ? errors.Charges[`${index}`].PortCode ? "has-error-select" : "" : "" : ""}`}                     
-                                                                classNamePrefix="select"
-                                                                styles={globalContext.customStyles}
-                                                                onKeyDown={handleKeydown}
-
-                                                            />
-                                                        )}
-                                                    />
-
-                                                    :
-                                                    <Controller
-                                                        name={("Charges" + '[' + index + ']' + '[PortCode]')}
-
-                                                        control={control}
-
-                                                        render={({ field: { onChange, value } }) => (
-                                                            <Select
-                                                                isClearable={true}
-                                                                {...register("Charges" + '[' + index + ']' + '[PortCode]')}
-                                                                value={value ? port.find(c => c.value === value) : null}
-                                                                onChange={val => val == null ? onChange(null) : onChange(val.value)}
-                                                                options={port}
-                                                                menuPortalTarget={document.body}
-                                                                className="basic-single PortCode"
-                                                                classNamePrefix="select"
-                                                                styles={globalContext.customStyles}
-
-                                                            />
-                                                        )}
-                                                    />
-                                                }
-
-
-
-                                            </td>
-                                            <td>
-
-                                                <Controller
-                                                    name={("Charges" + '[' + index + ']' + '[CurrencyType]')}
-
-                                                    control={control}
-
-                                                    render={({ field: { onChange, value } }) => (
-                                                        <Select
-                                                            isClearable={true}
-                                                            {...register("Charges" + '[' + index + ']' + '[CurrencyType]')}
-                                                            value={value ? currencyType.find(c => c.value === value) : null}
-                                                            onChange={val => val == null ? onChange(null) : onChange(val.value)}
-                                                            options={currencyType}
-                                                            menuPortalTarget={document.body}
-                                                            className="basic-single"
-                                                            classNamePrefix="select"
-                                                            styles={globalContext.customStyles}
-
-                                                        />
-                                                    )}
-                                                />
-
-                                            </td>
-                                            <td>
-                                                {checkDisabledAllPort == false ?
-                                                    <Controller
-                                                        name={`Charges[${index}][UOM][]`}
-                                                        control={control}
-                                                        render={({ field: { onChange, value } }) => (
-                                                            <Select
-                                                                isClearable={true}
-                                                                isMulti
-                                                                {...register(`Charges[${index}][UOM][]`, { required: "UOM cannot be blank." })}
-                                                                value={
-                                                                    value
-                                                                        ? Array.isArray(value)
-                                                                            ? value.map((c) =>
-                                                                                UOMOptions.find((z) => z.value === c)
-                                                                            )
-                                                                            : UOMOptions.find(
-                                                                                (c) => c.value === value
-                                                                            )
-                                                                        : null
-                                                                }
-                                                                onChange={(val) =>
-                                                                    val == null
-                                                                        ? onChange(null)
-                                                                        : onChange(val.map((c) => c.value))
-                                                                }
-                                                                options={UOMOptions}
-                                                                menuPortalTarget={document.body}
-                                                                className={`basic-multiple-select ${errors.Charges ? errors.Charges[`${index}`] ? errors.Charges[`${index}`].UOM ? "has-error-select" : "" : "" : ""}`}
-                                                                classNamePrefix="select"
-                                                                styles={globalContext.customStyles}
-                                                            />
-                                                        )}
-                                                    /> :
-                                                    <Controller
-                                                        name={`Charges[${index}][UOM][]`}
-                                                        control={control}
-                                                        render={({ field: { onChange, value } }) => (
-                                                            <Select
-                                                                isClearable={true}
-                                                                isMulti
-                                                                name={`Charges[${index}][UOM][]`}
-                                                                value={
-                                                                    value
-                                                                        ? Array.isArray(value)
-                                                                            ? value.map((c) =>
-                                                                                UOMOptions.find((z) => z.value === c)
-                                                                            )
-                                                                            : UOMOptions.find(
-                                                                                (c) => c.value === value
-                                                                            )
-                                                                        : null
-                                                                }
-                                                                onChange={(val) =>
-                                                                    val == null
-                                                                        ? onChange(null)
-                                                                        : onChange(val.map((c) => c.value))
-                                                                }
-                                                                options={UOMOptions}
-                                                                menuPortalTarget={document.body}
-                                                                className="basic-multiple-select"
-                                                                classNamePrefix="select"
-                                                                styles={globalContext.customStyles}
-                                                            />
-                                                        )}
-                                                    />
-
-                                                }
-
-                                            </td>
-                                            <td>
-                                                {checkDisabledAllPort == false ?
-                                                    <input  {...register("Charges" + '[' + index + ']' + '[ReferencePrice]', { required: "eee" })} className={`form-control dynamicReferencePrice inputDecimalFourPlaces ${errors.Charges ? errors.Charges[`${index}`] ? errors.Charges[`${index}`].ReferencePrice ? "has-error" : "" : "" : ""}`} /> :
-                                                    <input  {...register("Charges" + '[' + index + ']' + '[ReferencePrice]',)} className={`form-control dynamicReferencePrice inputDecimalFourPlaces}`} />
-
-                                                }
-                                            </td>
-
-                                            <td><input  {...register("Charges" + '[' + index + ']' + '[MinPrice]')} className={`form-control dynamicMinPrice inputDecimalFourPlaces`} /></td>
-                                            <td>
-                                                <Controller
-                                                    name={("Charges" + '[' + index + ']' + '[TaxCode]')}
-
-                                                    control={control}
-                                                    render={({ field: { onChange, value } }) => (
-                                                        <Select
-                                                            isClearable={true}
-                                                            {...register("Charges" + '[' + index + ']' + '[TaxCode]')}
-                                                            value={value ? taxCode.find(c => c.value === value) : null}
-                                                            onChange={val => { val == null ? onChange(null) : onChange(val.value); handleTaxCode(val, index) }}
-                                                            options={taxCode}
-                                                            menuPortalTarget={document.body}
-                                                            className="basic-single TaxCode"
-                                                            classNamePrefix="select"
-                                                            styles={globalContext.customStyles}
-
-                                                        />
-                                                    )}
-                                                />
-                                            </td>
-                                            <td><input  {...register("Charges" + '[' + index + ']' + '[TaxRate]')} className={`form-control inputDecimalFourPlaces`} /></td>
-
-                                        </tr>
-
-                                    ))}
-                                </tbody>
-
-
-
-                            </table>
-                        </div>
-                    </div>
-
-                    <button type="button" className="add-container btn btn-success btn-xs mb-2 mt-2" onClick={() => { append({ Name: "" }) }} ><span class="fa fa-plus"></span>Add Port</button>
-                </div>
-            </div>
-
-
-        )
-
-
-    }
-
-    const onSubmit = async (data, event) => {
-
-        setFlag(false)
-
-        event.preventDefault();
-        var tempForm = $("form")[0]
-
-        $(tempForm).find(".inputDecimalFourPlaces").each(function () {
-            var value1 = $(this).val();
-            if (value1 !== "") {
-                $(this).val(parseFloat(value1).toFixed(4));
-
-            }
-        })
-        const formdata = new FormData(tempForm);
-
-
-
-        var DataString = window.$($("form")[0]).serializeJSON()
-        var flag
-        formdata.append("data", JSON.stringify(DataString))
-        if(notApplytoAllPortArrayList.length==0){
-            var tempArrayList=[formState.id]
-            formdata.append("DynamicModel[ChargesUUID]", JSON.stringify(tempArrayList))
-        }else{
-            formdata.append("DynamicModel[ChargesUUID]", JSON.stringify(notApplytoAllPortArrayList))
-            
-        }
-       
-        setUpdataFormData(formdata)
-       
-
-        if (formState.formType == "New" || formState.formType == "Clone") {
-
-            var filters = {
-                "ChargesCode": getValues("DynamicModel[ChargesCode]"),
-                "ChargesName": getValues("DynamicModel[ChargesName]"),
-                "ChargesType": getValues("DynamicModel[ChargesType]"),
-                "FreightTerm": getValues("DynamicModel[FreightTerm]"),
-                "ContainerType": getValues("DynamicModel[ContainerType]"),
-                "CurrencyType ": getValues("DynamicModel[CurrencyType]"),
-                "VesselType": getValues("DynamicModel[VesselType]"),
-                "StartDate": $("input[name='DynamicModel[StartDate]']").val(),
-                "EndDate": $("input[name='DynamicModel[EndDate]']").val(),
-                "Floating": $(".FloatingField").val(),
-                "ApplyToAllPort": $(".applyToAllCheckbox").is(':checked') ? 1 : 0,
-            };
-
-            getCheckCharges(filters, globalContext).then(res => {
-                ControlOverlay(true)
-                if (res) {
-                    flag = res.data.ChargesUUID
-                    if (flag) {
-                        alert("The record already exist.")
-                        if (window.confirm('Do you want to update the existing record?')) {
-                            navigate("/setting/sales-settings/charges/update/id=" + flag);
-                            return false;
-                        } else {
-                            ControlOverlay(false)
-                            return false;
-                        }
-
-                    } else {
-                        CreateData(globalContext, props.data.modelLink, formdata).then(res => {
-                            if (res.data) {
-                                if (res.data.message == "Charges has already been taken.") {
-                                    ToastNotify("error", res.data.message)
-                                    ControlOverlay(false)
-                                }
-                                else {
-                                    ToastNotify("success", "Charges created successfully.")
-                                    navigate("/setting/sales-settings/charges/update/id=" + res.data.data, { state: { formType: "Update", id: res.data.data } })
-                                }
-                            }
-
-                        })
-                    }
-
-
-
-                } else {
-                    CreateData(globalContext, props.data.modelLink, formdata).then(res => {
-                        if (res.data) {
-                            if (res.data.message == "Charges has already been taken.") {
-                                ToastNotify("error", res.data.message)
-                                ControlOverlay(false)
-                            }
-                            else {
-                                ToastNotify("success", "Charges created successfully.")
-                                navigate("/setting/sales-settings/charges/update/id=" + res.data.data, { state: { formType: "Update", id: res.data.data } })
-                            }
-                        }
-
-                    })
-                }
-            })
-
-
-
-
-        }
-        else {
-
-            var chargesUUID = []
-            var flag;
-            // if ($("#applyToAllCheckbox").prop("checked") == true) {
-            chargesUUID = notApplytoAllPortArrayList;
-
-            if ($("#applyToAllCheckbox").prop("checked") == true) {
-                chargesUUID = []
-            }
-
-            if (state) {
-                chargesUUID.push(state.id)
-            } else {
-                chargesUUID.push(params.id)
-            }
-
-    
-
-            var filters = {
-                "ChargesCode": getValues("DynamicModel[ChargesCode]"),
-                "ChargesName": getValues("DynamicModel[ChargesName]"),
-                "ChargesType": getValues("DynamicModel[ChargesType]"),
-                "FreightTerm": getValues("DynamicModel[FreightTerm]"),
-                "ContainerType": getValues("DynamicModel[ContainerType]"),
-                "CurrencyType ": getValues("DynamicModel[CurrencyType]"),
-                "VesselType": getValues("DynamicModel[VesselType]"),
-                "StartDate": getValues("DynamicModel[StartDate]"),
-                "EndDate": getValues("DynamicModel[EndDate]"),
-                "Floating": $(".FloatingField").val(),
-                "ApplyToAllPort": $(".applyToAllCheckbox").is(':checked') ? 1 : 0,
-                "ChargesUUID": JSON.stringify(chargesUUID)
-            };
-
-            getCheckCharges(filters, globalContext).then(res => {
-                if (res) {
-                    flag = res.data.ChargesUUID
-                    alert("The record already exist.")
-                    if (window.confirm('Do you want to update the existing record?')) {
-                        navigate("/setting/sales-settings/charges/update/id=" + flag);
-                        return false;
-                    } else {
-                        return false;
-                    }
-
-                } else {
-                    if (foundEffected == true) {
-                        var madeChanged = false;
-                        var arrayCharges = [];
-                        if ($("#applyToAllCheckbox").prop("checked") == true) {
-
-                            arrayCharges.push({
-                                "ChargesUUID": state ? state.id : params.id,
-                                "ChargesCode": $(".ChargesCode").val(),
-                                "ChargesName": getValues("DynamicModel[ChargesName]"),
-                                "ChargesType": getValues("DynamicModel[ChargesType]"),
-                                "ContainerType": getValues("DynamicModel[ContainerType]"),
-                                "FreightTerm": getValues("DynamicModel[FreightTerm]"),
-                                "StartDate": getValues("DynamicModel[StartDate]"),
-                                "EndDate": getValues("DynamicModel[EndDate]"),
-                                "UOM": getValues("DynamicModel[UOM][]"),
-                                "CurrencyType": getValues("DynamicModel[CurrencyType]"),
-                                "AccountCode": getValues("DynamicModel[AccountCode]"),
-                                "VesselType": getValues("DynamicModel[VesselType]"),
-                                "ReferencePrice": $(".referencePrice").val(),
-                                "MinPrice": getValues("DynamicModel[MinPrice]"),
-                                "TaxCode": getValues("DynamicModel[TaxCode]"),
-                                "TaxRate": getValues("DynamicModel[TaxRate]"),
-                                "Description": getValues("DynamicModel[Description]"),
-                            })
-
-
-                        }
-                        else {
-                            $('.EffectedPortCode').each(function () {
-                                var index = $(this).parent().closest("tr").index()
-                                var listArray = {
-                                    ChargesUUID: $(this).val(),
-                                    PortCode: getValues(`Charges[${index}][PortCode]`),
-                                    CurrencyType: getValues(`Charges[${index}][CurrencyType]`),
-                                    AccountCode: getValues(`Charges[${index}][AccountCode]`),
-                                    VesselType: getValues(`Charges[${index}][VesselType]`),
-                                    ReferencePrice: getValues(`Charges[${index}][ReferencePrice]`),
-                                    MinPrice: getValues(`Charges[${index}][MinPrice]`),
-                                    TaxCode: getValues(`Charges[${index}][TaxCode]`),
-                                    TaxRate: getValues(`Charges[${index}][TaxRate]`),
-                                    ContainerType: getValues(`Charges[${index}][ContainerType]`),
-                                    UOM: getValues(`Charges[${index}][UOM][]`),
-                                    ChargesCode: getValues(`DynamicModel[ChargesCode]`),
-                                    ChargesName: getValues(`DynamicModel[ChargesName]`),
-                                    ChargesType: getValues(`DynamicModel[ChargesType]`),
-                                    FreightTerm: getValues(`DynamicModel[FreightTerm]`),
-                                    StartDate: getValues(`DynamicModel[StartDate]`),
-                                    EndDate: getValues(`DynamicModel[EndDate]`),
-                                    Description: getValues(`DynamicModel[Description]`)
-                                }
-                                arrayCharges.push(listArray)
-                            });
-                        }
-
-                        getEffectedDocuments(arrayCharges, globalContext).then(res => {
-                            if (res.data.updated == "0") {
-                                var newCharges = []
-
-                                $(".ChargesUUID").each(function () {
-                                    var index = $(this).parent().closest("tr").index()
-                                    var array = {
-                                        ChargesUUID: $(this).val(),
-                                        PortCode: getValues(`Charges[${index}][PortCode]`),
-                                        CurrencyType: getValues(`Charges[${index}][CurrencyType]`),
-                                        AccountCode: getValues(`Charges[${index}][AccountCode]`),
-                                        VesselType: getValues(`Charges[${index}][VesselType]`),
-                                        ContainerType: getValues(`Charges[${index}][ContainerType]`),
-                                        UOM: getValues(`Charges[${index}][UOM][]`),
-                                        ReferencePrice: getValues(`Charges[${index}][ReferencePrice]`),
-                                        MinPrice: getValues(`Charges[${index}][MinPrice]`),
-                                        TaxCode: getValues(`Charges[${index}][TaxCode]`),
-                                        TaxRate: getValues(`Charges[${index}][TaxRate]`)
-                                    }
-                                    newCharges.push(array)
-                                })
-
-                                if (oriCharges.length == newCharges.length) {
-
-                                    if (JSON.stringify(oriCharges) !== JSON.stringify(newCharges)) {
-                                        madeChanged = true
-
-                                    }
-
-                                } else {
-
-                                    setFlag(true)
-                                    ControlOverlay(false)
-
-                                    madeChanged = true
-                                }
-                                if (madeChanged !== true) {
-
-                                    alert("No changes has been made.")
-                                }
-                            } else {
-
-                                //clear all data inside modal before open
-                                $(".tariff").html("");
-                                $(".quotation").html("");
-                                $(".bookingReservation").html("");
-                                $(".salesInvoice").html("");
-
-                                setFlag(false)
-                                window.$('#affectedDocument').modal('toggle');
-                                ControlOverlay(false)
-
-                                if (res.data.Tariffs != null) {
-                                    $.each(res.data.Tariffs, function (key, value) {
-                                        $(".tariff").append("<div class='row'>&ensp;<input type='checkbox' class='checkboxTariffs'><div><input type = 'hidden' value = " + value.TariffUUID + "> &ensp;<a href='../../tariff/update/id=" + value.TariffUUID + "' class = 'checkPermissionLinkTariff' target='_blank'><span style='font-size: 15px'>" + value.pOLPortCode.PortCode + "-" + value.pODPortCode.PortCode + "</span></a></div></div>")
-                                    });
-                                }
-                                if (res.data.Quotations != null) {
-                                    $.each(res.data.Quotations, function (key, value) {
-                                        if (value.Barge == 1) {
-                                            $(".quotation").append("<div class='row'>&ensp;<input type='checkbox' class='checkboxQuotation'><input type = 'hidden' value = " + value.QuotationUUID + ">&ensp;<a href='../../../../sales/standard/quotation-barge/update/id=" + value.QuotationUUID + "' class = 'checkPermissionLinkQT' target='_blank'><span style='font-size: 15px'>" + value.DocNum + " </span></a></div>")
-                                        } else {
-                                            $(".quotation").append("<div class='row'>&ensp;<input type='checkbox' class='checkboxQuotation'><input type = 'hidden' value = " + value.QuotationUUID + ">&ensp;<a href='../../../../sales/container/quotation/update/id=" + value.QuotationUUID + "' class = 'checkPermissionLinkQT' target='_blank'><span style='font-size: 15px'>" + value.DocNum + " </span></a></div>")
-                                        }
-                                    });
-                                }
-
-                                if (res.data.BookingReservations != null) {
-                                    $.each(res.data.BookingReservations, function (key, value) {
-                                        if (value.Barge == 1) {
-                                            $(".bookingReservation").append("<div class='row'>&ensp;<input type='checkbox' class='checkboxBR'><input type = 'hidden' value = " + value.BookingReservationUUID + "> &ensp;<a href='../../../../sales/standard/booking-reservation-barge/update/id=" + value.BookingReservationUUID + "' class = 'checkPermissionLinkBR' target='_blank'><span style='font-size: 15px'>" + value.DocNum + "</span></a></div>")
-                                        } else {
-                                            $(".bookingReservation").append("<div class='row'>&ensp;<input type='checkbox' class='checkboxBR'><input type = 'hidden' value = " + value.BookingReservationUUID + "> &ensp;<a href='../../../../sales/container/booking-reservation/update/id=" + value.BookingReservationUUID + "' class = 'checkPermissionLinkBR' target='_blank'><span style='font-size: 15px'>" + value.DocNum + "</span></a></div>")
-
-                                        }
-                                    });
-                                }
-
-                                if (res.data.SalesInvoices != null) {
-                                    $.each(res.data.SalesInvoices, function (key, value) {
-                                        if (value.Barge == 1) {
-                                            $(".salesInvoice").append("<div class='row'>&ensp;<input type='checkbox' class='checkboxInvoice'><input type = 'hidden' value = " + value.SalesInvoiceUUID + "> &ensp;<a href='../../../../sales/standard/sales-invoice-barge/update/id=" + value.SalesInvoiceUUID + "' class = 'checkPermissionLinkINV' target='_blank'><span style='font-size: 15px'>" + value.DocNum + "</span></a></div>")
-                                        } else {
-                                            $(".salesInvoice").append("<div class='row'>&ensp;<input type='checkbox' class='checkboxInvoice'><input type = 'hidden' value = " + value.SalesInvoiceUUID + "> &ensp;<a href='../../../../sales/container/sales-invoice/update/id=" + value.SalesInvoiceUUID + "' class = 'checkPermissionLinkINV' target='_blank'><span style='font-size: 15px'>" + value.DocNum + "</span></a></div>")
-                                        }
-                                    });
-                                }
-                                $(".tariffCheckGroup").prop("checked", true);
-                                $(".quotationCheckGroup").prop("checked", true);
-                                $(".checkboxTariffs").prop("checked", true);
-                                $(".checkboxQuotation").prop("checked", true);
-
-                                //access control
-                                // if (getQTViewPermission == false) {
-                                //     $.each($(".checkPermissionLinkQT"), function () {
-                                //         var oldherf = $(this).attr("href");
-                                //         var newUrl = oldherf.replace(oldherf, "#"); // Create new url
-
-                                //         $(this).attr("href", newUrl);
-                                //         $(this).attr("class", "NoPermissionLink");
-                                //         $(this).removeAttr("target");
-                                //     })
-                                // }
-                                // if (getBRViewPermission == false) {
-                                //     $.each($(".checkPermissionLinkBR"), function () {
-                                //         var oldherf = $(this).attr("href");
-                                //         var newUrl = oldherf.replace(oldherf, "#"); // Create new url
-
-                                //         $(this).attr("href", newUrl);
-                                //         $(this).attr("class", "NoPermissionLink");
-                                //         $(this).removeAttr("target");
-                                //     })
-                                // }
-                                // if (getINVViewPermission == false) {
-                                //     $.each($(".checkPermissionLinkINV"), function () {
-                                //         var oldherf = $(this).attr("href");
-                                //         var newUrl = oldherf.replace(oldherf, "#"); // Create new url
-
-                                //         $(this).attr("href", newUrl);
-                                //         $(this).attr("class", "NoPermissionLink");
-                                //         $(this).removeAttr("target");
-                                //     })
-                                // }
-                                // if (getTariffViewPermission == false) {
-                                //     $.each($(".checkPermissionLinkTariff"), function () {
-                                //         var oldherf = $(this).attr("href");
-                                //         var newUrl = oldherf.replace(oldherf, "#"); // Create new url
-
-                                //         $(this).attr("href", newUrl);
-                                //         $(this).attr("class", "NoPermissionLink");
-                                //         $(this).removeAttr("target");
-                                //     })
-                                // }
-                                $("select:disabled").prop('disabled', false)
-                                $("input:disabled").prop('disabled', false)
-
-                            }
-
-
-                        })
-
-                        if (madeChanged == true) {
-                            $("select:disabled").prop('disabled', false)
-                            $("input:disabled").prop('disabled', false)
-                            setFlag(true)
-                            ControlOverlay(false)
-                        } else {
-                            setFlag(false)
-                            ControlOverlay(false)
-                        }
-
-
-
-                    } else {
-                        setFlag(true)
-                        ControlOverlay(false)
-                    }
-
-                }
-            })
-
-            // UpdateData(formState.id, globalContext, props.data.modelLink, formdata).then(res => {
-            //     if (res.data.data) {
-            //         ToastNotify("success", "Charges updated successfully.")
-            //         navigate("/setting/sales-settings/charges/update/id=" + res.data.data, { state: { formType: "Update", id: res.data.data } })
-
-            //     }
-            //     else {
-            //         ToastNotify("error", "Error")
-            //         ControlOverlay(false)
-            //     }
-            // })
-
-        }
-
-
-    }
+			return (
+				<div className='card Ports lvl1 col-xs-12 col-md-12 d-none'>
+					<div className='card-header'>
+						<h3 className='card-title'>Ports</h3>
+					</div>
+					<div className='card-body'>
+						<div className='table_wrap'>
+							<div className='table_wrap_inner'>
+								<table
+									className='table table-bordered commontable'
+									style={{width: "100%"}}>
+									<thead>
+										<tr>
+											<th>Container Type</th>
+											<th>Vessel Type</th>
+											<th>GL Code</th>
+											<th>Port Code</th>
+											<th>Currency Type</th>
+											<th>UOM</th>
+											<th>Reference Price</th>
+											<th>Min Price</th>
+											<th>Tax Code</th>
+											<th>Tax Rate</th>
+										</tr>
+									</thead>
+									<tbody className='portList'>
+										{fields.map((item, index) => (
+											<tr key={item.id}>
+												<td>
+													<div className='row'>
+														<div className='col-md-2'>
+															<div className='dropdownbar float-left ml-1'>
+																<button
+																	style={{
+																		position: "relative",
+																		left: "0px",
+																		top: "-5px",
+																		padding: "0px 3px 0px 3px",
+																	}}
+																	className='btn btn-xs mt-2 btn-secondary dropdown-toggle float-right mr-1'
+																	type='button'
+																	data-toggle='dropdown'
+																	aria-haspopup='true'
+																	aria-expanded='false'>
+																	<i className='fa fa-ellipsis-v'></i>
+																</button>
+																<div
+																	className='dropdown-menu'
+																	aria-labelledby='dropdownMenuButton'>
+																	<button
+																		className='dropdown-item remove-container'
+																		type='button'
+																		onClick={() => remove(index)}>
+																		Remove
+																	</button>
+																</div>
+															</div>
+														</div>
+														<input
+															{...register(
+																"Charges" + "[" + index + "]" + "[ChargesUUID]"
+															)}
+															className={`form-control  ChargesUUID d-none`}
+														/>
+														<div className='col-md-10'>
+															<Controller
+																name={
+																	"Charges" +
+																	"[" +
+																	index +
+																	"]" +
+																	"[ContainerType]"
+																}
+																control={control}
+																render={({field: {onChange, value}}) => (
+																	<Select
+																		isClearable={true}
+																		{...register(
+																			"Charges" +
+																				"[" +
+																				index +
+																				"]" +
+																				"[ContainerType]"
+																		)}
+																		value={
+																			value
+																				? containerType.find(
+																						(c) => c.value === value
+																				  )
+																				: null
+																		}
+																		onChange={(val) =>
+																			val == null
+																				? onChange(null)
+																				: onChange(val.value)
+																		}
+																		options={containerType}
+																		menuPortalTarget={document.body}
+																		className='basic-single'
+																		classNamePrefix='select'
+																		styles={globalContext.customStyles}
+																	/>
+																)}
+															/>
+														</div>
+													</div>
+												</td>
+												<td>
+													<Controller
+														name={
+															"Charges" + "[" + index + "]" + "[VesselType]"
+														}
+														control={control}
+														render={({field: {onChange, value}}) => (
+															<Select
+																isClearable={true}
+																{...register(
+																	"Charges" + "[" + index + "]" + "[VesselType]"
+																)}
+																value={
+																	value
+																		? vesselType.find((c) => c.value === value)
+																		: null
+																}
+																onChange={(val) =>
+																	val == null
+																		? onChange(null)
+																		: onChange(val.value)
+																}
+																options={vesselType}
+																menuPortalTarget={document.body}
+																className='basic-single'
+																classNamePrefix='select'
+																styles={globalContext.customStyles}
+															/>
+														)}
+													/>
+												</td>
+												<td>
+													<input
+														{...register(
+															"Charges" + "[" + index + "]" + "[AccountCode]"
+														)}
+														className={`form-control`}
+													/>
+												</td>
+												<td>
+													{checkDisabledAllPort == false ? (
+														<Controller
+															name={
+																"Charges" + "[" + index + "]" + "[PortCode]"
+															}
+															control={control}
+															render={({field: {onChange, value}}) => (
+																<Select
+																	isClearable={true}
+																	{...register(
+																		"Charges" +
+																			"[" +
+																			index +
+																			"]" +
+																			"[PortCode]",
+																		{required: "Port Code cannot be blank."}
+																	)}
+																	value={
+																		value
+																			? port.find((c) => c.value === value)
+																			: null
+																	}
+																	onChange={(val) =>
+																		val == null
+																			? onChange(null)
+																			: onChange(val.value)
+																	}
+																	options={port}
+																	menuPortalTarget={document.body}
+																	className={`basic-single PortCode ${
+																		errors.Charges
+																			? errors.Charges[`${index}`]
+																				? errors.Charges[`${index}`].PortCode
+																					? "has-error-select"
+																					: ""
+																				: ""
+																			: ""
+																	}`}
+																	classNamePrefix='select'
+																	styles={globalContext.customStyles}
+																	onKeyDown={handleKeydown}
+																/>
+															)}
+														/>
+													) : (
+														<Controller
+															name={
+																"Charges" + "[" + index + "]" + "[PortCode]"
+															}
+															control={control}
+															render={({field: {onChange, value}}) => (
+																<Select
+																	isClearable={true}
+																	{...register(
+																		"Charges" + "[" + index + "]" + "[PortCode]"
+																	)}
+																	value={
+																		value
+																			? port.find((c) => c.value === value)
+																			: null
+																	}
+																	onChange={(val) =>
+																		val == null
+																			? onChange(null)
+																			: onChange(val.value)
+																	}
+																	options={port}
+																	menuPortalTarget={document.body}
+																	className='basic-single PortCode'
+																	classNamePrefix='select'
+																	styles={globalContext.customStyles}
+																/>
+															)}
+														/>
+													)}
+												</td>
+												<td>
+													<Controller
+														name={
+															"Charges" + "[" + index + "]" + "[CurrencyType]"
+														}
+														control={control}
+														render={({field: {onChange, value}}) => (
+															<Select
+																isClearable={true}
+																{...register(
+																	"Charges" +
+																		"[" +
+																		index +
+																		"]" +
+																		"[CurrencyType]"
+																)}
+																value={
+																	value
+																		? currencyType.find(
+																				(c) => c.value === value
+																		  )
+																		: null
+																}
+																onChange={(val) =>
+																	val == null
+																		? onChange(null)
+																		: onChange(val.value)
+																}
+																options={currencyType}
+																menuPortalTarget={document.body}
+																className='basic-single'
+																classNamePrefix='select'
+																styles={globalContext.customStyles}
+															/>
+														)}
+													/>
+												</td>
+												<td>
+													{checkDisabledAllPort == false ? (
+														<Controller
+															name={`Charges[${index}][UOM][]`}
+															control={control}
+															render={({field: {onChange, value}}) => (
+																<Select
+																	isClearable={true}
+																	isMulti
+																	{...register(`Charges[${index}][UOM][]`, {
+																		required: "UOM cannot be blank.",
+																	})}
+																	value={
+																		value
+																			? Array.isArray(value)
+																				? value.map((c) =>
+																						UOMOptions.find(
+																							(z) => z.value === c
+																						)
+																				  )
+																				: UOMOptions.find(
+																						(c) => c.value === value
+																				  )
+																			: null
+																	}
+																	onChange={(val) =>
+																		val == null
+																			? onChange(null)
+																			: onChange(val.map((c) => c.value))
+																	}
+																	options={UOMOptions}
+																	menuPortalTarget={document.body}
+																	className={`basic-multiple-select ${
+																		errors.Charges
+																			? errors.Charges[`${index}`]
+																				? errors.Charges[`${index}`].UOM
+																					? "has-error-select"
+																					: ""
+																				: ""
+																			: ""
+																	}`}
+																	classNamePrefix='select'
+																	styles={globalContext.customStyles}
+																/>
+															)}
+														/>
+													) : (
+														<Controller
+															name={`Charges[${index}][UOM][]`}
+															control={control}
+															render={({field: {onChange, value}}) => (
+																<Select
+																	isClearable={true}
+																	isMulti
+																	name={`Charges[${index}][UOM][]`}
+																	value={
+																		value
+																			? Array.isArray(value)
+																				? value.map((c) =>
+																						UOMOptions.find(
+																							(z) => z.value === c
+																						)
+																				  )
+																				: UOMOptions.find(
+																						(c) => c.value === value
+																				  )
+																			: null
+																	}
+																	onChange={(val) =>
+																		val == null
+																			? onChange(null)
+																			: onChange(val.map((c) => c.value))
+																	}
+																	options={UOMOptions}
+																	menuPortalTarget={document.body}
+																	className='basic-multiple-select'
+																	classNamePrefix='select'
+																	styles={globalContext.customStyles}
+																/>
+															)}
+														/>
+													)}
+												</td>
+												<td>
+													{checkDisabledAllPort == false ? (
+														<input
+															{...register(
+																"Charges" +
+																	"[" +
+																	index +
+																	"]" +
+																	"[ReferencePrice]",
+																{required: "eee"}
+															)}
+															className={`form-control dynamicReferencePrice inputDecimalFourPlaces ${
+																errors.Charges
+																	? errors.Charges[`${index}`]
+																		? errors.Charges[`${index}`].ReferencePrice
+																			? "has-error"
+																			: ""
+																		: ""
+																	: ""
+															}`}
+														/>
+													) : (
+														<input
+															{...register(
+																"Charges" +
+																	"[" +
+																	index +
+																	"]" +
+																	"[ReferencePrice]"
+															)}
+															className={`form-control dynamicReferencePrice inputDecimalFourPlaces}`}
+														/>
+													)}
+												</td>
+
+												<td>
+													<input
+														{...register(
+															"Charges" + "[" + index + "]" + "[MinPrice]"
+														)}
+														className={`form-control dynamicMinPrice inputDecimalFourPlaces`}
+													/>
+												</td>
+												<td>
+													<Controller
+														name={"Charges" + "[" + index + "]" + "[TaxCode]"}
+														control={control}
+														render={({field: {onChange, value}}) => (
+															<Select
+																isClearable={true}
+																{...register(
+																	"Charges" + "[" + index + "]" + "[TaxCode]"
+																)}
+																value={
+																	value
+																		? taxCode.find((c) => c.value === value)
+																		: null
+																}
+																onChange={(val) => {
+																	val == null
+																		? onChange(null)
+																		: onChange(val.value);
+																	handleTaxCode(val, index);
+																}}
+																options={taxCode}
+																menuPortalTarget={document.body}
+																className='basic-single TaxCode'
+																classNamePrefix='select'
+																styles={globalContext.customStyles}
+															/>
+														)}
+													/>
+												</td>
+												<td>
+													<input
+														{...register(
+															"Charges" + "[" + index + "]" + "[TaxRate]"
+														)}
+														className={`form-control inputDecimalFourPlaces`}
+													/>
+												</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<button
+							type='button'
+							className='add-container btn btn-success btn-xs mb-2 mt-2'
+							onClick={() => {
+								append({Name: ""});
+							}}>
+							<span className='fa fa-plus'></span>Add Port
+						</button>
+					</div>
+				</div>
+			);
+		}
+
+		const onSubmit = async (data, event) => {
+			setFlag(false);
+
+			event.preventDefault();
+			var tempForm = $("form")[0];
+
+			$(tempForm)
+				.find(".inputDecimalFourPlaces")
+				.each(function () {
+					var value1 = $(this).val();
+					if (value1 !== "") {
+						$(this).val(parseFloat(value1).toFixed(4));
+					}
+				});
+			const formdata = new FormData(tempForm);
+
+			var DataString = window.$($("form")[0]).serializeJSON();
+			var flag;
+			formdata.append("data", JSON.stringify(DataString));
+			if (notApplytoAllPortArrayList.length == 0) {
+				var tempArrayList = [formState.id];
+				formdata.append(
+					"DynamicModel[ChargesUUID]",
+					JSON.stringify(tempArrayList)
+				);
+			} else {
+				formdata.append(
+					"DynamicModel[ChargesUUID]",
+					JSON.stringify(notApplytoAllPortArrayList)
+				);
+			}
+
+			setUpdataFormData(formdata);
+
+			if (formState.formType == "New" || formState.formType == "Clone") {
+				var filters = {
+					ChargesCode: getValues("DynamicModel[ChargesCode]"),
+					ChargesName: getValues("DynamicModel[ChargesName]"),
+					ChargesType: getValues("DynamicModel[ChargesType]"),
+					FreightTerm: getValues("DynamicModel[FreightTerm]"),
+					ContainerType: getValues("DynamicModel[ContainerType]"),
+					"CurrencyType ": getValues("DynamicModel[CurrencyType]"),
+					VesselType: getValues("DynamicModel[VesselType]"),
+					StartDate: $("input[name='DynamicModel[StartDate]']").val(),
+					EndDate: $("input[name='DynamicModel[EndDate]']").val(),
+					Floating: $(".FloatingField").val(),
+					ApplyToAllPort: $(".applyToAllCheckbox").is(":checked") ? 1 : 0,
+				};
+
+				getCheckCharges(filters, globalContext).then((res) => {
+					ControlOverlay(true);
+					if (res) {
+						flag = res.data.ChargesUUID;
+						if (flag) {
+							alert("The record already exist.");
+							if (
+								window.confirm("Do you want to update the existing record?")
+							) {
+								navigate("/setting/sales-settings/charges/update/id=" + flag);
+								return false;
+							} else {
+								ControlOverlay(false);
+								return false;
+							}
+						} else {
+							CreateData(globalContext, props.data.modelLink, formdata).then(
+								(res) => {
+									if (res.data) {
+										if (res.data.message == "Charges has already been taken.") {
+											ToastNotify("error", res.data.message);
+											ControlOverlay(false);
+										} else {
+											ToastNotify("success", "Charges created successfully.");
+											navigate(
+												"/setting/sales-settings/charges/update/id=" +
+													res.data.data,
+												{state: {formType: "Update", id: res.data.data}}
+											);
+										}
+									}
+								}
+							);
+						}
+					} else {
+						CreateData(globalContext, props.data.modelLink, formdata).then(
+							(res) => {
+								if (res.data) {
+									if (res.data.message == "Charges has already been taken.") {
+										ToastNotify("error", res.data.message);
+										ControlOverlay(false);
+									} else {
+										ToastNotify("success", "Charges created successfully.");
+										navigate(
+											"/setting/sales-settings/charges/update/id=" +
+												res.data.data,
+											{state: {formType: "Update", id: res.data.data}}
+										);
+									}
+								}
+							}
+						);
+					}
+				});
+			} else {
+				var chargesUUID = [];
+				var flag;
+				// if ($("#applyToAllCheckbox").prop("checked") == true) {
+				chargesUUID = notApplytoAllPortArrayList;
+
+				if ($("#applyToAllCheckbox").prop("checked") == true) {
+					chargesUUID = [];
+				}
+
+				if (state) {
+					chargesUUID.push(state.id);
+				} else {
+					chargesUUID.push(params.id);
+				}
+
+				var filters = {
+					ChargesCode: getValues("DynamicModel[ChargesCode]"),
+					ChargesName: getValues("DynamicModel[ChargesName]"),
+					ChargesType: getValues("DynamicModel[ChargesType]"),
+					FreightTerm: getValues("DynamicModel[FreightTerm]"),
+					ContainerType: getValues("DynamicModel[ContainerType]"),
+					"CurrencyType ": getValues("DynamicModel[CurrencyType]"),
+					VesselType: getValues("DynamicModel[VesselType]"),
+					StartDate: getValues("DynamicModel[StartDate]"),
+					EndDate: getValues("DynamicModel[EndDate]"),
+					Floating: $(".FloatingField").val(),
+					ApplyToAllPort: $(".applyToAllCheckbox").is(":checked") ? 1 : 0,
+					ChargesUUID: JSON.stringify(chargesUUID),
+				};
+
+				getCheckCharges(filters, globalContext).then((res) => {
+					if (res) {
+						flag = res.data.ChargesUUID;
+						alert("The record already exist.");
+						if (window.confirm("Do you want to update the existing record?")) {
+							navigate("/setting/sales-settings/charges/update/id=" + flag);
+							return false;
+						} else {
+							return false;
+						}
+					} else {
+						if (foundEffected == true) {
+							var madeChanged = false;
+							var arrayCharges = [];
+							if ($("#applyToAllCheckbox").prop("checked") == true) {
+								arrayCharges.push({
+									ChargesUUID: state ? state.id : params.id,
+									ChargesCode: $(".ChargesCode").val(),
+									ChargesName: getValues("DynamicModel[ChargesName]"),
+									ChargesType: getValues("DynamicModel[ChargesType]"),
+									ContainerType: getValues("DynamicModel[ContainerType]"),
+									FreightTerm: getValues("DynamicModel[FreightTerm]"),
+									StartDate: getValues("DynamicModel[StartDate]"),
+									EndDate: getValues("DynamicModel[EndDate]"),
+									UOM: getValues("DynamicModel[UOM][]"),
+									CurrencyType: getValues("DynamicModel[CurrencyType]"),
+									AccountCode: getValues("DynamicModel[AccountCode]"),
+									VesselType: getValues("DynamicModel[VesselType]"),
+									ReferencePrice: $(".referencePrice").val(),
+									MinPrice: getValues("DynamicModel[MinPrice]"),
+									TaxCode: getValues("DynamicModel[TaxCode]"),
+									TaxRate: getValues("DynamicModel[TaxRate]"),
+									Description: getValues("DynamicModel[Description]"),
+								});
+							} else {
+								$(".EffectedPortCode").each(function () {
+									var index = $(this).parent().closest("tr").index();
+									var listArray = {
+										ChargesUUID: $(this).val(),
+										PortCode: getValues(`Charges[${index}][PortCode]`),
+										CurrencyType: getValues(`Charges[${index}][CurrencyType]`),
+										AccountCode: getValues(`Charges[${index}][AccountCode]`),
+										VesselType: getValues(`Charges[${index}][VesselType]`),
+										ReferencePrice: getValues(
+											`Charges[${index}][ReferencePrice]`
+										),
+										MinPrice: getValues(`Charges[${index}][MinPrice]`),
+										TaxCode: getValues(`Charges[${index}][TaxCode]`),
+										TaxRate: getValues(`Charges[${index}][TaxRate]`),
+										ContainerType: getValues(
+											`Charges[${index}][ContainerType]`
+										),
+										UOM: getValues(`Charges[${index}][UOM][]`),
+										ChargesCode: getValues(`DynamicModel[ChargesCode]`),
+										ChargesName: getValues(`DynamicModel[ChargesName]`),
+										ChargesType: getValues(`DynamicModel[ChargesType]`),
+										FreightTerm: getValues(`DynamicModel[FreightTerm]`),
+										StartDate: getValues(`DynamicModel[StartDate]`),
+										EndDate: getValues(`DynamicModel[EndDate]`),
+										Description: getValues(`DynamicModel[Description]`),
+									};
+									arrayCharges.push(listArray);
+								});
+							}
+
+							getEffectedDocuments(arrayCharges, globalContext).then((res) => {
+								if (res.data.updated == "0") {
+									var newCharges = [];
+
+									$(".ChargesUUID").each(function () {
+										var index = $(this).parent().closest("tr").index();
+										var array = {
+											ChargesUUID: $(this).val(),
+											PortCode: getValues(`Charges[${index}][PortCode]`),
+											CurrencyType: getValues(
+												`Charges[${index}][CurrencyType]`
+											),
+											AccountCode: getValues(`Charges[${index}][AccountCode]`),
+											VesselType: getValues(`Charges[${index}][VesselType]`),
+											ContainerType: getValues(
+												`Charges[${index}][ContainerType]`
+											),
+											UOM: getValues(`Charges[${index}][UOM][]`),
+											ReferencePrice: getValues(
+												`Charges[${index}][ReferencePrice]`
+											),
+											MinPrice: getValues(`Charges[${index}][MinPrice]`),
+											TaxCode: getValues(`Charges[${index}][TaxCode]`),
+											TaxRate: getValues(`Charges[${index}][TaxRate]`),
+										};
+										newCharges.push(array);
+									});
+
+									if (oriCharges.length == newCharges.length) {
+										if (
+											JSON.stringify(oriCharges) !== JSON.stringify(newCharges)
+										) {
+											madeChanged = true;
+										}
+									} else {
+										setFlag(true);
+										ControlOverlay(false);
+
+										madeChanged = true;
+									}
+									if (madeChanged !== true) {
+										alert("No changes has been made.");
+									}
+								} else {
+									//clear all data inside modal before open
+									$(".tariff").html("");
+									$(".quotation").html("");
+									$(".bookingReservation").html("");
+									$(".salesInvoice").html("");
+
+									setFlag(false);
+									window.$("#affectedDocument").modal("toggle");
+									ControlOverlay(false);
+
+									if (res.data.Tariffs != null) {
+										$.each(res.data.Tariffs, function (key, value) {
+											$(".tariff").append(
+												"<div className='row'>&ensp;<input type='checkbox' className='checkboxTariffs'><div><input type = 'hidden' value = " +
+													value.TariffUUID +
+													"> &ensp;<a href='../../tariff/update/id=" +
+													value.TariffUUID +
+													"' class = 'checkPermissionLinkTariff' target='_blank'><span style='font-size: 15px'>" +
+													value.pOLPortCode.PortCode +
+													"-" +
+													value.pODPortCode.PortCode +
+													"</span></a></div></div>"
+											);
+										});
+									}
+									if (res.data.Quotations != null) {
+										$.each(res.data.Quotations, function (key, value) {
+											if (value.Barge == 1) {
+												$(".quotation").append(
+													"<div className='row'>&ensp;<input type='checkbox' className='checkboxQuotation'><input type = 'hidden' value = " +
+														value.QuotationUUID +
+														">&ensp;<a href='../../../../sales/standard/quotation-barge/update/id=" +
+														value.QuotationUUID +
+														"' class = 'checkPermissionLinkQT' target='_blank'><span style='font-size: 15px'>" +
+														value.DocNum +
+														" </span></a></div>"
+												);
+											} else {
+												$(".quotation").append(
+													"<div className='row'>&ensp;<input type='checkbox' className='checkboxQuotation'><input type = 'hidden' value = " +
+														value.QuotationUUID +
+														">&ensp;<a href='../../../../sales/container/quotation/update/id=" +
+														value.QuotationUUID +
+														"' class = 'checkPermissionLinkQT' target='_blank'><span style='font-size: 15px'>" +
+														value.DocNum +
+														" </span></a></div>"
+												);
+											}
+										});
+									}
+
+									if (res.data.BookingReservations != null) {
+										$.each(res.data.BookingReservations, function (key, value) {
+											if (value.Barge == 1) {
+												$(".bookingReservation").append(
+													"<div className='row'>&ensp;<input type='checkbox' className='checkboxBR'><input type = 'hidden' value = " +
+														value.BookingReservationUUID +
+														"> &ensp;<a href='../../../../sales/standard/booking-reservation-barge/update/id=" +
+														value.BookingReservationUUID +
+														"' class = 'checkPermissionLinkBR' target='_blank'><span style='font-size: 15px'>" +
+														value.DocNum +
+														"</span></a></div>"
+												);
+											} else {
+												$(".bookingReservation").append(
+													"<div className='row'>&ensp;<input type='checkbox' className='checkboxBR'><input type = 'hidden' value = " +
+														value.BookingReservationUUID +
+														"> &ensp;<a href='../../../../sales/container/booking-reservation/update/id=" +
+														value.BookingReservationUUID +
+														"' class = 'checkPermissionLinkBR' target='_blank'><span style='font-size: 15px'>" +
+														value.DocNum +
+														"</span></a></div>"
+												);
+											}
+										});
+									}
+
+									if (res.data.SalesInvoices != null) {
+										$.each(res.data.SalesInvoices, function (key, value) {
+											if (value.Barge == 1) {
+												$(".salesInvoice").append(
+													"<div className='row'>&ensp;<input type='checkbox' className='checkboxInvoice'><input type = 'hidden' value = " +
+														value.SalesInvoiceUUID +
+														"> &ensp;<a href='../../../../sales/standard/sales-invoice-barge/update/id=" +
+														value.SalesInvoiceUUID +
+														"' class = 'checkPermissionLinkINV' target='_blank'><span style='font-size: 15px'>" +
+														value.DocNum +
+														"</span></a></div>"
+												);
+											} else {
+												$(".salesInvoice").append(
+													"<div className='row'>&ensp;<input type='checkbox' className='checkboxInvoice'><input type = 'hidden' value = " +
+														value.SalesInvoiceUUID +
+														"> &ensp;<a href='../../../../sales/container/sales-invoice/update/id=" +
+														value.SalesInvoiceUUID +
+														"' class = 'checkPermissionLinkINV' target='_blank'><span style='font-size: 15px'>" +
+														value.DocNum +
+														"</span></a></div>"
+												);
+											}
+										});
+									}
+									$(".tariffCheckGroup").prop("checked", true);
+									$(".quotationCheckGroup").prop("checked", true);
+									$(".checkboxTariffs").prop("checked", true);
+									$(".checkboxQuotation").prop("checked", true);
+
+									//access control
+									// if (getQTViewPermission == false) {
+									//     $.each($(".checkPermissionLinkQT"), function () {
+									//         var oldherf = $(this).attr("href");
+									//         var newUrl = oldherf.replace(oldherf, "#"); // Create new url
+
+									//         $(this).attr("href", newUrl);
+									//         $(this).attr("class", "NoPermissionLink");
+									//         $(this).removeAttr("target");
+									//     })
+									// }
+									// if (getBRViewPermission == false) {
+									//     $.each($(".checkPermissionLinkBR"), function () {
+									//         var oldherf = $(this).attr("href");
+									//         var newUrl = oldherf.replace(oldherf, "#"); // Create new url
+
+									//         $(this).attr("href", newUrl);
+									//         $(this).attr("class", "NoPermissionLink");
+									//         $(this).removeAttr("target");
+									//     })
+									// }
+									// if (getINVViewPermission == false) {
+									//     $.each($(".checkPermissionLinkINV"), function () {
+									//         var oldherf = $(this).attr("href");
+									//         var newUrl = oldherf.replace(oldherf, "#"); // Create new url
+
+									//         $(this).attr("href", newUrl);
+									//         $(this).attr("class", "NoPermissionLink");
+									//         $(this).removeAttr("target");
+									//     })
+									// }
+									// if (getTariffViewPermission == false) {
+									//     $.each($(".checkPermissionLinkTariff"), function () {
+									//         var oldherf = $(this).attr("href");
+									//         var newUrl = oldherf.replace(oldherf, "#"); // Create new url
+
+									//         $(this).attr("href", newUrl);
+									//         $(this).attr("class", "NoPermissionLink");
+									//         $(this).removeAttr("target");
+									//     })
+									// }
+									$("select:disabled").prop("disabled", false);
+									$("input:disabled").prop("disabled", false);
+								}
+							});
+
+							if (madeChanged == true) {
+								$("select:disabled").prop("disabled", false);
+								$("input:disabled").prop("disabled", false);
+								setFlag(true);
+								ControlOverlay(false);
+							} else {
+								setFlag(false);
+								ControlOverlay(false);
+							}
+						} else {
+							setFlag(true);
+							ControlOverlay(false);
+						}
+					}
+				});
+
+				// UpdateData(formState.id, globalContext, props.data.modelLink, formdata).then(res => {
+				//     if (res.data.data) {
+				//         ToastNotify("success", "Charges updated successfully.")
+				//         navigate("/setting/sales-settings/charges/update/id=" + res.data.data, { state: { formType: "Update", id: res.data.data } })
+
+				//     }
+				//     else {
+				//         ToastNotify("error", "Error")
+				//         ControlOverlay(false)
+				//     }
+				// })
+			}
+		};
 
     useEffect(() => {
         $(".ContainerType").removeClass("Readonly")

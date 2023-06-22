@@ -715,107 +715,355 @@ function QuickFormContainer(props) {
 
 
     return (
-        <div className={`${props.ContainerItem.cardLength}`}>
-            <div className="card charges ContainerCharges lvl1">
-                <div className="card-header">
-                    <h3 className="card-title">{props.ContainerItem.cardTitle}</h3>
-                    <div className="card-tools">
-                        <button type="button" className="btn btn-tool" data-card-widget="collapse">
-                            <i className="fas fa-minus" data-toggle="tooltip" title="" data-placement="top" data-original-title="Collapse"></i>
-                        </button>
-                    </div>
-                </div>
-                <div className="card-body">
-                    <div className="card">
-                        <div className='card-body'>
-                            <div className="btn-group float-left mb-2" id="columnchooserdropdown">
-                                <button type="button" className="btn btn-secondary btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i className="fa fa-th-list" data-toggle="tooltip" title="Column Chooser" data-placement="top"></i>
-                                </button>
-                                <div className="dropdown-menu dropdown-menu-left  scrollable-columnchooser">
-                                    {props.ContainerItem.ContainerColumn.map((item, index) => {
-                                        return (
-                                            <label key={index} className="dropdown-item dropdown-item-marker">
-                                                {item.defaultChecked ? <input type="checkbox" className="columnChooserColumn" defaultChecked /> : <input type="checkbox" className="columnChooserColumn" />}
-                                                {item.columnName}
-                                            </label>
-                                        )
-                                    })}
-                                </div>
-                            </div>
-                            <div className="table_wrap">
-                                <div className="table_wrap_inner">
-                                    <div className="row">
+			<div className={`${props.ContainerItem.cardLength}`}>
+				<div className='card charges ContainerCharges lvl1'>
+					<div className='card-header'>
+						<h3 className='card-title'>{props.ContainerItem.cardTitle}</h3>
+						<div className='card-tools'>
+							<button
+								type='button'
+								className='btn btn-tool'
+								data-card-widget='collapse'>
+								<i
+									className='fas fa-minus'
+									data-toggle='tooltip'
+									title=''
+									data-placement='top'
+									data-original-title='Collapse'></i>
+							</button>
+						</div>
+					</div>
+					<div className='card-body'>
+						<div className='card'>
+							<div className='card-body'>
+								<div
+									className='btn-group float-left mb-2'
+									id='columnchooserdropdown'>
+									<button
+										type='button'
+										className='btn btn-secondary btn-xs dropdown-toggle'
+										data-toggle='dropdown'
+										aria-haspopup='true'
+										aria-expanded='false'>
+										<i
+											className='fa fa-th-list'
+											data-toggle='tooltip'
+											title='Column Chooser'
+											data-placement='top'></i>
+									</button>
+									<div className='dropdown-menu dropdown-menu-left  scrollable-columnchooser'>
+										{props.ContainerItem.ContainerColumn.map((item, index) => {
+											return (
+												<label
+													key={index}
+													className='dropdown-item dropdown-item-marker'>
+													{item.defaultChecked ? (
+														<input
+															type='checkbox'
+															className='columnChooserColumn'
+															defaultChecked
+														/>
+													) : (
+														<input
+															type='checkbox'
+															className='columnChooserColumn'
+														/>
+													)}
+													{item.columnName}
+												</label>
+											);
+										})}
+									</div>
+								</div>
+								<div className='table_wrap'>
+									<div className='table_wrap_inner'>
+										<div className='row'>
+											<div>
+												<button
+													id='loadExcel'
+													type='button'
+													className='btn btn-primary btn-sm ml-2 mb-1'
+													onClick={handleLoadExcel}>
+													<i className='fa fa-plus' aria-hidden='true'></i>{" "}
+													Import Excel
+												</button>
+												<input
+													id='file'
+													className='d-none'
+													type='file'
+													accept='.xlsx,.xls'
+													onChange={handleChangeFile}></input>
+												<button
+													id='downloadSampleTemplate'
+													type='button'
+													className='btn btn-primary btn-sm ml-2 mb-1'
+													onClick={handleDownloadSample}>
+													<i className='fa fa-download'></i> Download Sample
+													Template
+												</button>
+											</div>
+										</div>
+										<table
+											className='table table-bordered commontable'
+											style={{width: "100%"}}>
+											<thead>
+												<tr>
+													{fields.length > 0
+														? fields[0].ContainerItem.map((item, index) => {
+																return (
+																	<th key={item.id} className={item.class}>
+																		{item.columnName}
+																	</th>
+																);
+														  })
+														: props.ContainerItem.ContainerColumn.map(
+																(item, index) => {
+																	return (
+																		<th key={item.id} className={item.class}>
+																			{item.columnName}
+																		</th>
+																	);
+																}
+														  )}
+												</tr>
+											</thead>
+											<tbody className='ContainerType container-item'>
+												{fields.map((item, index) => {
+													return (
+														<>
+															<tr key={item.id}>
+																{item.ContainerItem.map((item2, index2) => {
+																	if (item2.inputType == "input") {
+																		return (
+																			<td className={item2.class}>
+																				{item2.requiredField ? (
+																					<input
+																						defaultValue=''
+																						readOnly={
+																							item2.readOnly
+																								? item2.readOnly
+																								: false
+																						}
+																						{...register(
+																							`${formName}HasContainer` +
+																								"[" +
+																								index +
+																								"]" +
+																								"[" +
+																								item2.name +
+																								"]",
+																							{required: "required"}
+																						)}
+																						className={`form-control ${
+																							item2.fieldClass
+																								? item2.fieldClass
+																								: ""
+																						} ${
+																							errors[`${formName}HasContainer`]
+																								? errors[
+																										`${formName}HasContainer`
+																								  ][`${index}`]
+																									? errors[
+																											`${formName}HasContainer`
+																									  ][`${index}`][
+																											`${item2.name}`
+																									  ]
+																										? "has-error"
+																										: ""
+																									: ""
+																								: ""
+																						}`}
+																					/>
+																				) : (
+																					<input
+																						defaultValue=''
+																						readOnly={
+																							item2.readOnly
+																								? item2.readOnly
+																								: false
+																						}
+																						{...register(
+																							`${formName}HasContainer` +
+																								"[" +
+																								index +
+																								"]" +
+																								"[" +
+																								item2.name +
+																								"]"
+																						)}
+																						className={`form-control ${
+																							item2.fieldClass
+																								? item2.fieldClass
+																								: ""
+																						}`}
+																					/>
+																				)}
+																			</td>
+																		);
+																	}
 
-                                        <div>
-                                        <button id="loadExcel" type="button" className="btn btn-primary btn-sm ml-2 mb-1" onClick={handleLoadExcel}><i class="fa fa-plus" aria-hidden="true"></i> Import Excel</button>
-                                        <input id="file" class="d-none" type="file" accept=".xlsx,.xls" onChange={handleChangeFile}></input>
-                                        <button id="downloadSampleTemplate" type="button" className="btn btn-primary btn-sm ml-2 mb-1" onClick={handleDownloadSample}><i class="fa fa-download"></i> Download Sample Template</button>
-                                        </div>
-                                    </div>
-                                    <table className="table table-bordered commontable" style={{ width: "100%" }}>
-                                        <thead>
-                                            <tr>
-                                                {fields.length > 0 ? fields[0].ContainerItem.map((item, index) => {
-                                                    return (
-                                                        <th key={item.id} className={item.class}>{item.columnName}</th>
-                                                    )
-
-                                                }) : props.ContainerItem.ContainerColumn.map((item, index) => {
-                                                    return (
-                                                        <th key={item.id} className={item.class}>{item.columnName}</th>
-                                                    )
-                                                })}
-                                            </tr>
-                                        </thead>
-                                        <tbody className="ContainerType container-item">
-                                            {fields.map((item, index) => {
-                                                return (
-                                                    <>
-                                                        <tr key={item.id}>
-
-                                                            {item.ContainerItem.map((item2, index2) => {
-                                                                if (item2.inputType == "input") {
-                                                                    return (
-                                                                        <td className={item2.class}>
-                                                                            {item2.requiredField ?
-                                                                                <input defaultValue='' readOnly={item2.readOnly ? item2.readOnly : false} {...register(`${formName}HasContainer` + '[' + index + ']' + '[' + item2.name + ']', { required: "required" })} className={`form-control ${item2.fieldClass ? item2.fieldClass : ""} ${errors[`${formName}HasContainer`] ? errors[`${formName}HasContainer`][`${index}`] ? errors[`${formName}HasContainer`][`${index}`][`${item2.name}`] ? "has-error" : "" : "" : ""}`} />
-                                                                                :
-                                                                                <input defaultValue='' readOnly={item2.readOnly ? item2.readOnly : false} {...register(`${formName}HasContainer` + '[' + index + ']' + '[' + item2.name + ']')} className={`form-control ${item2.fieldClass ? item2.fieldClass : ""}`} />
-                                                                            }
-
-                                                                        </td>
-
-                                                                    )
-                                                                }
-
-                                                                if (item2.inputType == "number") {
-                                                                    return (
-                                                                        <td className={item2.class}>
-                                                                            {item2.requiredField ?
-                                                                                <input type="number" defaultValue='' readOnly={item2.readOnly ? item2.readOnly : false} {...register(`${formName}HasContainer` + '[' + index + ']' + '[' + item2.name + ']', { required: "required" })} className={`form-control ${item2.fieldClass ? item2.fieldClass : ""} ${errors[`${formName}HasContainer`] ? errors[`${formName}HasContainer`][`${index}`] ? errors[`${formName}HasContainer`][`${index}`][`${item2.name}`] ? "has-error" : "" : "" : ""}`} />
-                                                                                :
-                                                                                <input type="number" defaultValue='' readOnly={item2.readOnly ? item2.readOnly : false} {...register(`${formName}HasContainer` + '[' + index + ']' + '[' + item2.name + ']')} className={`form-control ${item2.fieldClass ? item2.fieldClass : ""}`} />
-                                                                            }
-
-                                                                        </td>
-
-                                                                    )
-                                                                }
-                                                                if (item2.inputType == "number-withModal") {
-                                                                    return (
-                                                                        <td className={item2.class}>
-                                                                            <div class="input-group">
-                                                                                {item2.requiredField ?
-                                                                                    <input type="number" defaultValue={item2.defaultValue} readOnly={item2.readOnly ? item2.readOnly : false} {...register(`${formName}HasContainer` + '[' + index + ']' + '[' + item2.name + ']', { required: "required" })} className={`form-control ${item2.fieldClass ? item2.fieldClass : ""} ${errors[`${formName}HasContainer`] ? errors[`${formName}HasContainer`][`${index}`] ? errors[`${formName}HasContainer`][`${index}`][`${item2.name}`] ? "has-error" : "" : "" : ""}`} />
-                                                                                    :
-                                                                                    <input type="number" defaultValue={item2.defaultValue} readOnly={item2.readOnly ? item2.readOnly : false} {...register(`${formName}HasContainer` + '[' + index + ']' + '[' + item2.name + ']')} className={`form-control ${item2.fieldClass ? item2.fieldClass : ""}`} />
-                                                                                }
-                                                                                <div class="input-group-append" style={{ cursor: "pointer" }} onClick={() => ShareContainerModel({ formName, index, fields, getValues, setValue, update, globalContext })}>
-                                                                                    <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
-                                                                                </div>
-                                                                            </div>
-                                                                            {/* <div className="SelectContainerCodeField d-none">
+																	if (item2.inputType == "number") {
+																		return (
+																			<td className={item2.class}>
+																				{item2.requiredField ? (
+																					<input
+																						type='number'
+																						defaultValue=''
+																						readOnly={
+																							item2.readOnly
+																								? item2.readOnly
+																								: false
+																						}
+																						{...register(
+																							`${formName}HasContainer` +
+																								"[" +
+																								index +
+																								"]" +
+																								"[" +
+																								item2.name +
+																								"]",
+																							{required: "required"}
+																						)}
+																						className={`form-control ${
+																							item2.fieldClass
+																								? item2.fieldClass
+																								: ""
+																						} ${
+																							errors[`${formName}HasContainer`]
+																								? errors[
+																										`${formName}HasContainer`
+																								  ][`${index}`]
+																									? errors[
+																											`${formName}HasContainer`
+																									  ][`${index}`][
+																											`${item2.name}`
+																									  ]
+																										? "has-error"
+																										: ""
+																									: ""
+																								: ""
+																						}`}
+																					/>
+																				) : (
+																					<input
+																						type='number'
+																						defaultValue=''
+																						readOnly={
+																							item2.readOnly
+																								? item2.readOnly
+																								: false
+																						}
+																						{...register(
+																							`${formName}HasContainer` +
+																								"[" +
+																								index +
+																								"]" +
+																								"[" +
+																								item2.name +
+																								"]"
+																						)}
+																						className={`form-control ${
+																							item2.fieldClass
+																								? item2.fieldClass
+																								: ""
+																						}`}
+																					/>
+																				)}
+																			</td>
+																		);
+																	}
+																	if (item2.inputType == "number-withModal") {
+																		return (
+																			<td className={item2.class}>
+																				<div className='input-group'>
+																					{item2.requiredField ? (
+																						<input
+																							type='number'
+																							defaultValue={item2.defaultValue}
+																							readOnly={
+																								item2.readOnly
+																									? item2.readOnly
+																									: false
+																							}
+																							{...register(
+																								`${formName}HasContainer` +
+																									"[" +
+																									index +
+																									"]" +
+																									"[" +
+																									item2.name +
+																									"]",
+																								{required: "required"}
+																							)}
+																							className={`form-control ${
+																								item2.fieldClass
+																									? item2.fieldClass
+																									: ""
+																							} ${
+																								errors[
+																									`${formName}HasContainer`
+																								]
+																									? errors[
+																											`${formName}HasContainer`
+																									  ][`${index}`]
+																										? errors[
+																												`${formName}HasContainer`
+																										  ][`${index}`][
+																												`${item2.name}`
+																										  ]
+																											? "has-error"
+																											: ""
+																										: ""
+																									: ""
+																							}`}
+																						/>
+																					) : (
+																						<input
+																							type='number'
+																							defaultValue={item2.defaultValue}
+																							readOnly={
+																								item2.readOnly
+																									? item2.readOnly
+																									: false
+																							}
+																							{...register(
+																								`${formName}HasContainer` +
+																									"[" +
+																									index +
+																									"]" +
+																									"[" +
+																									item2.name +
+																									"]"
+																							)}
+																							className={`form-control ${
+																								item2.fieldClass
+																									? item2.fieldClass
+																									: ""
+																							}`}
+																						/>
+																					)}
+																					<div
+																						className='input-group-append'
+																						style={{cursor: "pointer"}}
+																						onClick={() =>
+																							ShareContainerModel({
+																								formName,
+																								index,
+																								fields,
+																								getValues,
+																								setValue,
+																								update,
+																								globalContext,
+																							})
+																						}>
+																						<span className='input-group-text'>
+																							<i
+																								className='fa fa-search'
+																								aria-hidden='true'></i>
+																						</span>
+																					</div>
+																				</div>
+																				{/* <div className="SelectContainerCodeField d-none">
                                                                                 <Controller
                                                                                     name={(`${formName}HasContainer` + '[' + index + ']' + '[ContainerCode][]')}
                                                                                     control={control}
@@ -850,225 +1098,513 @@ function QuickFormContainer(props) {
                                                                                     )}
                                                                                 />
                                                                             </div> */}
-                                                                        </td>
+																			</td>
+																		);
+																	}
 
-                                                                    )
-                                                                }
+																	if (item2.inputType == "checkbox") {
+																		return (
+																			<td
+																				className={item2.class}
+																				style={{
+																					textAlign: "center",
+																					verticalAlign: "middle",
+																				}}>
+																				<input
+																					type={"checkbox"}
+																					disabled={
+																						item2.disabled
+																							? item2.disabled
+																							: false
+																					}
+																					checked={item2.check}
+																					defaultValue='0'
+																					className={`mt-2 ${
+																						item2.fieldClass
+																							? item2.fieldClass
+																							: ""
+																					}`}
+																					onChange={CheckBoxHandle}></input>
+																				<input
+																					type={"input"}
+																					defaultValue='0'
+																					className='d-none'
+																					{...register(
+																						`${formName}HasContainer` +
+																							"[" +
+																							index +
+																							"]" +
+																							"[" +
+																							item2.name +
+																							"]"
+																					)}
+																				/>
+																			</td>
+																		);
+																	}
 
-                                                                if (item2.inputType == "checkbox") {
-                                                                    return (
-                                                                        <td className={item2.class} style={{ textAlign: "center", verticalAlign: "middle" }}>
-                                                                            <input type={"checkbox"}  disabled={item2.disabled ? item2.disabled : false} checked={item2.check} defaultValue='0' className={`mt-2 ${item2.fieldClass ? item2.fieldClass : ""}`} onChange={CheckBoxHandle}></input>
-                                                                            <input type={"input"} defaultValue='0' className="d-none" {...register(`${formName}HasContainer` + '[' + index + ']' + '[' + item2.name + ']')} />
-                                                                        </td>
-                                                                    )
-                                                                }
+																	if (item2.inputType == "single-select") {
+																		if (index2 == 0) {
+																			return (
+																				<td className={item2.class}>
+																					<div className='row'>
+																						<div className='col-md-2'>
+																							<button
+																								type='button'
+																								style={{
+																									position: "relative",
+																									left: "0px",
+																									top: "2px",
+																								}}
+																								className='btn btn-xs ChargesDisplay'>
+																								<i
+																									className='fas fa-plus'
+																									data-toggle='tooltip'
+																									title='Expand'></i>
+																							</button>
+																						</div>
+																						<div className='dropdown float-left dropdownbar'>
+																							<button
+																								style={{
+																									position: "relative",
+																									left: "0px",
+																									top: "1px",
+																								}}
+																								className='btn btn-xs btn-secondary dropdown-toggle float-right'
+																								type='button'
+																								data-toggle='dropdown'
+																								aria-haspopup='true'
+																								aria-expanded='false'>
+																								<i
+																									className='fa fa-ellipsis-v'
+																									data-hover='tooltip'
+																									data-placement='top'
+																									title='Options'></i>
+																							</button>
+																							<div
+																								className='dropdown-menu'
+																								aria-labelledby='dropdownMenuButton'>
+																								<button
+																									data-repeater-delete
+																									className='dropdown-item RemoveContainer'
+																									type='button'
+																									onClick={() => remove(index)}>
+																									Remove
+																								</button>
+																							</div>
+																						</div>
+																						<input
+																							defaultValue=''
+																							{...register(
+																								`${formName}HasContainer` +
+																									"[" +
+																									index +
+																									"]" +
+																									"[ContainerReleaseOrderContainerUUID]"
+																							)}
+																							className={`form-control d-none`}
+																						/>
 
-                                                                if (item2.inputType == "single-select") {
-                                                                    if (index2 == 0) {
-                                                                        return (
-                                                                            <td className={item2.class}>
-                                                                                <div className="row">
-                                                                                    <div className="col-md-2">
-                                                                                        <button type="button" style={{ position: "relative", left: "0px", top: "2px" }} className="btn btn-xs ChargesDisplay"><i className="fas fa-plus" data-toggle="tooltip" title="Expand"></i>
-                                                                                        </button>
-                                                                                    </div>
-                                                                                    <div className="dropdown float-left dropdownbar">
-                                                                                        <button style={{ position: "relative", left: "0px", top: "1px" }} className="btn btn-xs btn-secondary dropdown-toggle float-right" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                                            <i className="fa fa-ellipsis-v" data-hover="tooltip" data-placement="top" title="Options"></i></button>
-                                                                                        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                                            
-                                                                                            <button data-repeater-delete className="dropdown-item RemoveContainer" type="button" onClick={() => remove(index)}>Remove</button>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <input  defaultValue='' {...register(`${formName}HasContainer` + '[' + index + ']' + '[ContainerReleaseOrderContainerUUID]')} className={`form-control d-none`}/>
-                                                                             
-                                                                                    <div className="col-md-8" style={{ paddingLeft: "0px", paddingRight: "0px" }}>
-                                                                                        <Controller
-                                                                                            name={(`${formName}HasContainer` + '[' + index + ']' + '[' + item2.name + ']')}
-                                                                                            control={control}
-                                                                                            render={({ field: { onChange, value } }) => (
-                                                                                                <Select
-                                                                                                    isClearable={true}
-                                                                                                    {...register(`${formName}HasContainer` + '[' + index + ']' + '[' + item2.name + ']')}
-                                                                                                    value={value ? item.ContainerTypeOptions.find(c => c.value === value) : null}
-                                                                                                    onKeyDown={handleKeydown}
-                                                                                                    onChange={val => { val == null ? onChange(null) : onChange(val.value); item2.onChange(val, index); }}
-                                                                                                    options={item.ContainerTypeOptions}
-                                                                                                    isOptionDisabled={(selectedValue) => selectedValue.selected == true}
-                                                                                                    menuPortalTarget={document.body}
-                                                                                                    className={`basic-single ${item2.fieldClass ? item2.fieldClass : ""}  ${errors[`${formName}HasContainer`] ? errors[`${formName}HasContainer`][`${index}`] ? errors[`${formName}HasContainer`][`${index}`][`${item2.name}`] ? "has-error-select" : "" : "" : ""}`}
-                                                                                                    classNamePrefix="select"
-                                                                                                    styles={globalContext.customStyles}
+																						<div
+																							className='col-md-8'
+																							style={{
+																								paddingLeft: "0px",
+																								paddingRight: "0px",
+																							}}>
+																							<Controller
+																								name={
+																									`${formName}HasContainer` +
+																									"[" +
+																									index +
+																									"]" +
+																									"[" +
+																									item2.name +
+																									"]"
+																								}
+																								control={control}
+																								render={({
+																									field: {onChange, value},
+																								}) => (
+																									<Select
+																										isClearable={true}
+																										{...register(
+																											`${formName}HasContainer` +
+																												"[" +
+																												index +
+																												"]" +
+																												"[" +
+																												item2.name +
+																												"]"
+																										)}
+																										value={
+																											value
+																												? item.ContainerTypeOptions.find(
+																														(c) =>
+																															c.value === value
+																												  )
+																												: null
+																										}
+																										onKeyDown={handleKeydown}
+																										onChange={(val) => {
+																											val == null
+																												? onChange(null)
+																												: onChange(val.value);
+																											item2.onChange(
+																												val,
+																												index
+																											);
+																										}}
+																										options={
+																											item.ContainerTypeOptions
+																										}
+																										isOptionDisabled={(
+																											selectedValue
+																										) =>
+																											selectedValue.selected ==
+																											true
+																										}
+																										menuPortalTarget={
+																											document.body
+																										}
+																										className={`basic-single ${
+																											item2.fieldClass
+																												? item2.fieldClass
+																												: ""
+																										}  ${
+																											errors[
+																												`${formName}HasContainer`
+																											]
+																												? errors[
+																														`${formName}HasContainer`
+																												  ][`${index}`]
+																													? errors[
+																															`${formName}HasContainer`
+																													  ][`${index}`][
+																															`${item2.name}`
+																													  ]
+																														? "has-error-select"
+																														: ""
+																													: ""
+																												: ""
+																										}`}
+																										classNamePrefix='select'
+																										styles={
+																											globalContext.customStyles
+																										}
+																									/>
+																								)}
+																							/>
+																						</div>
+																					</div>
+																				</td>
+																			);
+																		} else {
+																			return (
+																				<td className={item2.class}>
+																					<Controller
+																						name={
+																							`${formName}HasContainer` +
+																							"[" +
+																							index +
+																							"]" +
+																							"[" +
+																							item2.name +
+																							"]"
+																						}
+																						control={control}
+																						render={({
+																							field: {onChange, value},
+																						}) => (
+																							<Select
+																								isClearable={true}
+																								{...register(
+																									`${formName}HasContainer` +
+																										"[" +
+																										index +
+																										"]" +
+																										"[" +
+																										item2.name +
+																										"]"
+																								)}
+																								value={
+																									value
+																										? item2.options
+																											? item2.options.find(
+																													(c) =>
+																														c.value === value
+																											  )
+																											: null
+																										: ""
+																								}
+																								onChange={(val) => {
+																									val == null
+																										? onChange(null)
+																										: onChange(val.value);
+																									item2.onChange(val, index);
+																								}}
+																								options={item2.options}
+																								onKeyDown={handleKeydown}
+																								menuPortalTarget={document.body}
+																								isOptionDisabled={(
+																									selectedValue
+																								) =>
+																									selectedValue.selected == true
+																								}
+																								className={`basic-single ${
+																									item2.fieldClass
+																										? item2.fieldClass
+																										: ""
+																								}`}
+																								classNamePrefix='select'
+																								styles={
+																									globalContext.customStyles
+																								}
+																							/>
+																						)}
+																					/>
 
-                                                                                                />
-                                                                                            )}
-                                                                                        />
-                                                                                    </div>
-                                                                                </div>
-                                                                            </td>
-                                                                        )
-                                                                    }
-                                                                    else {
-                                                                        return (
-                                                                            <td className={item2.class}>
+																					{/* {item2.columnName == "UOM" ? <input type="hidden" className="ArrayUOM"></input> : ""} */}
+																				</td>
+																			);
+																		}
+																	}
 
-                                                                                <Controller
-                                                                                    name={(`${formName}HasContainer` + '[' + index + ']' + '[' + item2.name + ']')}
+																	if (item2.inputType == "multiple-select") {
+																		return (
+																			<td className={item2.class}>
+																				<Controller
+																					name={
+																						`${formName}HasContainer` +
+																						"[" +
+																						index +
+																						"]" +
+																						"[ContainerCode][]"
+																					}
+																					control={control}
+																					render={({
+																						field: {onChange, value},
+																					}) => (
+																						<Select
+																							isClearable={true}
+																							isMulti
+																							{...register(
+																								`${formName}HasContainer` +
+																									"[" +
+																									index +
+																									"]" +
+																									"[ContainerCode][]"
+																							)}
+																							value={
+																								value
+																									? Array.isArray(value)
+																										? value.map((c) =>
+																												item2.options
+																													? item2.options.find(
+																															(z) =>
+																																z.value ===
+																																c.value
+																													  )
+																													: ""
+																										  )
+																										: item2.options.find(
+																												(c) => c.value === value
+																										  )
+																									: null
+																							}
+																							onChange={(val) =>
+																								val == null
+																									? onChange(null)
+																									: onChange(
+																											val.map((c) => c.value)
+																									  )
+																							}
+																							options={item2.options}
+																							onKeyDown={handleKeydown}
+																							menuPortalTarget={document.body}
+																							className={`basic-multiple-select ${
+																								item2.fieldClass
+																									? item2.fieldClass
+																									: ""
+																							}`}
+																							classNamePrefix='select'
+																							styles={
+																								globalContext.customStyles
+																							}
+																						/>
+																					)}
+																				/>
+																			</td>
+																		);
+																	}
 
-                                                                                    control={control}
+																	if (item2.inputType == "single-asyncSelect") {
+																		return (
+																			<td className={item2.class}>
+																				<Controller
+																					name={
+																						`${formName}HasContainer` +
+																						"[" +
+																						index +
+																						"]" +
+																						"[" +
+																						item2.name +
+																						"]"
+																					}
+																					control={control}
+																					render={({
+																						field: {onChange, value},
+																					}) => (
+																						<AsyncSelect
+																							isClearable={true}
+																							{...register(
+																								`${formName}HasContainer` +
+																									"[" +
+																									index +
+																									"]" +
+																									"[" +
+																									item2.name +
+																									"]"
+																							)}
+																							value={
+																								item2.optionColumn
+																									? item2.optionColumn
+																									: value
+																							}
+																							placeholder={
+																								globalContext.asyncSelectPlaceHolder
+																							}
+																							onChange={(val) => {
+																								val == null
+																									? onChange(null)
+																									: onChange(val.value);
+																								item2.onChange &&
+																									item2.onChange(val, index);
+																							}}
+																							getOptionLabel={(val) =>
+																								val[`${item2.optionLabel}`]
+																							}
+																							getOptionValue={(val) =>
+																								val[`${item2.optionValue}`]
+																							}
+																							loadOptions={item2.loadOption}
+																							menuPortalTarget={document.body}
+																							className={`basic-single ${
+																								item2.fieldClass
+																									? item2.fieldClass
+																									: ""
+																							}`}
+																							classNamePrefix='select'
+																							styles={
+																								globalContext.customStyles
+																							}
+																						/>
+																					)}
+																				/>
+																			</td>
+																		);
+																	}
 
-                                                                                    render={({ field: { onChange, value } }) => (
-                                                                                        <Select
-                                                                                            isClearable={true}
-                                                                                            {...register(`${formName}HasContainer` + '[' + index + ']' + '[' + item2.name + ']')}
-                                                                                            value={value ? item2.options ? item2.options.find(c => c.value === value) : null : ""}
-                                                                                            onChange={val => { val == null ? onChange(null) : onChange(val.value); item2.onChange(val, index) }}
-                                                                                            options={item2.options}
-                                                                                            onKeyDown={handleKeydown}
-                                                                                            menuPortalTarget={document.body}
-                                                                                            isOptionDisabled={(selectedValue) => selectedValue.selected == true}
-                                                                                            className={`basic-single ${item2.fieldClass ? item2.fieldClass : ""}`}
-                                                                                            classNamePrefix="select"
-                                                                                            styles={globalContext.customStyles}
-                                                                                        />
-                                                                                    )}
-                                                                                />
+																	if (item2.inputType == "input-Modal") {
+																		return (
+																			<td className={item2.class}>
+																				<input
+																					type='text'
+																					className={`form-control ${
+																						item2.fieldClass
+																							? item2.fieldClass
+																							: ""
+																					}`}
+																					defaultValue={item2.textValue}
+																					onClick={openTextAreaModal}
+																					style={{cursor: "pointer"}}
+																					readOnly={
+																						item2.readOnly
+																							? item2.readOnly
+																							: false
+																					}
+																				/>
+																				<div className='modal fade'>
+																					<div className='modal-dialog'>
+																						<div className='modal-content'>
+																							<div className='modal-header'>
+																								<h4 className='modal-title'>
+																									{item2.columnName}
+																								</h4>
+																								<button
+																									type='button'
+																									className='close'
+																									data-dismiss='modal'>
+																									×
+																								</button>
+																							</div>
 
-                                                                                {/* {item2.columnName == "UOM" ? <input type="hidden" className="ArrayUOM"></input> : ""} */}
-                                                                            </td>
-                                                                        )
-                                                                    }
-                                                                }
+																							<div className='modal-body'>
+																								<div className='form-group'>
+																									<textarea
+																										id=''
+																										className={`form-control ${item2.modelClass}`}
+																										readOnly
+																										{...register(
+																											`${formName}HasContainer` +
+																												"[" +
+																												index +
+																												"]" +
+																												"[" +
+																												item2.name +
+																												"]"
+																										)}
+																										rows='5'
+																										placeholder={`Enter ${item2.columnName}`}></textarea>
+																								</div>
+																							</div>
 
-                                                                if (item2.inputType == "multiple-select") {
-
-                                                                    return (
-                                                                        <td className={item2.class}>
-
-                                                                            <Controller
-                                                                                name={(`${formName}HasContainer` + '[' + index + ']' + '[ContainerCode][]')}
-                                                                                control={control}
-                                                                                render={({ field: { onChange, value } }) => (
-                                                                                    <Select
-                                                                                        isClearable={true}
-                                                                                        isMulti
-                                                                                        {...register(`${formName}HasContainer` + '[' + index + ']' + '[ContainerCode][]')}
-                                                                                        value={value
-                                                                                            ? Array.isArray(value)
-                                                                                                ? value.map((c) =>
-                                                                                                    item2.options ? item2.options.find((z) => z.value === c.value) : ""
-
-                                                                                                )
-                                                                                                : item2.options.find(
-                                                                                                    (c) => c.value === value
-                                                                                                )
-                                                                                            : null
-                                                                                        }
-                                                                                        onChange={(val) =>
-                                                                                            val == null
-                                                                                                ? onChange(null)
-                                                                                                : onChange(val.map((c) => c.value))
-                                                                                        }
-                                                                                        options={item2.options}
-                                                                                        onKeyDown={handleKeydown}
-                                                                                        menuPortalTarget={document.body}
-                                                                                        className={`basic-multiple-select ${item2.fieldClass ? item2.fieldClass : ""}`}
-                                                                                        classNamePrefix="select"
-                                                                                        styles={globalContext.customStyles}
-
-                                                                                    />
-                                                                                )}
-                                                                            />
-                                                                        </td>
-                                                                    )
-
-                                                                }
-
-                                                                if (item2.inputType == "single-asyncSelect") {
-                                                                    return (
-                                                                        <td className={item2.class}>
-                                                                            <Controller
-                                                                                name={(`${formName}HasContainer` + '[' + index + ']' + '[' + item2.name + ']')}
-                                                                                control={control}
-                                                                                render={({ field: { onChange, value } }) => (
-                                                                                    <AsyncSelect
-                                                                                        isClearable={true}
-                                                                                        {...register((`${formName}HasContainer` + '[' + index + ']' + '[' + item2.name + ']'))}
-                                                                                        value={item2.optionColumn ? item2.optionColumn : (value)}
-                                                                                        placeholder={globalContext.asyncSelectPlaceHolder}
-                                                                                        onChange={val => { val == null ? onChange(null) : onChange(val.value); item2.onChange && item2.onChange(val, index) }}
-                                                                                        getOptionLabel={val => val[`${item2.optionLabel}`]}
-                                                                                        getOptionValue={val => val[`${item2.optionValue}`]}
-                                                                                        loadOptions={item2.loadOption}
-                                                                                        menuPortalTarget={document.body}
-                                                                                        className={`basic-single ${item2.fieldClass ? item2.fieldClass : ""}`}
-                                                                                        classNamePrefix="select"
-                                                                                        styles={globalContext.customStyles}
-                                                                                    />
-                                                                                )}
-                                                                            />
-                                                                        </td>
-                                                                    )
-                                                                }
-
-                                                                if (item2.inputType == "input-Modal") {
-                                                                    return (
-                                                                        <td className={item2.class}>
-                                                                            <input type="text" className={`form-control ${item2.fieldClass ? item2.fieldClass : ""}`} defaultValue={item2.textValue} onClick={openTextAreaModal} style={{ cursor: "pointer" }} readOnly={item2.readOnly ? item2.readOnly : false} />
-                                                                            <div className="modal fade">
-                                                                                <div className="modal-dialog">
-                                                                                    <div className="modal-content">
-
-                                                                                        <div className="modal-header">
-                                                                                            <h4 className="modal-title">{item2.columnName}</h4>
-                                                                                            <button type="button" className="close" data-dismiss="modal">×</button>
-                                                                                        </div>
-
-                                                                                        <div className="modal-body">
-                                                                                            <div className="form-group">
-
-                                                                                                <textarea id="" className={`form-control ${item2.modelClass}`} readOnly  {...register((`${formName}HasContainer` + '[' + index + ']' + '[' + item2.name + ']'))} rows="5" placeholder={`Enter ${item2.columnName}`}></textarea>
-
-
-                                                                                            </div>
-                                                                                        </div>
-
-                                                                                        <div className="modal-footer">
-                                                                                            <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                                        </div>
-
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </td>
-                                                                    )
-                                                                }
-                                                            })}
-                                                        </tr>
-                                                        <tr class="d-none ChargesTable">
-                                                            <td colSpan="23">
-                                                                <QuickFormInnerContainer checkPrevContainerInnerData={prevContainerInnerData} checkImportExcelData={checkImportExcelData} checkSelectContainer={containerInnerData} innerContainerData={props.containerInnerData} formName={formName} containerIndex={index} globalContext={globalContext} />
-                                                            </td>
-
-                                                        </tr>
-
-                                                    </>
-                                                )
-                                            })}
-                                          
-                                        </tbody>
-                                     
-                                    </table>
-                                    <p1 id="TotalContainer">Total : </p1>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    )
+																							<div className='modal-footer'>
+																								<button
+																									type='button'
+																									className='btn btn-secondary'
+																									data-dismiss='modal'>
+																									Close
+																								</button>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																			</td>
+																		);
+																	}
+																})}
+															</tr>
+															<tr className='d-none ChargesTable'>
+																<td colSpan='23'>
+																	<QuickFormInnerContainer
+																		checkPrevContainerInnerData={
+																			prevContainerInnerData
+																		}
+																		checkImportExcelData={checkImportExcelData}
+																		checkSelectContainer={containerInnerData}
+																		innerContainerData={
+																			props.containerInnerData
+																		}
+																		formName={formName}
+																		containerIndex={index}
+																		globalContext={globalContext}
+																	/>
+																</td>
+															</tr>
+														</>
+													);
+												})}
+											</tbody>
+										</table>
+										<p1 id='TotalContainer'>Total : </p1>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
 }
 
 export default QuickFormContainer

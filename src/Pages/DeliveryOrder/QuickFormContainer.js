@@ -694,18 +694,115 @@ function QuickFormContainer(props) {
                                                                 }
                                                                 if (item2.inputType == "number-withModal") {
                                                                     return (
-                                                                        <td className={item2.class}>
-                                                                            <div class="input-group">
-                                                                                {item2.requiredField ?
-                                                                                    <input type="number" defaultValue={item2.defaultValue} readOnly={item2.readOnly ? item2.readOnly : false} {...register(`${formName}HasContainer` + '[' + index + ']' + '[' + item2.name + ']', { required: "required" })} className={`form-control ${item2.fieldClass ? item2.fieldClass : ""} ${errors[`${formName}HasContainer`] ? errors[`${formName}HasContainer`][`${index}`] ? errors[`${formName}HasContainer`][`${index}`][`${item2.name}`] ? "has-error" : "" : "" : ""}`} />
-                                                                                    :
-                                                                                    <input type="number" defaultValue={item2.defaultValue} readOnly={item2.readOnly ? item2.readOnly : false} {...register(`${formName}HasContainer` + '[' + index + ']' + '[' + item2.name + ']')} className={`form-control ${item2.fieldClass ? item2.fieldClass : ""}`} />
-                                                                                }
-                                                                                <div class="input-group-append" style={{ cursor: "pointer" }} onClick={() => ShareContainerModel({ formName, index, fields, getValues, setValue, update, globalContext })}>
-                                                                                    <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
-                                                                                </div>
-                                                                            </div>
-                                                                            {/* <div className="SelectContainerCodeField d-none">
+																																			<td
+																																				className={
+																																					item2.class
+																																				}>
+																																				<div className='input-group'>
+																																					{item2.requiredField ? (
+																																						<input
+																																							type='number'
+																																							defaultValue={
+																																								item2.defaultValue
+																																							}
+																																							readOnly={
+																																								item2.readOnly
+																																									? item2.readOnly
+																																									: false
+																																							}
+																																							{...register(
+																																								`${formName}HasContainer` +
+																																									"[" +
+																																									index +
+																																									"]" +
+																																									"[" +
+																																									item2.name +
+																																									"]",
+																																								{
+																																									required:
+																																										"required",
+																																								}
+																																							)}
+																																							className={`form-control ${
+																																								item2.fieldClass
+																																									? item2.fieldClass
+																																									: ""
+																																							} ${
+																																								errors[
+																																									`${formName}HasContainer`
+																																								]
+																																									? errors[
+																																											`${formName}HasContainer`
+																																									  ][
+																																											`${index}`
+																																									  ]
+																																										? errors[
+																																												`${formName}HasContainer`
+																																										  ][
+																																												`${index}`
+																																										  ][
+																																												`${item2.name}`
+																																										  ]
+																																											? "has-error"
+																																											: ""
+																																										: ""
+																																									: ""
+																																							}`}
+																																						/>
+																																					) : (
+																																						<input
+																																							type='number'
+																																							defaultValue={
+																																								item2.defaultValue
+																																							}
+																																							readOnly={
+																																								item2.readOnly
+																																									? item2.readOnly
+																																									: false
+																																							}
+																																							{...register(
+																																								`${formName}HasContainer` +
+																																									"[" +
+																																									index +
+																																									"]" +
+																																									"[" +
+																																									item2.name +
+																																									"]"
+																																							)}
+																																							className={`form-control ${
+																																								item2.fieldClass
+																																									? item2.fieldClass
+																																									: ""
+																																							}`}
+																																						/>
+																																					)}
+																																					<div
+																																						className='input-group-append'
+																																						style={{
+																																							cursor:
+																																								"pointer",
+																																						}}
+																																						onClick={() =>
+																																							ShareContainerModel(
+																																								{
+																																									formName,
+																																									index,
+																																									fields,
+																																									getValues,
+																																									setValue,
+																																									update,
+																																									globalContext,
+																																								}
+																																							)
+																																						}>
+																																						<span className='input-group-text'>
+																																							<i
+																																								className='fa fa-search'
+																																								aria-hidden='true'></i>
+																																						</span>
+																																					</div>
+																																				</div>
+																																				{/* <div className="SelectContainerCodeField d-none">
                                                                                 <Controller
                                                                                     name={(`${formName}HasContainer` + '[' + index + ']' + '[ContainerCode][]')}
                                                                                     control={control}
@@ -740,9 +837,8 @@ function QuickFormContainer(props) {
                                                                                     )}
                                                                                 />
                                                                             </div> */}
-                                                                        </td>
-
-                                                                    )
+																																			</td>
+																																		);
                                                                 }
 
                                                                 if (item2.inputType == "checkbox") {

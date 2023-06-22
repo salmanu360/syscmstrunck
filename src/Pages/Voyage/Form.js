@@ -427,522 +427,901 @@ function Form(props) {
     }
 
     function VoyageSchedule() {
-        return (
-
-            <div className="card Ports lvl1 col-xs-12 col-md-12">
-                <div className="card-header">
-                    <h3 className="card-title">Voyage Schedule</h3>
-
-                </div>
-                <div className="card-body">
-
-                    <div className="btn-group float-left mb-2 columnchooserdropdown" id="columnchooserdropdown">
-                        <button type="button" className="btn btn-secondary btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            <i className="fa fa-th-list"></i>
-                        </button>
-                        <div className="dropdown-menu dropdown-menu-left  scrollable-columnchooser charges" id={`chargesColumChooser-${props.containerIndex}`}>
-                            {VoyageScheduleColumn.map((item, index) => {
-
-                                return (
-                                    <label className="dropdown-item dropdown-item-marker">
-                                        {item.defaultChecked ? <input type="checkbox" className="columnChooserColumn" defaultChecked /> : <input type="checkbox" className="columnChooserColumn" />}
-                                        {item.columnName}
-
-                                    </label>
-                                )
-
-                            })}
-
-                        </div>
-                    </div>
-
-                    <div>
-                        <button type="button" class="btn btn-success QuickAdd btn-xs mb-2 ml-2" data-toggle="modal" data-target="#addRouteModal">
-                            Quick Add
-                        </button>
-
-                        <button type="button" class="btn btn-success btn-xs mb-2 ml-2" id="clearTableData" onClick={handleClearTableData}>
-                            Clear
-                        </button>
-                    </div>
-
-
-
-                    <div class="table_wrap">
-                        <div class="table_wrap_inner">
-                            <table className="table table-bordered commontable" style={{ width: "100%" }}>
-                                <thead>
-                                    <tr>
-
-                                        {fields.length > 0 ?
-                                            fields[0].Charges ?
-                                                fields[0].Charges.map((item, index) => {
-                                                    return (
-                                                        <th key={item.id} className={item.class}>{item.columnName}</th>
-                                                    )
-                                                })
-                                                : ""
-                                            : VoyageScheduleColumn.map((item, index) => {
-                                                return (
-                                                    <th key={item.id} className={item.class}>{item.columnName}</th>
-                                                )
-                                            })
-                                        }
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    {fields.map((item, index) => {
-
-                                        return (
-
-                                            <tr key={item.id}>
-
-                                                {item.Charges.map((item2, index2) => {
-
-
-                                                    if (item2.inputType == "input") {
-                                                        
-                                                        if(!quickAddState){
-                                                            if (item2.name == "Tues" || item2.name=="Weight") {
-                                                                var tempName;
-                                                                item2.name=="Tues"?tempName=requiredStateTues[`VoyageSchedule[${index}][Tues]`]:tempName=requiredStateWeight[`VoyageSchedule[${index}][Weight]`]
-                                                                if(tempName==true){
-                                                                    return (
-                                                                        <td className={item2.class}>
-                                                                          
-                                                                          
-                                                                          <input defaultValue='' readOnly={item2.readOnly ? item2.readOnly : false} {...register("VoyageSchedule" + '[' + index + ']' + '[' + item2.name + ']',{ required: "required" })} className={`form-control ${item2.fieldClass ? item2.fieldClass : ""} ${errors.VoyageSchedule ? errors.VoyageSchedule[`${index}`] ? errors.VoyageSchedule[`${index}`][`${item2.name}`] ? "has-error" : "" : "" : ""}`} />
-                                                                               
-            
-                                                                        </td>
-            
-                                                                    )
-                                                                }else
-                                                                {
-                                                                    return (
-                                                                        <td className={item2.class}>
-                                                                          
-                                                                          
-                                                                          <input defaultValue='' readOnly={item2.readOnly ? item2.readOnly : false} {...register("VoyageSchedule" + '[' + index + ']' + '[' + item2.name + ']')} className={`form-control ${item2.fieldClass ? item2.fieldClass : ""} ${errors.VoyageSchedule ? errors.VoyageSchedule[`${index}`] ? errors.VoyageSchedule[`${index}`][`${item2.name}`] ? "has-error" : "" : "" : ""}`} />
-                                                                               
-            
-                                                                        </td>
-            
-                                                                    )
-                                                                }
-                                                              
-    
-                                                            }else{
-                                                                return (
-                                                                    <td className={item2.class}>
-                                                                        {item2.requiredField ?
-        
-                                                                            <input defaultValue='' readOnly={item2.readOnly ? item2.readOnly : false} {...register("VoyageSchedule" + '[' + index + ']' + '[' + item2.name + ']', { required: "required" })} className={`form-control ${item2.fieldClass ? item2.fieldClass : ""} ${errors.VoyageSchedule ? errors.VoyageSchedule[`${index}`] ? errors.VoyageSchedule[`${index}`][`${item2.name}`] ? "has-error" : "" : "" : ""}`} />
-                                                                            :
-                                                                            <input defaultValue='' readOnly={item2.readOnly ? item2.readOnly : false} {...register("VoyageSchedule" + '[' + index + ']' + '[' + item2.name + ']')} className={`form-control ${item2.fieldClass ? item2.fieldClass : ""}`} />
-                                                                        }
-        
-                                                                    </td>
-        
-                                                                )
-                                                            }
-
-                                                        }else{
-                                                            return (
-                                                                <td className={item2.class}>
-                                                                    {item2.requiredField ?
-    
-                                                                        <input defaultValue='' readOnly={item2.readOnly ? item2.readOnly : false} {...register("VoyageSchedule" + '[' + index + ']' + '[' + item2.name + ']', { required: "required" })} className={`form-control ${item2.fieldClass ? item2.fieldClass : ""} ${errors.VoyageSchedule ? errors.VoyageSchedule[`${index}`] ? errors.VoyageSchedule[`${index}`][`${item2.name}`] ? "has-error" : "" : "" : ""}`} />
-                                                                        :
-                                                                        <input defaultValue='' readOnly={item2.readOnly ? item2.readOnly : false} {...register("VoyageSchedule" + '[' + index + ']' + '[' + item2.name + ']')} className={`form-control ${item2.fieldClass ? item2.fieldClass : ""}`} />
-                                                                    }
-    
-                                                                </td>
-    
-                                                            )
-                                                        }
-                                                       
-                                                       
-                                                    }
-
-                                                    if (item2.inputType == "single-select") {
-                                                        if (index2 == 0) {
-                                                            return (
-                                                                <td className={item2.class}>
-                                                                    <div className="row">
-                                                                        <div className="col-md-2">
-                                                                            <div className="dropdownbar float-left ml-1">
-                                                                                <button style={{ position: "relative", left: "0px", top: "-5px", padding: "0px 3px 0px 3px" }} className="btn btn-xs mt-2 btn-secondary dropdown-toggle float-right mr-1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                                    <i className="fa fa-ellipsis-v"></i></button>
-                                                                                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                                    <button className="dropdown-item remove-container" type="button" onClick={() => remove(index)}>Remove</button>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <input defaultValue=''  {...register("VoyageSchedule" + '[' + index + ']' + '[VoyageScheduleUUID]')} className={`form-control VoyageScheduleUUID d-none`} />
-                                                                        <div className="col-md-10">
-                                                                            <Controller
-                                                                                name={("VoyageSchedule" + '[' + index + ']' + '[' + item2.name + ']')}
-
-                                                                                control={control}
-
-                                                                                render={({ field: { onChange, value } }) => (
-                                                                                    <Select
-                                                                                        isClearable={true}
-                                                                                        {...register("VoyageSchedule" + '[' + index + ']' + '[' + item2.name + ']', { required: "P cannot be blank." })}
-                                                                                        value={value ? item2.options.find(c => c.value === value) : null}
-                                                                                        onChange={val => { val == null ? onChange(null) : onChange(val.value); item2.onChange(val, index) }}
-                                                                                        options={item2.options}
-
-                                                                                        isOptionDisabled={(selectedValue) => selectedValue.selected == true}
-                                                                                        menuPortalTarget={document.body}
-                                                                                        className={`basic-single ${item2.fieldClass ? item2.fieldClass : ""}  ${errors.VoyageSchedule ? errors.VoyageSchedule[`${index}`] ? errors.VoyageSchedule[`${index}`][`${item2.name}`] ? "has-error-select" : "" : "" : ""}`}
-                                                                                        onKeyDown={handleKeydown}
-                                                                                        classNamePrefix="select"
-                                                                                        styles={globalContext.customStyles}
-
-                                                                                    />
-                                                                                )}
-                                                                            />
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                </td>
-                                                            )
-                                                        }
-                                                        else {
-                                                            return (
-                                                                <td className={item2.class}>
-                                                                    <Controller
-                                                                        name={("VoyageSchedule" + '[' + index + ']' + '[' + item2.name + ']')}
-
-                                                                        control={control}
-
-                                                                        render={({ field: { onChange, value } }) => (
-                                                                            <Select
-                                                                                isClearable={true}
-                                                                                {...register("VoyageSchedule" + '[' + index + ']' + '[' + item2.name + ']')}
-                                                                                value={value ? item2.options.find(c => c.value === value) : null}
-                                                                                onChange={val => { val == null ? onChange(null) : onChange(val.value); item2.onChange(val, index) }}
-                                                                                options={item2.options}
-
-                                                                                menuPortalTarget={document.body}
-                                                                                onKeyDown={handleKeydown}
-                                                                                isOptionDisabled={(selectedValue) => selectedValue.selected == true}
-                                                                                className={`basic-single ${item2.fieldClass ? item2.fieldClass : ""}`}
-                                                                                classNamePrefix="select"
-                                                                                styles={globalContext.customStyles}
-
-                                                                            />
-                                                                        )}
-                                                                    />
-                                                                    {item2.columnName == "UOM" ? <input type="hidden" className="ArrayUOM"></input> : ""}
-                                                                </td>
-                                                            )
-                                                        }
-
-
-                                                    }
-
-                                                    if (item2.inputType == "date-time") {
-                                                        return (
-                                                            <td className={item2.class}>
-                                                                {item2.requiredField ?
-                                                                    <Controller
-
-                                                                        control={control}
-                                                                        name={`VoyageSchedule[${index}][${item2.name}]`}
-                                                                        render={({ field: { onChange, value } }) => (
-                                                                            <>
-                                                                                <Flatpickr
-                                                                                     value={value ? value : ""}
-                                                                                    {...register(`VoyageSchedule[${index}][${item2.name}]`, { required: 'required333' })}
-                                                                                    onChange={(val, event) => {
-
-                                                                                        onChange(moment(val[0]).format("DD/MM/YYYY H:mm"))
-
-                                                                                    }}
-                                                                                    onClose={(_, __, fp) => {
-                                                                                      
-                                                                                        setTimeout(() => {
-                                                                                          
-                                                                                            if ($(fp.element).hasClass("Eta")) {
-                                                                                                var checkEta = handlingEta(fp, index)
-                                                                                 
-                                                                                                if (checkEta == "after") {
-                                                                                                    fp.clear()
-                                                                                                    onChange("")
-                                                                                                    fp.input.value = '';
-                                                                                                    alert("ETA cannot be late than ETD")
-
-                                                                                                } else if (checkEta == "before") {
-                                                                                                    fp.clear()
-                                                                                                    onChange("")
-                                                                                                    fp.input.value = '';
-                                                                                                    alert("ETA cannot be ealier than Closing Date Time")
-                                                                                            
-                                                                                                }else if(checkEta=="beforePreviousPort"){
-                                                                                                    fp.clear()
-                                                                                                    onChange("")
-                                                                                                    fp.input.value = '';
-                                                                                                    alert("ETA cannot be ealier than previous port ETD")
-                                                                                                    
-                                                                                                }
-                                                                                            } else if ($(fp.element).hasClass("Closingdatetime")) {
-                                                                                                var checkClosingDateTime = handlingClosingDatetime(fp, index)
-
-                                                                                                if (checkClosingDateTime == "after") {
-                                                                                                    fp.clear()
-                                                                                                    onChange("")
-                                                                                                    fp.input.value = '';
-                                                                                                    alert("Closing Date Time cannot be late than ETA")                                                                                              
-
-                                                                                                }
-                                                                                            } else if ($(fp.element).hasClass("Etd")) {
-                                                                                                var checkEtd = handlingEtd(fp, index)
-
-                                                                                                if (checkEtd == "before") {
-                                                                                                    fp.clear()
-                                                                                                    onChange("")
-                                                                                                    fp.input.value = '';
-                                                                                                    alert("ETD cannot be ealier than ETA")
-                                                                                                }
-
-                                                                                            }
-
-
-
-                                                                                        }, 300);
-                                                                                    }}
-                                                                                    className={`form-control dateformat flatpickr-input ${item2.fieldClass ? item2.fieldClass : ""}  ${errors.VoyageSchedule ? errors.VoyageSchedule[`${index}`] ? errors.VoyageSchedule[`${index}`][`${item2.name}`] ? "has-error" : "" : "" : ""}`}
-                                                                                    options={{
-                                                                                        enableTime: true,
-                                                                                        time_24hr: true,
-                                                                                        dateFormat: "d/m/Y H:i",
-                                                                                        defaultHour: 12,
-
-
-
-                                                                                    }}
-
-                                                                                />
-                                                                            </>
-                                                                        )}
-                                                                    /> :
-                                                                    <Controller
-
-                                                                        control={control}
-                                                                        name={`VoyageSchedule[${index}][${item2.name}]`}
-                                                                        render={({ field: { onChange, value } }) => (
-                                                                            <>
-                                                                                <Flatpickr
-                                                                                    value={value ? value : ""}
-                                                                                    {...register(`VoyageSchedule[${index}][${item2.name}]`)}
-                                                                                    onChange={val => {
-
-                                                                                        onChange(moment(val[0]).format("DD/MM/YYYY H:mm"))
-                                                                                    }}
-                                                                                    onClose={(_, __, fp) => {
-                                                                                      
-                                                                                        setTimeout(() => {
-                                                                                          
-                                                                                            if ($(fp.element).hasClass("Eta")) {
-                                                                                                var checkEta = handlingEta(fp, index)
-                                                                                 
-                                                                                                if (checkEta == "after") {
-                                                                                                    fp.clear()
-                                                                                                    onChange("")
-                                                                                                    fp.input.value = '';
-                                                                                                    alert("ETA cannot be late than ETD")
-
-                                                                                                } else if (checkEta == "before") {
-                                                                                                    fp.clear()
-                                                                                                    onChange("")
-                                                                                                    fp.input.value = '';
-                                                                                                    alert("ETA cannot be ealier than Closing Date Time")
-                                                                                            
-                                                                                                }else if(checkEta=="beforePreviousPort"){
-                                                                                                    fp.clear()
-                                                                                                    onChange("")
-                                                                                                    fp.input.value = '';
-                                                                                                    alert("ETA cannot be ealier than previous port ETD")
-                                                                                                    
-                                                                                                }
-                                                                                            } else if ($(fp.element).hasClass("Closingdatetime")) {
-                                                                                                var checkClosingDateTime = handlingClosingDatetime(fp, index)
-
-                                                                                                if (checkClosingDateTime == "after") {
-                                                                                                    fp.clear()
-                                                                                                    onChange("")
-                                                                                                    fp.input.value = '';
-                                                                                                    alert("Closing Date Time cannot be late than ETA")                                                                                              
-
-                                                                                                }
-                                                                                            } else if ($(fp.element).hasClass("Etd")) {
-                                                                                                var checkEtd = handlingEtd(fp, index)
-
-                                                                                                if (checkEtd == "before") {
-                                                                                                    fp.clear()
-                                                                                                    onChange("")
-                                                                                                    fp.input.value = '';
-                                                                                                    alert("ETD cannot be ealier than ETA")
-                                                                                                }
-
-                                                                                            }
-
-
-
-                                                                                        }, 300);
-                                                                                    }}
-                                                                                    className={`form-control dateformat flatpickr-input`}
-                                                                                    options={{
-                                                                                        enableTime: true,
-                                                                                        time_24hr: true,
-                                                                                        dateFormat: "d/m/Y H:i",
-                                                                                        defaultHour: 12,
-                                                                                    }}
-
-                                                                                />
-                                                                            </>
-                                                                        )}
-                                                                    />
-                                                                }
-
-                                                            </td>
-
-                                                        )
-                                                    }
-
-
-
-
-                                                })}
-                                            </tr>
-
-
-                                        )
-                                    })}
-                                </tbody>
-
-
-
-                            </table>
-                        </div>
-                    </div>
-
-                    <button type="button" className="add-container btn btn-success btn-xs mb-2 mt-2" onClick={handleAddCharges} ><span class="fa fa-plus"></span>Add Route Point</button>
-                </div>
-            </div>
-
-
-        )
-
-
-    }
-
-    const onSubmit = (data, event) => {
-
-        event.preventDefault();
-
-        var tempForm = $("form")[0];
-        ControlOverlay(true)
-
-        $(tempForm).find(".inputDecimalThreePlaces").each(function () {
-            var value1 = $(this).val();
-            if (value1 !== "") {
-                $(this).val(parseFloat(value1).toFixed(4));
-
-            }
-        })
-
-        const formdata = new FormData(tempForm);
-        
-      
-
-        if (formState.formType == "New" || formState.formType == "Clone") {
-
-
-            CreateData(globalContext, props.data.modelLink, formdata).then(res => {
-                if (res.data) {
-                    if (res.data.message == "Voyage has already been taken." || res.data.message == "Tues or Weight Exceeded.") {
-                        ToastNotify("error", res.data.message)
-                        ControlOverlay(false)
-                    }
-                    else {
-                        ToastNotify("success", "Voyage created successfully.")
-                        navigate("/schedule/voyage/update/id=" + res.data.data, { state: { formType: "Update", id: res.data.data } })
-                    }
-                }
-
-            })
-        }
-        else {
-
-            var VoyageSchedulesData = [];
-            $('.VoyageScheduleUUID').each(function (key, value) {
-                var listArray = {
-                    VoyageScheduleUUID: $(this).val(),
-                    SCNCode: getValues(`VoyageSchedule[${key}][SCNCode]`),
-                    ClosingDateTime: getValues(`VoyageSchedule[${key}][ClosingDateTime]`),
-                    ETA: getValues(`VoyageSchedule[${key}][ETA]`),
-                    ETD: getValues(`VoyageSchedule[${key}][ETD]`)
-                }
-                VoyageSchedulesData.push(listArray)
-            });
-            // VoyageSchedulesDataObj[]
-
-
-            CheckVoyageEffectedDocument(globalContext, props.data.modelLink, formState.id, VoyageSchedulesData).then(res => {
-                if (res.BillOfLadings == "" && res.BookingReservations == "" && res.ContainerReleaseOrders == "" && res.Quotations == "") {
-                    handleConfirmVoyage()
-                } else {
-                    ControlOverlay(false)
-                    window.$('#affectedDocument').modal('toggle');
-
-
-                    if (res.Quotations != null) {
-                        $.each(res.Quotations, function (key, value) {
-                            $(".Quotation").append("<div class='row'>&ensp;<input type = 'hidden' class='quotationuuid' value = " + value.QuotationUUID + "><span style='font-size: 15px'>" + value.DocNum + "</span></div>")
-                        });
-                    }
-
-                    if (res.BookingReservations != null) {
-                        $.each(res.BookingReservations, function (key, value) {
-                            $(".BookingReservation").append("<div class='row'>&ensp;<input type = 'hidden' class='bookingreservationuuid' value = " + value.BookingReservationUUID + "><span style='font-size: 15px'>" + value.DocNum + "</span></div>")
-                        });
-                    }
-
-                    if (res.ContainerReleaseOrders != null) {
-                        $.each(res.ContainerReleaseOrders, function (key, value) {
-                            $(".CRO").append("<div class='row'>&ensp;<input type = 'hidden' class='crouuid' value = " + value.ContainerReleaseOrderUUID + "><span style='font-size: 15px'>" + value.DocNum + "</span></div>")
-                        });
-                    }
-
-                    if (res.BillOfLadings != null) {
-                        $.each(res.BillOfLadings, function (key, value) {
-                            $(".BillOfLading").append("<div class='row'>&ensp;<input type = 'hidden' class='bluuid' value = " + value.BillOfLadingUUID + "><span style='font-size: 15px'>" + value.DocNum + "</span></div>")
-                        });
-                    }
-                }
-            })
-            // UpdateData(formState.id, globalContext, props.data.modelLink, formdata).then(res => {
-            //     if (res.data.data) {
-            //         ToastNotify("success", "Voyage updated successfully.")
-            //         navigate("/schedule/voyage/update/id=" + res.data.data, { state: { formType: "Update", id: res.data.data } })
-
-            //     }
-            //     else {
-            //         ToastNotify("error", "Error")
-            //         ControlOverlay(false)
-            //     }
-            // })
-
-        }
-
-
-    }
+			return (
+				<div className='card Ports lvl1 col-xs-12 col-md-12'>
+					<div className='card-header'>
+						<h3 className='card-title'>Voyage Schedule</h3>
+					</div>
+					<div className='card-body'>
+						<div
+							className='btn-group float-left mb-2 columnchooserdropdown'
+							id='columnchooserdropdown'>
+							<button
+								type='button'
+								className='btn btn-secondary btn-xs dropdown-toggle'
+								data-toggle='dropdown'
+								aria-haspopup='true'
+								aria-expanded='true'>
+								<i className='fa fa-th-list'></i>
+							</button>
+							<div
+								className='dropdown-menu dropdown-menu-left  scrollable-columnchooser charges'
+								id={`chargesColumChooser-${props.containerIndex}`}>
+								{VoyageScheduleColumn.map((item, index) => {
+									return (
+										<label className='dropdown-item dropdown-item-marker'>
+											{item.defaultChecked ? (
+												<input
+													type='checkbox'
+													className='columnChooserColumn'
+													defaultChecked
+												/>
+											) : (
+												<input
+													type='checkbox'
+													className='columnChooserColumn'
+												/>
+											)}
+											{item.columnName}
+										</label>
+									);
+								})}
+							</div>
+						</div>
+
+						<div>
+							<button
+								type='button'
+								className='btn btn-success QuickAdd btn-xs mb-2 ml-2'
+								data-toggle='modal'
+								data-target='#addRouteModal'>
+								Quick Add
+							</button>
+
+							<button
+								type='button'
+								className='btn btn-success btn-xs mb-2 ml-2'
+								id='clearTableData'
+								onClick={handleClearTableData}>
+								Clear
+							</button>
+						</div>
+
+						<div className='table_wrap'>
+							<div className='table_wrap_inner'>
+								<table
+									className='table table-bordered commontable'
+									style={{width: "100%"}}>
+									<thead>
+										<tr>
+											{fields.length > 0
+												? fields[0].Charges
+													? fields[0].Charges.map((item, index) => {
+															return (
+																<th key={item.id} className={item.class}>
+																	{item.columnName}
+																</th>
+															);
+													  })
+													: ""
+												: VoyageScheduleColumn.map((item, index) => {
+														return (
+															<th key={item.id} className={item.class}>
+																{item.columnName}
+															</th>
+														);
+												  })}
+										</tr>
+									</thead>
+									<tbody>
+										{fields.map((item, index) => {
+											return (
+												<tr key={item.id}>
+													{item.Charges.map((item2, index2) => {
+														if (item2.inputType == "input") {
+															if (!quickAddState) {
+																if (
+																	item2.name == "Tues" ||
+																	item2.name == "Weight"
+																) {
+																	var tempName;
+																	item2.name == "Tues"
+																		? (tempName =
+																				requiredStateTues[
+																					`VoyageSchedule[${index}][Tues]`
+																				])
+																		: (tempName =
+																				requiredStateWeight[
+																					`VoyageSchedule[${index}][Weight]`
+																				]);
+																	if (tempName == true) {
+																		return (
+																			<td className={item2.class}>
+																				<input
+																					defaultValue=''
+																					readOnly={
+																						item2.readOnly
+																							? item2.readOnly
+																							: false
+																					}
+																					{...register(
+																						"VoyageSchedule" +
+																							"[" +
+																							index +
+																							"]" +
+																							"[" +
+																							item2.name +
+																							"]",
+																						{required: "required"}
+																					)}
+																					className={`form-control ${
+																						item2.fieldClass
+																							? item2.fieldClass
+																							: ""
+																					} ${
+																						errors.VoyageSchedule
+																							? errors.VoyageSchedule[
+																									`${index}`
+																							  ]
+																								? errors.VoyageSchedule[
+																										`${index}`
+																								  ][`${item2.name}`]
+																									? "has-error"
+																									: ""
+																								: ""
+																							: ""
+																					}`}
+																				/>
+																			</td>
+																		);
+																	} else {
+																		return (
+																			<td className={item2.class}>
+																				<input
+																					defaultValue=''
+																					readOnly={
+																						item2.readOnly
+																							? item2.readOnly
+																							: false
+																					}
+																					{...register(
+																						"VoyageSchedule" +
+																							"[" +
+																							index +
+																							"]" +
+																							"[" +
+																							item2.name +
+																							"]"
+																					)}
+																					className={`form-control ${
+																						item2.fieldClass
+																							? item2.fieldClass
+																							: ""
+																					} ${
+																						errors.VoyageSchedule
+																							? errors.VoyageSchedule[
+																									`${index}`
+																							  ]
+																								? errors.VoyageSchedule[
+																										`${index}`
+																								  ][`${item2.name}`]
+																									? "has-error"
+																									: ""
+																								: ""
+																							: ""
+																					}`}
+																				/>
+																			</td>
+																		);
+																	}
+																} else {
+																	return (
+																		<td className={item2.class}>
+																			{item2.requiredField ? (
+																				<input
+																					defaultValue=''
+																					readOnly={
+																						item2.readOnly
+																							? item2.readOnly
+																							: false
+																					}
+																					{...register(
+																						"VoyageSchedule" +
+																							"[" +
+																							index +
+																							"]" +
+																							"[" +
+																							item2.name +
+																							"]",
+																						{required: "required"}
+																					)}
+																					className={`form-control ${
+																						item2.fieldClass
+																							? item2.fieldClass
+																							: ""
+																					} ${
+																						errors.VoyageSchedule
+																							? errors.VoyageSchedule[
+																									`${index}`
+																							  ]
+																								? errors.VoyageSchedule[
+																										`${index}`
+																								  ][`${item2.name}`]
+																									? "has-error"
+																									: ""
+																								: ""
+																							: ""
+																					}`}
+																				/>
+																			) : (
+																				<input
+																					defaultValue=''
+																					readOnly={
+																						item2.readOnly
+																							? item2.readOnly
+																							: false
+																					}
+																					{...register(
+																						"VoyageSchedule" +
+																							"[" +
+																							index +
+																							"]" +
+																							"[" +
+																							item2.name +
+																							"]"
+																					)}
+																					className={`form-control ${
+																						item2.fieldClass
+																							? item2.fieldClass
+																							: ""
+																					}`}
+																				/>
+																			)}
+																		</td>
+																	);
+																}
+															} else {
+																return (
+																	<td className={item2.class}>
+																		{item2.requiredField ? (
+																			<input
+																				defaultValue=''
+																				readOnly={
+																					item2.readOnly
+																						? item2.readOnly
+																						: false
+																				}
+																				{...register(
+																					"VoyageSchedule" +
+																						"[" +
+																						index +
+																						"]" +
+																						"[" +
+																						item2.name +
+																						"]",
+																					{required: "required"}
+																				)}
+																				className={`form-control ${
+																					item2.fieldClass
+																						? item2.fieldClass
+																						: ""
+																				} ${
+																					errors.VoyageSchedule
+																						? errors.VoyageSchedule[`${index}`]
+																							? errors.VoyageSchedule[
+																									`${index}`
+																							  ][`${item2.name}`]
+																								? "has-error"
+																								: ""
+																							: ""
+																						: ""
+																				}`}
+																			/>
+																		) : (
+																			<input
+																				defaultValue=''
+																				readOnly={
+																					item2.readOnly
+																						? item2.readOnly
+																						: false
+																				}
+																				{...register(
+																					"VoyageSchedule" +
+																						"[" +
+																						index +
+																						"]" +
+																						"[" +
+																						item2.name +
+																						"]"
+																				)}
+																				className={`form-control ${
+																					item2.fieldClass
+																						? item2.fieldClass
+																						: ""
+																				}`}
+																			/>
+																		)}
+																	</td>
+																);
+															}
+														}
+
+														if (item2.inputType == "single-select") {
+															if (index2 == 0) {
+																return (
+																	<td className={item2.class}>
+																		<div className='row'>
+																			<div className='col-md-2'>
+																				<div className='dropdownbar float-left ml-1'>
+																					<button
+																						style={{
+																							position: "relative",
+																							left: "0px",
+																							top: "-5px",
+																							padding: "0px 3px 0px 3px",
+																						}}
+																						className='btn btn-xs mt-2 btn-secondary dropdown-toggle float-right mr-1'
+																						type='button'
+																						data-toggle='dropdown'
+																						aria-haspopup='true'
+																						aria-expanded='false'>
+																						<i className='fa fa-ellipsis-v'></i>
+																					</button>
+																					<div
+																						className='dropdown-menu'
+																						aria-labelledby='dropdownMenuButton'>
+																						<button
+																							className='dropdown-item remove-container'
+																							type='button'
+																							onClick={() => remove(index)}>
+																							Remove
+																						</button>
+																					</div>
+																				</div>
+																			</div>
+																			<input
+																				defaultValue=''
+																				{...register(
+																					"VoyageSchedule" +
+																						"[" +
+																						index +
+																						"]" +
+																						"[VoyageScheduleUUID]"
+																				)}
+																				className={`form-control VoyageScheduleUUID d-none`}
+																			/>
+																			<div className='col-md-10'>
+																				<Controller
+																					name={
+																						"VoyageSchedule" +
+																						"[" +
+																						index +
+																						"]" +
+																						"[" +
+																						item2.name +
+																						"]"
+																					}
+																					control={control}
+																					render={({
+																						field: {onChange, value},
+																					}) => (
+																						<Select
+																							isClearable={true}
+																							{...register(
+																								"VoyageSchedule" +
+																									"[" +
+																									index +
+																									"]" +
+																									"[" +
+																									item2.name +
+																									"]",
+																								{required: "P cannot be blank."}
+																							)}
+																							value={
+																								value
+																									? item2.options.find(
+																											(c) => c.value === value
+																									  )
+																									: null
+																							}
+																							onChange={(val) => {
+																								val == null
+																									? onChange(null)
+																									: onChange(val.value);
+																								item2.onChange(val, index);
+																							}}
+																							options={item2.options}
+																							isOptionDisabled={(
+																								selectedValue
+																							) =>
+																								selectedValue.selected == true
+																							}
+																							menuPortalTarget={document.body}
+																							className={`basic-single ${
+																								item2.fieldClass
+																									? item2.fieldClass
+																									: ""
+																							}  ${
+																								errors.VoyageSchedule
+																									? errors.VoyageSchedule[
+																											`${index}`
+																									  ]
+																										? errors.VoyageSchedule[
+																												`${index}`
+																										  ][`${item2.name}`]
+																											? "has-error-select"
+																											: ""
+																										: ""
+																									: ""
+																							}`}
+																							onKeyDown={handleKeydown}
+																							classNamePrefix='select'
+																							styles={
+																								globalContext.customStyles
+																							}
+																						/>
+																					)}
+																				/>
+																			</div>
+																		</div>
+																	</td>
+																);
+															} else {
+																return (
+																	<td className={item2.class}>
+																		<Controller
+																			name={
+																				"VoyageSchedule" +
+																				"[" +
+																				index +
+																				"]" +
+																				"[" +
+																				item2.name +
+																				"]"
+																			}
+																			control={control}
+																			render={({field: {onChange, value}}) => (
+																				<Select
+																					isClearable={true}
+																					{...register(
+																						"VoyageSchedule" +
+																							"[" +
+																							index +
+																							"]" +
+																							"[" +
+																							item2.name +
+																							"]"
+																					)}
+																					value={
+																						value
+																							? item2.options.find(
+																									(c) => c.value === value
+																							  )
+																							: null
+																					}
+																					onChange={(val) => {
+																						val == null
+																							? onChange(null)
+																							: onChange(val.value);
+																						item2.onChange(val, index);
+																					}}
+																					options={item2.options}
+																					menuPortalTarget={document.body}
+																					onKeyDown={handleKeydown}
+																					isOptionDisabled={(selectedValue) =>
+																						selectedValue.selected == true
+																					}
+																					className={`basic-single ${
+																						item2.fieldClass
+																							? item2.fieldClass
+																							: ""
+																					}`}
+																					classNamePrefix='select'
+																					styles={globalContext.customStyles}
+																				/>
+																			)}
+																		/>
+																		{item2.columnName == "UOM" ? (
+																			<input
+																				type='hidden'
+																				className='ArrayUOM'></input>
+																		) : (
+																			""
+																		)}
+																	</td>
+																);
+															}
+														}
+
+														if (item2.inputType == "date-time") {
+															return (
+																<td className={item2.class}>
+																	{item2.requiredField ? (
+																		<Controller
+																			control={control}
+																			name={`VoyageSchedule[${index}][${item2.name}]`}
+																			render={({field: {onChange, value}}) => (
+																				<>
+																					<Flatpickr
+																						value={value ? value : ""}
+																						{...register(
+																							`VoyageSchedule[${index}][${item2.name}]`,
+																							{required: "required333"}
+																						)}
+																						onChange={(val, event) => {
+																							onChange(
+																								moment(val[0]).format(
+																									"DD/MM/YYYY H:mm"
+																								)
+																							);
+																						}}
+																						onClose={(_, __, fp) => {
+																							setTimeout(() => {
+																								if (
+																									$(fp.element).hasClass("Eta")
+																								) {
+																									var checkEta = handlingEta(
+																										fp,
+																										index
+																									);
+
+																									if (checkEta == "after") {
+																										fp.clear();
+																										onChange("");
+																										fp.input.value = "";
+																										alert(
+																											"ETA cannot be late than ETD"
+																										);
+																									} else if (
+																										checkEta == "before"
+																									) {
+																										fp.clear();
+																										onChange("");
+																										fp.input.value = "";
+																										alert(
+																											"ETA cannot be ealier than Closing Date Time"
+																										);
+																									} else if (
+																										checkEta ==
+																										"beforePreviousPort"
+																									) {
+																										fp.clear();
+																										onChange("");
+																										fp.input.value = "";
+																										alert(
+																											"ETA cannot be ealier than previous port ETD"
+																										);
+																									}
+																								} else if (
+																									$(fp.element).hasClass(
+																										"Closingdatetime"
+																									)
+																								) {
+																									var checkClosingDateTime =
+																										handlingClosingDatetime(
+																											fp,
+																											index
+																										);
+
+																									if (
+																										checkClosingDateTime ==
+																										"after"
+																									) {
+																										fp.clear();
+																										onChange("");
+																										fp.input.value = "";
+																										alert(
+																											"Closing Date Time cannot be late than ETA"
+																										);
+																									}
+																								} else if (
+																									$(fp.element).hasClass("Etd")
+																								) {
+																									var checkEtd = handlingEtd(
+																										fp,
+																										index
+																									);
+
+																									if (checkEtd == "before") {
+																										fp.clear();
+																										onChange("");
+																										fp.input.value = "";
+																										alert(
+																											"ETD cannot be ealier than ETA"
+																										);
+																									}
+																								}
+																							}, 300);
+																						}}
+																						className={`form-control dateformat flatpickr-input ${
+																							item2.fieldClass
+																								? item2.fieldClass
+																								: ""
+																						}  ${
+																							errors.VoyageSchedule
+																								? errors.VoyageSchedule[
+																										`${index}`
+																								  ]
+																									? errors.VoyageSchedule[
+																											`${index}`
+																									  ][`${item2.name}`]
+																										? "has-error"
+																										: ""
+																									: ""
+																								: ""
+																						}`}
+																						options={{
+																							enableTime: true,
+																							time_24hr: true,
+																							dateFormat: "d/m/Y H:i",
+																							defaultHour: 12,
+																						}}
+																					/>
+																				</>
+																			)}
+																		/>
+																	) : (
+																		<Controller
+																			control={control}
+																			name={`VoyageSchedule[${index}][${item2.name}]`}
+																			render={({field: {onChange, value}}) => (
+																				<>
+																					<Flatpickr
+																						value={value ? value : ""}
+																						{...register(
+																							`VoyageSchedule[${index}][${item2.name}]`
+																						)}
+																						onChange={(val) => {
+																							onChange(
+																								moment(val[0]).format(
+																									"DD/MM/YYYY H:mm"
+																								)
+																							);
+																						}}
+																						onClose={(_, __, fp) => {
+																							setTimeout(() => {
+																								if (
+																									$(fp.element).hasClass("Eta")
+																								) {
+																									var checkEta = handlingEta(
+																										fp,
+																										index
+																									);
+
+																									if (checkEta == "after") {
+																										fp.clear();
+																										onChange("");
+																										fp.input.value = "";
+																										alert(
+																											"ETA cannot be late than ETD"
+																										);
+																									} else if (
+																										checkEta == "before"
+																									) {
+																										fp.clear();
+																										onChange("");
+																										fp.input.value = "";
+																										alert(
+																											"ETA cannot be ealier than Closing Date Time"
+																										);
+																									} else if (
+																										checkEta ==
+																										"beforePreviousPort"
+																									) {
+																										fp.clear();
+																										onChange("");
+																										fp.input.value = "";
+																										alert(
+																											"ETA cannot be ealier than previous port ETD"
+																										);
+																									}
+																								} else if (
+																									$(fp.element).hasClass(
+																										"Closingdatetime"
+																									)
+																								) {
+																									var checkClosingDateTime =
+																										handlingClosingDatetime(
+																											fp,
+																											index
+																										);
+
+																									if (
+																										checkClosingDateTime ==
+																										"after"
+																									) {
+																										fp.clear();
+																										onChange("");
+																										fp.input.value = "";
+																										alert(
+																											"Closing Date Time cannot be late than ETA"
+																										);
+																									}
+																								} else if (
+																									$(fp.element).hasClass("Etd")
+																								) {
+																									var checkEtd = handlingEtd(
+																										fp,
+																										index
+																									);
+
+																									if (checkEtd == "before") {
+																										fp.clear();
+																										onChange("");
+																										fp.input.value = "";
+																										alert(
+																											"ETD cannot be ealier than ETA"
+																										);
+																									}
+																								}
+																							}, 300);
+																						}}
+																						className={`form-control dateformat flatpickr-input`}
+																						options={{
+																							enableTime: true,
+																							time_24hr: true,
+																							dateFormat: "d/m/Y H:i",
+																							defaultHour: 12,
+																						}}
+																					/>
+																				</>
+																			)}
+																		/>
+																	)}
+																</td>
+															);
+														}
+													})}
+												</tr>
+											);
+										})}
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<button
+							type='button'
+							className='add-container btn btn-success btn-xs mb-2 mt-2'
+							onClick={handleAddCharges}>
+							<span className='fa fa-plus'></span>Add Route Point
+						</button>
+					</div>
+				</div>
+			);
+		}
+
+		const onSubmit = (data, event) => {
+			event.preventDefault();
+
+			var tempForm = $("form")[0];
+			ControlOverlay(true);
+
+			$(tempForm)
+				.find(".inputDecimalThreePlaces")
+				.each(function () {
+					var value1 = $(this).val();
+					if (value1 !== "") {
+						$(this).val(parseFloat(value1).toFixed(4));
+					}
+				});
+
+			const formdata = new FormData(tempForm);
+
+			if (formState.formType == "New" || formState.formType == "Clone") {
+				CreateData(globalContext, props.data.modelLink, formdata).then(
+					(res) => {
+						if (res.data) {
+							if (
+								res.data.message == "Voyage has already been taken." ||
+								res.data.message == "Tues or Weight Exceeded."
+							) {
+								ToastNotify("error", res.data.message);
+								ControlOverlay(false);
+							} else {
+								ToastNotify("success", "Voyage created successfully.");
+								navigate("/schedule/voyage/update/id=" + res.data.data, {
+									state: {formType: "Update", id: res.data.data},
+								});
+							}
+						}
+					}
+				);
+			} else {
+				var VoyageSchedulesData = [];
+				$(".VoyageScheduleUUID").each(function (key, value) {
+					var listArray = {
+						VoyageScheduleUUID: $(this).val(),
+						SCNCode: getValues(`VoyageSchedule[${key}][SCNCode]`),
+						ClosingDateTime: getValues(
+							`VoyageSchedule[${key}][ClosingDateTime]`
+						),
+						ETA: getValues(`VoyageSchedule[${key}][ETA]`),
+						ETD: getValues(`VoyageSchedule[${key}][ETD]`),
+					};
+					VoyageSchedulesData.push(listArray);
+				});
+				// VoyageSchedulesDataObj[]
+
+				CheckVoyageEffectedDocument(
+					globalContext,
+					props.data.modelLink,
+					formState.id,
+					VoyageSchedulesData
+				).then((res) => {
+					if (
+						res.BillOfLadings == "" &&
+						res.BookingReservations == "" &&
+						res.ContainerReleaseOrders == "" &&
+						res.Quotations == ""
+					) {
+						handleConfirmVoyage();
+					} else {
+						ControlOverlay(false);
+						window.$("#affectedDocument").modal("toggle");
+
+						if (res.Quotations != null) {
+							$.each(res.Quotations, function (key, value) {
+								$(".Quotation").append(
+									"<div className='row'>&ensp;<input type = 'hidden' className='quotationuuid' value = " +
+										value.QuotationUUID +
+										"><span style='font-size: 15px'>" +
+										value.DocNum +
+										"</span></div>"
+								);
+							});
+						}
+
+						if (res.BookingReservations != null) {
+							$.each(res.BookingReservations, function (key, value) {
+								$(".BookingReservation").append(
+									"<div className='row'>&ensp;<input type = 'hidden' className='bookingreservationuuid' value = " +
+										value.BookingReservationUUID +
+										"><span style='font-size: 15px'>" +
+										value.DocNum +
+										"</span></div>"
+								);
+							});
+						}
+
+						if (res.ContainerReleaseOrders != null) {
+							$.each(res.ContainerReleaseOrders, function (key, value) {
+								$(".CRO").append(
+									"<div className='row'>&ensp;<input type = 'hidden' className='crouuid' value = " +
+										value.ContainerReleaseOrderUUID +
+										"><span style='font-size: 15px'>" +
+										value.DocNum +
+										"</span></div>"
+								);
+							});
+						}
+
+						if (res.BillOfLadings != null) {
+							$.each(res.BillOfLadings, function (key, value) {
+								$(".BillOfLading").append(
+									"<div className='row'>&ensp;<input type = 'hidden' className='bluuid' value = " +
+										value.BillOfLadingUUID +
+										"><span style='font-size: 15px'>" +
+										value.DocNum +
+										"</span></div>"
+								);
+							});
+						}
+					}
+				});
+				// UpdateData(formState.id, globalContext, props.data.modelLink, formdata).then(res => {
+				//     if (res.data.data) {
+				//         ToastNotify("success", "Voyage updated successfully.")
+				//         navigate("/schedule/voyage/update/id=" + res.data.data, { state: { formType: "Update", id: res.data.data } })
+
+				//     }
+				//     else {
+				//         ToastNotify("error", "Error")
+				//         ControlOverlay(false)
+				//     }
+				// })
+			}
+		};
 
 
     useEffect(() => {

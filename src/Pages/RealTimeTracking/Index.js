@@ -111,163 +111,231 @@ function Index(props) {
                             if (ContainerRelease == "") {
                                 html += ""
                             } else {
-                                html += '<div class="card shipping-instructions lvl1">'
+                                html +=
+																	'<div className="card shipping-instructions lvl1">' +
+																	'<div className="card-header">' +
+																	'<h3 className="card-title"><button type="button" className="btn btn-tool ContainerDetailsShow"> <i className="fas fa-minus"></i></button>Container Code: ' +
+																	value.ContainerCode +
+																	"</h3>" +
+																	// +          '<div className="card-tools">'
+																	// +              '<button type="button" className="btn btn-tool" data-card-widget="collapse">'
+																	// +                  '<i className="fas fa-minus"></i>'
+																	// +              '</button>'
+																	// +          '</div>'
+																	"</div>" +
+																	'<table className="ContainerDetails ml-4" style="width:50%;">' +
+																	"<tr>" +
+																	'<th style:"width:10%;"></th>' +
+																	'<th style:"width:90%;"></th>' +
+																	"</tr>" +
+																	"<tr>" +
+																	'<td style="width:10%;" >Seal No.:</td>' +
+																	'<td style="width:90%;">' +
+																	ContainerSealNum +
+																	"</td>" +
+																	"</tr>" +
+																	"<tr>" +
+																	'<td style="width:10%;" >Commodity:</td>' +
+																	'<td style="width:90%;" >' +
+																	ContainerCommodity +
+																	"</td>" +
+																	"</tr>" +
+																	'<td style="width:10%;">Gross Weight:</td>' +
+																	'<td style="width:90%;">' +
+																	ContainerGrossWeight +
+																	"</td>" +
+																	"</tr>" +
+																	"</tr>" +
+																	'<td style="width:10%;">M3:</td>' +
+																	'<td style="width:90%;">' +
+																	ContainerM3 +
+																	"</td>" +
+																	"</tr>" +
+																	"</table>" +
+																	'<div className="card-body">' +
+																	'<section className="content">' +
+																	'<div className="container-fluid">' +
+																	'<div className="row">' +
+																	'<div className="col-md-12">' +
+																	'<div className="timeline">';
 
-                                    + '<div class="card-header">'
-                                    + '<h3 class="card-title"><button type="button" class="btn btn-tool ContainerDetailsShow"> <i class="fas fa-minus"></i></button>Container Code: ' + value.ContainerCode + '</h3>'
-                                    // +          '<div class="card-tools">'
-                                    // +              '<button type="button" class="btn btn-tool" data-card-widget="collapse">'
-                                    // +                  '<i class="fas fa-minus"></i>'
-                                    // +              '</button>'
-                                    // +          '</div>'  
-                                    + '</div>'
+																if (value.ContainerReceive !== null) {
+																	html +=
+																		"<div>" +
+																		'<i className="fas fa-circle bg-blue"></i>' +
+																		'<div className="timeline-item">' +
+																		'<h3 className="timeline-header">' +
+																		replaceNull(
+																			ContainerReceive.CreatedAt,
+																			""
+																		) +
+																		"</h3>" +
+																		'<div className="timeline-body">' +
+																		"Container Received<br>" +
+																		replaceNull(ContainerReceive.Area, "") +
+																		"</div>" +
+																		"</div>" +
+																		"</div>";
+																}
 
-                                    + '<table class="ContainerDetails ml-4" style="width:50%;">'
-                                    + '<tr>'
-                                    + '<th style:"width:10%;"></th>'
-                                    + '<th style:"width:90%;"></th>'
-                                    + '</tr>'
-                                    + '<tr>'
-                                    + '<td style="width:10%;" >Seal No.:</td>'
-                                    + '<td style="width:90%;">' + ContainerSealNum + '</td>'
-                                    + '</tr>'
-                                    + '<tr>'
-                                    + '<td style="width:10%;" >Commodity:</td>'
-                                    + '<td style="width:90%;" >' + ContainerCommodity + '</td>'
-                                    + '</tr>'
-                                    + '<td style="width:10%;">Gross Weight:</td>'
-                                    + '<td style="width:90%;">' + ContainerGrossWeight + '</td>'
-                                    + '</tr>'
-                                    + '</tr>'
-                                    + '<td style="width:10%;">M3:</td>'
-                                    + '<td style="width:90%;">' + ContainerM3 + '</td>'
-                                    + '</tr>'
-                                    + '</table>'
+																if (value.ContainerGateOut !== null) {
+																	html +=
+																		"<div>" +
+																		'<i className="fas fa-circle bg-blue"></i>' +
+																		'<div className="timeline-item">' +
+																		'<h3 className="timeline-header">' +
+																		replaceNull(
+																			ContainerGateOut.CreatedAt,
+																			""
+																		) +
+																		"</h3>" +
+																		'<div className="timeline-body">' +
+																		"Container Gate Out<br>" +
+																		replaceNull(ContainerGateOut.Area, "") +
+																		"</div>" +
+																		"</div>" +
+																		"</div>";
+																}
 
+																if (value.ContainerDischarged[1] != null) {
+																	html +=
+																		"<div>" +
+																		'<i className="fas fa-circle bg-blue"></i>' +
+																		'<div className="timeline-item">' +
+																		'<h3 className="timeline-header">' +
+																		replaceNull(
+																			value.ContainerDischarged[1].CreatedAt,
+																			""
+																		) +
+																		"</h3>" +
+																		'<div className="timeline-body">' +
+																		"Container Discharged<br>" +
+																		replaceNull(
+																			value.ContainerDischarged[1].Area,
+																			""
+																		) +
+																		"</div>" +
+																		"</div>" +
+																		"</div>";
+																}
 
+																if (value.ContainerLoaded[1] != null) {
+																	html +=
+																		"<div>" +
+																		'<i className="fas fa-circle bg-blue"></i>' +
+																		'<div className="timeline-item">' +
+																		'<h3 className="timeline-header">' +
+																		replaceNull(
+																			value.ContainerLoaded[1].CreatedAt,
+																			""
+																		) +
+																		"</h3>" +
+																		'<div className="timeline-body">' +
+																		"Container Loaded<br>" +
+																		replaceNull(
+																			value.ContainerLoaded[1].Area,
+																			""
+																		) +
+																		"</div>" +
+																		"</div>" +
+																		"</div>";
+																}
 
-                                    + '<div class="card-body">'
-                                    + '<section class="content">'
-                                    + '<div class="container-fluid">'
-                                    + '<div class="row">'
-                                    + '<div class="col-md-12">'
-                                    + '<div class="timeline">'
+																if (value.ContainerDischarged[0] != null) {
+																	html +=
+																		"<div>" +
+																		'<i className="fas fa-circle bg-blue"></i>' +
+																		'<div className="timeline-item">' +
+																		'<h3 className="timeline-header">' +
+																		replaceNull(
+																			value.ContainerDischarged[0].CreatedAt,
+																			""
+																		) +
+																		"</h3>" +
+																		'<div className="timeline-body">' +
+																		"Container Discharged<br>" +
+																		replaceNull(
+																			value.ContainerDischarged[0].Area,
+																			""
+																		) +
+																		"</div>" +
+																		"</div>" +
+																		"</div>";
+																}
 
-                                if (value.ContainerReceive !== null) {
-                                    html += '<div>'
-                                        + '<i class="fas fa-circle bg-blue"></i>'
-                                        + '<div class="timeline-item">'
-                                        + '<h3 class="timeline-header">' + replaceNull(ContainerReceive.CreatedAt, "") + '</h3>'
-                                        + '<div class="timeline-body">'
-                                        + 'Container Received<br>'
-                                        + replaceNull(ContainerReceive.Area, "")
-                                        + '</div>'
-                                        + '</div>'
-                                        + '</div>'
-                                }
+																if (value.ContainerLoaded[0] != null) {
+																	html +=
+																		"<div>" +
+																		'<i className="fas fa-circle bg-blue"></i>' +
+																		'<div className="timeline-item">' +
+																		'<h3 className="timeline-header">' +
+																		replaceNull(
+																			value.ContainerLoaded[0].CreatedAt,
+																			""
+																		) +
+																		"</h3>" +
+																		'<div className="timeline-body">' +
+																		"Container Loaded<br>" +
+																		replaceNull(
+																			value.ContainerLoaded[0].Area,
+																			""
+																		) +
+																		"</div>" +
+																		"</div>" +
+																		"</div>";
+																}
 
-                                if (value.ContainerGateOut !== null) {
-                                    html += '<div>'
-                                        + '<i class="fas fa-circle bg-blue"></i>'
-                                        + '<div class="timeline-item">'
-                                        + '<h3 class="timeline-header">' + replaceNull(ContainerGateOut.CreatedAt, "") + '</h3>'
-                                        + '<div class="timeline-body">'
-                                        + 'Container Gate Out<br>'
-                                        + replaceNull(ContainerGateOut.Area, "")
-                                        + '</div>'
-                                        + '</div>'
-                                        + '</div>'
-                                }
+																if (value.ContainerGateIn !== null) {
+																	html +=
+																		"<div>" +
+																		'<i className="fas fa-circle bg-blue"></i>' +
+																		'<div className="timeline-item">' +
+																		'<h3 className="timeline-header">' +
+																		replaceNull(ContainerGateIn.CreatedAt, "") +
+																		"</h3>" +
+																		'<div className="timeline-body">' +
+																		"Container Gate In<br>" +
+																		replaceNull(ContainerGateIn.Area, "") +
+																		"</div>" +
+																		"</div>" +
+																		"</div>";
+																}
 
-                                if (value.ContainerDischarged[1] != null) {
-                                    html += '<div>'
-                                        + '<i class="fas fa-circle bg-blue"></i>'
-                                        + '<div class="timeline-item">'
-                                        + '<h3 class="timeline-header">' + replaceNull(value.ContainerDischarged[1].CreatedAt, "") + '</h3>'
-                                        + '<div class="timeline-body">'
-                                        + 'Container Discharged<br>'
-                                        + replaceNull(value.ContainerDischarged[1].Area, "")
-                                        + '</div>'
-                                        + '</div>'
-                                        + '</div>'
-                                }
+																if (value.ContainerVerifyGrossMass !== null) {
+																	html +=
+																		"<div>" +
+																		'<i className="fas fa-circle bg-blue"></i>' +
+																		'<div className="timeline-item">' +
+																		'<h3 className="timeline-header">' +
+																		replaceNull(
+																			ContainerVerifyGrossMass.CreatedAt,
+																			""
+																		) +
+																		"</h3>" +
+																		'<div className="timeline-body">' +
+																		"Container Verified Gross Mass<br>" +
+																		replaceNull(
+																			ContainerVerifyGrossMass.Area,
+																			""
+																		) +
+																		"</div>" +
+																		"</div>" +
+																		"</div>";
+																}
 
-                                if (value.ContainerLoaded[1] != null) {
-                                    html += '<div>'
-                                        + '<i class="fas fa-circle bg-blue"></i>'
-                                        + '<div class="timeline-item">'
-                                        + '<h3 class="timeline-header">' + replaceNull(value.ContainerLoaded[1].CreatedAt, "") + '</h3>'
-                                        + '<div class="timeline-body">'
-                                        + 'Container Loaded<br>'
-                                        + replaceNull(value.ContainerLoaded[1].Area, "")
-                                        + '</div>'
-                                        + '</div>'
-                                        + '</div>'
-                                }
-
-                                if (value.ContainerDischarged[0] != null) {
-                                    html += '<div>'
-                                        + '<i class="fas fa-circle bg-blue"></i>'
-                                        + '<div class="timeline-item">'
-                                        + '<h3 class="timeline-header">' + replaceNull(value.ContainerDischarged[0].CreatedAt, "") + '</h3>'
-                                        + '<div class="timeline-body">'
-                                        + 'Container Discharged<br>'
-                                        + replaceNull(value.ContainerDischarged[0].Area, "")
-                                        + '</div>'
-                                        + '</div>'
-                                        + '</div>'
-                                }
-
-                                if (value.ContainerLoaded[0] != null) {
-                                    html += '<div>'
-                                        + '<i class="fas fa-circle bg-blue"></i>'
-                                        + '<div class="timeline-item">'
-                                        + '<h3 class="timeline-header">' + replaceNull(value.ContainerLoaded[0].CreatedAt, "") + '</h3>'
-                                        + '<div class="timeline-body">'
-                                        + 'Container Loaded<br>'
-                                        + replaceNull(value.ContainerLoaded[0].Area, "")
-                                        + '</div>'
-                                        + '</div>'
-                                        + '</div>'
-                                }
-
-
-                                if (value.ContainerGateIn !== null) {
-                                    html += '<div>'
-                                        + '<i class="fas fa-circle bg-blue"></i>'
-                                        + '<div class="timeline-item">'
-                                        + '<h3 class="timeline-header">' + replaceNull(ContainerGateIn.CreatedAt, "") + '</h3>'
-                                        + '<div class="timeline-body">'
-                                        + 'Container Gate In<br>'
-                                        + replaceNull(ContainerGateIn.Area, "")
-                                        + '</div>'
-                                        + '</div>'
-                                        + '</div>'
-                                }
-
-                                if (value.ContainerVerifyGrossMass !== null) {
-                                    html += '<div>'
-                                        + '<i class="fas fa-circle bg-blue"></i>'
-                                        + '<div class="timeline-item">'
-                                        + '<h3 class="timeline-header">' + replaceNull(ContainerVerifyGrossMass.CreatedAt, "") + '</h3>'
-                                        + '<div class="timeline-body">'
-                                        + 'Container Verified Gross Mass<br>'
-                                        + replaceNull(ContainerVerifyGrossMass.Area, "")
-                                        + '</div>'
-                                        + '</div>'
-                                        + '</div>'
-                                }
-
-                                html += '<div>'
-                                    + '<i class="fas fa-circle bg-blue"></i>'
-                                    + '<div class="timeline-item">'
-                                    + '<h3 class="timeline-header">' + replaceNull(ContainerRelease.CreatedAt, "") + '</h3>'
-                                    + '<div class="timeline-body">'
-                                    + 'Container Released<br>'
-                                    + replaceNull(ContainerRelease.Area, "")
-                                    + '</div>'
-                                    + '</div>'
-                                    + '</div>'
+																html +=
+																	"<div>" +
+																	'<i className="fas fa-circle bg-blue"></i>' +
+																	'<div className="timeline-item">' +
+																	'<h3 className="timeline-header">' +
+																	replaceNull(ContainerRelease.CreatedAt, "") +
+																	"</h3>" +
+																	'<div className="timeline-body">' +
+																	"Container Released<br>" +
+																	replaceNull(ContainerRelease.Area, "") +
+																	"</div>" +
+																	"</div>" +
+																	"</div>";
 
 
                                 html += '</div>'

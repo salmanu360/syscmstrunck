@@ -832,291 +832,531 @@ function BuildUIForInstruction(props){
                         
               
                    
-                    return (res.type === "input-text")?
-                    (
-                        <div key={index} className={res.gridSize}>
-                            <div className="form-group">
-                                <label className="control-label">{res.title}</label>
-                                {res.specialFeature.includes("required") ? 
-                                    <input {...props.props.register(name,{required: `${res.title} cannot be blank.`})} id={res.id} className={`form-control ${res.className}`} data-target={res.dataTarget} readOnly={res.specialFeature.includes("readOnly")?true:false}/>
-                                    :
-                                    <input {...props.props.register(name)} defaultValue={res.defaultValue} id={res.id} className={`form-control ${res.className}`} data-target={res.dataTarget} readOnly={res.specialFeature.includes("readOnly")?true:false}/>
-                                }
-                            </div>
-                        </div>
-                    ):
-                    (res.type === "MultiplePOD")?
-                    (
-                        <div>
-                          <DetailFormMultiplePODField formName={formName}  register={props.props.register} control={props.props.control} errors={props.props.errors} setValue={props.props.setValue} port={props.props.port} getValues={props.props.getValues}/>
-                
-                        </div>
-                    ):
-                    (res.type === "input-number")?
-                    (
-                        <div key={index} className={res.gridSize}>
-                            <div className="form-group">
-                                <label className="control-label">{res.title}</label>
-                                {res.specialFeature.includes("required") ? 
-                                <input type={"number"} {...props.props.register(name,{required: `${res.title} cannot be blank.`})} id={res.id} data-target={res.dataTarget} className={`form-control ${res.className}`}/>
-                                    :   
-                                <input type={"number"} {...props.props.register(name)} id={res.id} data-target={res.dataTarget} className={`form-control ${res.className}`}/>
-                                }
-                             
-                            </div>
-                        </div>
-                    ):
-                    (res.type === "flatpickr-input")?
-                    (
-                        <div key={index} className={res.gridSize}>
-                            <div className="form-group">
-                                <label className="control-label">{res.title}</label>
-                                <Controller 
-                                    name={name}
-                                    id={res.id}
-                                    control={props.props.control}
-                                    render={({ field: { onChange, value } }) => (
-                                        <>
-                                            <Flatpickr
-                                                {...props.props.register(name)}
-                                                style={{ backgroundColor: "white" }}
-                                                value={""}
-                                                id={res.id}
-                                                data-target={res.dataTarget}
-                                                onChange={val => {
-                                                    val == null ? onChange(null) :onChange(moment(val[0]).format("DD/MM/YYYY"),res.dataTarget);
-                                                    val == null ? formContext.setStateHandle(null,res.dataTarget): formContext.setStateHandle(moment(val[0]).format("DD/MM/YYYY"),res.dataTarget)
-                                                }}
-                                                className={`form-control c-date-picker ${res.className}`}
-                                                options={{
-                                                    dateFormat: "d/m/Y"
-                                                }}
-        
-                                            />
-                                        </>
-                                    )}
-                                />
-                            </div>
-                        </div>
-                    ):
-                    (res.type === "flatpickr-input-time")?
-                    (
-                        <div key={index} className={res.gridSize}>
-                            <div className="form-group">
-                                <label className="control-label">{res.title}</label>
-                                <Controller 
-                                    name={name}
-                                    id={res.id}
-                                    control={props.props.control}
-                                    render={({ field: { onChange, value } }) => (
-                                        <> 
-                                            <Flatpickr
-                                                {...props.props.register(name)}
-                                                style={{backgroundColor: "white"}}
-                                                value={value?value:""}
-                                                id={res.id}
-                                                data-target={res.dataTarget}
-                                                onChange={val => {
-                                                    val == null ? onChange(null) :onChange(moment(val[0]).format("DD/MM/YYYY"),res.dataTarget);
-                                                    val == null ? formContext.setStateHandle(null,res.dataTarget): formContext.setStateHandle(moment(val[0]).format("DD/MM/YYYY HH:mm"),res.dataTarget)
-                                                }}
-                                                className={`form-control c-date-picker ${res.className}`}
-                                                options={{
-                                                    dateFormat: "d/m/Y H:i",
-                                                    time_24hr: true,
-                                                    enableTime: true,
-                                                }}
-                                            />
-                                        </>
-                                    )}
-                                />
-                            </div>
-                        </div>
-                    ):
-                    (res.type === "dropdown")?
-                    (
-                        <div key={index} className={res.gridSize}>
-                            <div className="form-group">
-                                <label className="control-label">{res.title}</label>
-                                <div className="input-group">
-                                    <Controller
-                                        name={name}
-                                        id={res.id}
-                                        control={props.props.control}
-                                        data-target={res.dataTarget}
-                                        render={({ field: { onChange, value } }) => (
-                                            <Select
-                                                {...props.props.register(name)}
-                                                isClearable={true}
-                                                data-target={res.dataTarget}
-                                                id={res.id}
-                                                defaultValue={res.defaultValue?res.defaultValue:""}
-                                                value={
-                                                    value
-                                                    ? res.option?res.option.find((c) => c.value === value)
-                                                    : null
-                                                    : null
-                                                }
-                                                onChange={(val) =>{
-                                                    val == null ? onChange(null) : onChange(val.value);
-                                                    res.onChange && res.onChange(val,res.id)
-                                                }}
-                                                options={res.option?res.option:""}
-                                                className={`form-control ${res.className}`}
-                                                classNamePrefix="select"
-                                                onKeyDown={handleKeydown}
-                                                menuPortalTarget={document.body}
-                                                styles={props.props.verificationStatus ? globalContext.customStylesReadonly : globalContext.customStyles}
-                                            />
-                                        )}
-                                    />     
-                                    {res.specialFeature.includes("VoyageTools")?<div class="input-group-append" style={{cursor: "pointer"}}>
-                                        <button type="button" class="btn btn-outline-secondary openModalVoyage"><i class="fa fa-search"></i></button>
-                                        <button type="button" class="btn btn-outline-secondary" data-toggle="popover" data-placement="bottom"><i class="fa fa-info"></i></button>
-                                    </div>:""}
-                                </div>
-                            </div>    
-                        </div>
-                    ):
-                    (res.type === "dropdown-asyncSelect")?
-                    (
-                        <div key={index} className={res.gridSize}>
-                            <div className="form-group">
-                                <label className="control-label">{res.title}</label>
-                                <Controller
-                                    name={name}
-                                    id={res.id}
-                                    control={props.props.control}
-                                    data-target={res.dataTarget}
-                                    render={({ field: { onChange, value } }) => (
-                                        <AsyncSelect
-                                            isClearable={true}
-                                            {...props.props.register(name)}
-                                            value={value}
-                                            placeholder={globalContext.asyncSelectPlaceHolder}
-                                            onChange={e => { e == null ? onChange(null) : onChange(e.id); res.onChange && res.onChange(e)}}
-                                            getOptionLabel={e => e.CompanyName}
-                                            getOptionValue={e => e.CompanyUUID}
-                                            loadOptions={loadCompanyOptions}
-                                            menuPortalTarget={document.body}
-                                            className={`form-control ${res.className}`}
-                                            classNamePrefix="select"
-                                            styles={props.props.verificationStatus ? globalContext.customStylesReadonly : globalContext.customStyles}
-                                        />
-                                    )}
-                                />               
-                            </div>    
-                        </div>
-                    ):
-                    (res.type === "input-textarea")?
-                    (
-                        <div key={index} className={res.gridSize}>
-                            <div className="form-group">
-                                <label className="control-label">{res.title}</label>
-                                {res.specialFeature.includes("required") ? 
-                                <textarea {...props.props.register(name,{required: `${res.title} cannot be blank.`})} data-target={res.dataTarget} className={`form-control ${res.className}`}/>
-                                    :   
-                                <textarea {...props.props.register(name)} data-target={res.dataTarget} className={`form-control ${res.className}`}/>
-                                }
-                            </div>
-                        </div>
-                    ):
-                    (res.type === "input-dropdownInputCompany")?
-                    (
-                        <div key={index} className={res.gridSize}>
-                            <div className="form-group">
-                                <label className="control-label">{res.title}</label>
-                                <input type="hidden" id={`${lowercaseFormName}-shipoperator`} className={`form-control`} {...props.props.register(name)} readOnly="readOnly" data-target={`CompanyID-${instructionType[props.cardIndex]}`} />
-                                <input defaultValue={res.defaultValue} id={res.id} className={`form-control ${res.className}`} data-target={res.dataTarget} readOnly={res.specialFeature.includes("readOnly")?true:false}/>
-                                <div style={dropdownInputStyle} className={`dropdownTable ${lowercaseFormName}${instructionType[props.cardIndex].toLowerCase()}-dropdown d-none`}>    
-                                    <table id={`CompanyROC-${instructionType[props.cardIndex]}Hauler-DetailForm-Table`}></table>
-                                </div>
-                            </div>
-                        </div>
-                    ):
-                    (res.type === "input-dropdownInputBranch")?
-                    (
-                        <div key={index} className={res.gridSize}>
-                            <div className="form-group">
-                                <label className="control-label">{res.title}</label>
-                                <input type="hidden" id={`${lowercaseFormName}-shipoperatorbranchcode`} className={`form-control`}  {...props.props.register(name)} readOnly="readOnly" data-target={`BranchID-${instructionType[props.cardIndex]}`} />
-                                <input defaultValue={res.defaultValue} id={res.id} className={`form-control ${res.className}`} data-target={res.dataTarget} data-refer={res.dataRefer} readOnly={res.specialFeature.includes("readOnly")?true:false}/>
-                                <div style={dropdownInputStyle} className={`dropdownTable ${lowercaseFormName}${instructionType[props.cardIndex].toLowerCase()}-dropdown d-none`}>    
-                                    <table id={`BranchCode-${instructionType[props.cardIndex]}Hauler-DetailForm-Table`}></table>
-                                </div>
-                            </div>
-                        </div>
-                    )
-                    :
-                    (res.type === "input-text-withModal")?
-                    (
-                        <div key={index} className={res.gridSize}>
-                        <div className="form-group">
-                            <label className="control-label">{res.title}</label>
-                            <div className="input-group">
-                                {res.specialFeature.includes("required") ? 
-                                    <input {...props.props.register(name,{required: `${res.title} cannot be blank.`})} id={res.id} className={`form-control ${res.className}`} data-target={res.dataTarget} readOnly={res.specialFeature.includes("readOnly")?true:false}/>
-                                    :
-                                    <input {...props.props.register(name)} defaultValue={res.defaultValue} id={res.id} className={`form-control ${res.className}`} data-target={res.dataTarget} readOnly={res.specialFeature.includes("readOnly")?true:false}/>
-                                }
-                                <div className="input-group-append openAttentionModal" data-refer={`${lowercaseFormName}${instructionType[props.cardIndex].toLowerCase()}-branchcode`}><span className="input-group-text"><i className="fa fa-search" aria-hidden="true"></i></span></div>
-                            </div>
-                        </div>
-                    </div>
-                    )
-                    :
-                    (res.type === "checkbox")?
-                    
-                    (
-                        <div key={index} className={res.gridSize}>
-                            <div className={`form-group field-${lowercaseFormName}-${(res.title).toLowerCase().replace(" ",'')}`}>
-                                <input type={"checkbox"} className={`mt-1 ${res.checkBoxClass?res.checkBoxClass:""}`} id={res.id} onChange={CheckBoxHandle} defaultChecked={res.specialFeature.includes("defaultCheck")? true:false}></input>
-                                <input type={"text"} className="d-none" {...props.props.register(name)} defaultValue={res.specialFeature.includes("defaultCheck")? 1:0}/>
-                                <label htmlFor={res.id} className={res.className}>{res.title}</label>
-                            </div>
-                        </div>
-                    )
-                    :(res.type === "DND")?
-                    (
-                        <div key={index}>
-                            <div className="col-md-12 ml-5">
-                                <div className="col-md-8 DNDCombineDay ml-2">
-                                    <label>D&amp;D Combine Day</label>
-                                    <input type="checkbox" className="CombineDayCheckBox ml-2 checkbox-inline mb-1 d-none"/>
-                                    <div className={`form-group field-${lowercaseFormName}-dndcombinedday`}>
-                                        <input type="number" id={`${lowercaseFormName}-dndcombinedday`} className="form-control reflect-field" {...props.props.register(`${formName}[DNDCombinedDay]`)} defaultValue="10" data-target="DNDCombinedDay" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-12 ml-5">
-                                <div className ="row">
-                                    <div className="col-md-5 Detention ml-2 d-none">
-                                        <label>Detention(days)</label>
-                                        <input type="checkbox" className="DetentionCheckBox  ml-2 checkbox-inline mb-1 d-none"/>
-                                        <div className={`form-group field-${lowercaseFormName}-detention`}>
-                                            <input type="number" id="quotation-detention" className="form-control reflect-field" {...props.props.register(`${formName}[Detention]`)} defaultValue="5" data-target="Detention" />
-                                        </div>
-                                    </div>
+                    return res.type === "input-text" ? (
+											<div key={index} className={res.gridSize}>
+												<div className='form-group'>
+													<label className='control-label'>{res.title}</label>
+													{res.specialFeature.includes("required") ? (
+														<input
+															{...props.props.register(name, {
+																required: `${res.title} cannot be blank.`,
+															})}
+															id={res.id}
+															className={`form-control ${res.className}`}
+															data-target={res.dataTarget}
+															readOnly={
+																res.specialFeature.includes("readOnly")
+																	? true
+																	: false
+															}
+														/>
+													) : (
+														<input
+															{...props.props.register(name)}
+															defaultValue={res.defaultValue}
+															id={res.id}
+															className={`form-control ${res.className}`}
+															data-target={res.dataTarget}
+															readOnly={
+																res.specialFeature.includes("readOnly")
+																	? true
+																	: false
+															}
+														/>
+													)}
+												</div>
+											</div>
+										) : res.type === "MultiplePOD" ? (
+											<div>
+												<DetailFormMultiplePODField
+													formName={formName}
+													register={props.props.register}
+													control={props.props.control}
+													errors={props.props.errors}
+													setValue={props.props.setValue}
+													port={props.props.port}
+													getValues={props.props.getValues}
+												/>
+											</div>
+										) : res.type === "input-number" ? (
+											<div key={index} className={res.gridSize}>
+												<div className='form-group'>
+													<label className='control-label'>{res.title}</label>
+													{res.specialFeature.includes("required") ? (
+														<input
+															type={"number"}
+															{...props.props.register(name, {
+																required: `${res.title} cannot be blank.`,
+															})}
+															id={res.id}
+															data-target={res.dataTarget}
+															className={`form-control ${res.className}`}
+														/>
+													) : (
+														<input
+															type={"number"}
+															{...props.props.register(name)}
+															id={res.id}
+															data-target={res.dataTarget}
+															className={`form-control ${res.className}`}
+														/>
+													)}
+												</div>
+											</div>
+										) : res.type === "flatpickr-input" ? (
+											<div key={index} className={res.gridSize}>
+												<div className='form-group'>
+													<label className='control-label'>{res.title}</label>
+													<Controller
+														name={name}
+														id={res.id}
+														control={props.props.control}
+														render={({field: {onChange, value}}) => (
+															<>
+																<Flatpickr
+																	{...props.props.register(name)}
+																	style={{backgroundColor: "white"}}
+																	value={""}
+																	id={res.id}
+																	data-target={res.dataTarget}
+																	onChange={(val) => {
+																		val == null
+																			? onChange(null)
+																			: onChange(
+																					moment(val[0]).format("DD/MM/YYYY"),
+																					res.dataTarget
+																			  );
+																		val == null
+																			? formContext.setStateHandle(
+																					null,
+																					res.dataTarget
+																			  )
+																			: formContext.setStateHandle(
+																					moment(val[0]).format("DD/MM/YYYY"),
+																					res.dataTarget
+																			  );
+																	}}
+																	className={`form-control c-date-picker ${res.className}`}
+																	options={{
+																		dateFormat: "d/m/Y",
+																	}}
+																/>
+															</>
+														)}
+													/>
+												</div>
+											</div>
+										) : res.type === "flatpickr-input-time" ? (
+											<div key={index} className={res.gridSize}>
+												<div className='form-group'>
+													<label className='control-label'>{res.title}</label>
+													<Controller
+														name={name}
+														id={res.id}
+														control={props.props.control}
+														render={({field: {onChange, value}}) => (
+															<>
+																<Flatpickr
+																	{...props.props.register(name)}
+																	style={{backgroundColor: "white"}}
+																	value={value ? value : ""}
+																	id={res.id}
+																	data-target={res.dataTarget}
+																	onChange={(val) => {
+																		val == null
+																			? onChange(null)
+																			: onChange(
+																					moment(val[0]).format("DD/MM/YYYY"),
+																					res.dataTarget
+																			  );
+																		val == null
+																			? formContext.setStateHandle(
+																					null,
+																					res.dataTarget
+																			  )
+																			: formContext.setStateHandle(
+																					moment(val[0]).format(
+																						"DD/MM/YYYY HH:mm"
+																					),
+																					res.dataTarget
+																			  );
+																	}}
+																	className={`form-control c-date-picker ${res.className}`}
+																	options={{
+																		dateFormat: "d/m/Y H:i",
+																		time_24hr: true,
+																		enableTime: true,
+																	}}
+																/>
+															</>
+														)}
+													/>
+												</div>
+											</div>
+										) : res.type === "dropdown" ? (
+											<div key={index} className={res.gridSize}>
+												<div className='form-group'>
+													<label className='control-label'>{res.title}</label>
+													<div className='input-group'>
+														<Controller
+															name={name}
+															id={res.id}
+															control={props.props.control}
+															data-target={res.dataTarget}
+															render={({field: {onChange, value}}) => (
+																<Select
+																	{...props.props.register(name)}
+																	isClearable={true}
+																	data-target={res.dataTarget}
+																	id={res.id}
+																	defaultValue={
+																		res.defaultValue ? res.defaultValue : ""
+																	}
+																	value={
+																		value
+																			? res.option
+																				? res.option.find(
+																						(c) => c.value === value
+																				  )
+																				: null
+																			: null
+																	}
+																	onChange={(val) => {
+																		val == null
+																			? onChange(null)
+																			: onChange(val.value);
+																		res.onChange && res.onChange(val, res.id);
+																	}}
+																	options={res.option ? res.option : ""}
+																	className={`form-control ${res.className}`}
+																	classNamePrefix='select'
+																	onKeyDown={handleKeydown}
+																	menuPortalTarget={document.body}
+																	styles={
+																		props.props.verificationStatus
+																			? globalContext.customStylesReadonly
+																			: globalContext.customStyles
+																	}
+																/>
+															)}
+														/>
+														{res.specialFeature.includes("VoyageTools") ? (
+															<div
+																className='input-group-append'
+																style={{cursor: "pointer"}}>
+																<button
+																	type='button'
+																	className='btn btn-outline-secondary openModalVoyage'>
+																	<i className='fa fa-search'></i>
+																</button>
+																<button
+																	type='button'
+																	className='btn btn-outline-secondary'
+																	data-toggle='popover'
+																	data-placement='bottom'>
+																	<i className='fa fa-info'></i>
+																</button>
+															</div>
+														) : (
+															""
+														)}
+													</div>
+												</div>
+											</div>
+										) : res.type === "dropdown-asyncSelect" ? (
+											<div key={index} className={res.gridSize}>
+												<div className='form-group'>
+													<label className='control-label'>{res.title}</label>
+													<Controller
+														name={name}
+														id={res.id}
+														control={props.props.control}
+														data-target={res.dataTarget}
+														render={({field: {onChange, value}}) => (
+															<AsyncSelect
+																isClearable={true}
+																{...props.props.register(name)}
+																value={value}
+																placeholder={
+																	globalContext.asyncSelectPlaceHolder
+																}
+																onChange={(e) => {
+																	e == null ? onChange(null) : onChange(e.id);
+																	res.onChange && res.onChange(e);
+																}}
+																getOptionLabel={(e) => e.CompanyName}
+																getOptionValue={(e) => e.CompanyUUID}
+																loadOptions={loadCompanyOptions}
+																menuPortalTarget={document.body}
+																className={`form-control ${res.className}`}
+																classNamePrefix='select'
+																styles={
+																	props.props.verificationStatus
+																		? globalContext.customStylesReadonly
+																		: globalContext.customStyles
+																}
+															/>
+														)}
+													/>
+												</div>
+											</div>
+										) : res.type === "input-textarea" ? (
+											<div key={index} className={res.gridSize}>
+												<div className='form-group'>
+													<label className='control-label'>{res.title}</label>
+													{res.specialFeature.includes("required") ? (
+														<textarea
+															{...props.props.register(name, {
+																required: `${res.title} cannot be blank.`,
+															})}
+															data-target={res.dataTarget}
+															className={`form-control ${res.className}`}
+														/>
+													) : (
+														<textarea
+															{...props.props.register(name)}
+															data-target={res.dataTarget}
+															className={`form-control ${res.className}`}
+														/>
+													)}
+												</div>
+											</div>
+										) : res.type === "input-dropdownInputCompany" ? (
+											<div key={index} className={res.gridSize}>
+												<div className='form-group'>
+													<label className='control-label'>{res.title}</label>
+													<input
+														type='hidden'
+														id={`${lowercaseFormName}-shipoperator`}
+														className={`form-control`}
+														{...props.props.register(name)}
+														readOnly='readOnly'
+														data-target={`CompanyID-${
+															instructionType[props.cardIndex]
+														}`}
+													/>
+													<input
+														defaultValue={res.defaultValue}
+														id={res.id}
+														className={`form-control ${res.className}`}
+														data-target={res.dataTarget}
+														readOnly={
+															res.specialFeature.includes("readOnly")
+																? true
+																: false
+														}
+													/>
+													<div
+														style={dropdownInputStyle}
+														className={`dropdownTable ${lowercaseFormName}${instructionType[
+															props.cardIndex
+														].toLowerCase()}-dropdown d-none`}>
+														<table
+															id={`CompanyROC-${
+																instructionType[props.cardIndex]
+															}Hauler-DetailForm-Table`}></table>
+													</div>
+												</div>
+											</div>
+										) : res.type === "input-dropdownInputBranch" ? (
+											<div key={index} className={res.gridSize}>
+												<div className='form-group'>
+													<label className='control-label'>{res.title}</label>
+													<input
+														type='hidden'
+														id={`${lowercaseFormName}-shipoperatorbranchcode`}
+														className={`form-control`}
+														{...props.props.register(name)}
+														readOnly='readOnly'
+														data-target={`BranchID-${
+															instructionType[props.cardIndex]
+														}`}
+													/>
+													<input
+														defaultValue={res.defaultValue}
+														id={res.id}
+														className={`form-control ${res.className}`}
+														data-target={res.dataTarget}
+														data-refer={res.dataRefer}
+														readOnly={
+															res.specialFeature.includes("readOnly")
+																? true
+																: false
+														}
+													/>
+													<div
+														style={dropdownInputStyle}
+														className={`dropdownTable ${lowercaseFormName}${instructionType[
+															props.cardIndex
+														].toLowerCase()}-dropdown d-none`}>
+														<table
+															id={`BranchCode-${
+																instructionType[props.cardIndex]
+															}Hauler-DetailForm-Table`}></table>
+													</div>
+												</div>
+											</div>
+										) : res.type === "input-text-withModal" ? (
+											<div key={index} className={res.gridSize}>
+												<div className='form-group'>
+													<label className='control-label'>{res.title}</label>
+													<div className='input-group'>
+														{res.specialFeature.includes("required") ? (
+															<input
+																{...props.props.register(name, {
+																	required: `${res.title} cannot be blank.`,
+																})}
+																id={res.id}
+																className={`form-control ${res.className}`}
+																data-target={res.dataTarget}
+																readOnly={
+																	res.specialFeature.includes("readOnly")
+																		? true
+																		: false
+																}
+															/>
+														) : (
+															<input
+																{...props.props.register(name)}
+																defaultValue={res.defaultValue}
+																id={res.id}
+																className={`form-control ${res.className}`}
+																data-target={res.dataTarget}
+																readOnly={
+																	res.specialFeature.includes("readOnly")
+																		? true
+																		: false
+																}
+															/>
+														)}
+														<div
+															className='input-group-append openAttentionModal'
+															data-refer={`${lowercaseFormName}${instructionType[
+																props.cardIndex
+															].toLowerCase()}-branchcode`}>
+															<span className='input-group-text'>
+																<i
+																	className='fa fa-search'
+																	aria-hidden='true'></i>
+															</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										) : res.type === "checkbox" ? (
+											<div key={index} className={res.gridSize}>
+												<div
+													className={`form-group field-${lowercaseFormName}-${res.title
+														.toLowerCase()
+														.replace(" ", "")}`}>
+													<input
+														type={"checkbox"}
+														className={`mt-1 ${
+															res.checkBoxClass ? res.checkBoxClass : ""
+														}`}
+														id={res.id}
+														onChange={CheckBoxHandle}
+														defaultChecked={
+															res.specialFeature.includes("defaultCheck")
+																? true
+																: false
+														}></input>
+													<input
+														type={"text"}
+														className='d-none'
+														{...props.props.register(name)}
+														defaultValue={
+															res.specialFeature.includes("defaultCheck")
+																? 1
+																: 0
+														}
+													/>
+													<label htmlFor={res.id} className={res.className}>
+														{res.title}
+													</label>
+												</div>
+											</div>
+										) : res.type === "DND" ? (
+											<div key={index}>
+												<div className='col-md-12 ml-5'>
+													<div className='col-md-8 DNDCombineDay ml-2'>
+														<label>D&amp;D Combine Day</label>
+														<input
+															type='checkbox'
+															className='CombineDayCheckBox ml-2 checkbox-inline mb-1 d-none'
+														/>
+														<div
+															className={`form-group field-${lowercaseFormName}-dndcombinedday`}>
+															<input
+																type='number'
+																id={`${lowercaseFormName}-dndcombinedday`}
+																className='form-control reflect-field'
+																{...props.props.register(
+																	`${formName}[DNDCombinedDay]`
+																)}
+																defaultValue='10'
+																data-target='DNDCombinedDay'
+															/>
+														</div>
+													</div>
+												</div>
+												<div className='col-md-12 ml-5'>
+													<div className='row'>
+														<div className='col-md-5 Detention ml-2 d-none'>
+															<label>Detention(days)</label>
+															<input
+																type='checkbox'
+																className='DetentionCheckBox  ml-2 checkbox-inline mb-1 d-none'
+															/>
+															<div
+																className={`form-group field-${lowercaseFormName}-detention`}>
+																<input
+																	type='number'
+																	id='quotation-detention'
+																	className='form-control reflect-field'
+																	{...props.props.register(
+																		`${formName}[Detention]`
+																	)}
+																	defaultValue='5'
+																	data-target='Detention'
+																/>
+															</div>
+														</div>
 
-                                    <div className="col-md-5 Demurrage ml-2 d-none">
-                                        <label>Demurrage(days)</label>
-                                        <input type="checkbox" className="DemurrageCheckBox ml-2 checkbox-inline mb-1 d-none"/>
-                                        <div className={`form-group field-${lowercaseFormName}-demurrage`}>
-                                            <input type="number" id="quotation-demurrage" className="form-control reflect-field" {...props.props.register(`${formName}[Demurrage]`)} defaultValue="5" data-target="Demurrage" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    ):
-                    (res.type === "hidden")?
-                    (
-                        <input key={res.id} type={"hidden"} id={res.id} className={res.className} {...props.props.register(name)}/>      
-                    ):
-                    (
-                        <>
-                        </>
-                    )
+														<div className='col-md-5 Demurrage ml-2 d-none'>
+															<label>Demurrage(days)</label>
+															<input
+																type='checkbox'
+																className='DemurrageCheckBox ml-2 checkbox-inline mb-1 d-none'
+															/>
+															<div
+																className={`form-group field-${lowercaseFormName}-demurrage`}>
+																<input
+																	type='number'
+																	id='quotation-demurrage'
+																	className='form-control reflect-field'
+																	{...props.props.register(
+																		`${formName}[Demurrage]`
+																	)}
+																	defaultValue='5'
+																	data-target='Demurrage'
+																/>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										) : res.type === "hidden" ? (
+											<input
+												key={res.id}
+												type={"hidden"}
+												id={res.id}
+												className={res.className}
+												{...props.props.register(name)}
+											/>
+										) : (
+											<></>
+										);
                 }) 
             }
         </>

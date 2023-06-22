@@ -3598,213 +3598,237 @@ function StatementListing(props) {
 
 
     return (
+			<div className='card card-primary'>
+				<div className='card-body'>
+					<div className='card lvl1'>
+						<div className='card-body'>
+							<div className='row'>
+								<div className='col-xs-12 col-md-1 mt-2'>
+									<div className='form-group mt-4 mb-1'>
+										<input
+											type='checkbox'
+											className='dueCheckbox'
+											id='dueCheckbox'
+											onChange={handleDue}
+										/>
+										<input
+											type='text'
+											className='form-control d-none dueField'
+											{...register("DynamicModel[Due]")}
+										/>
+										<label className='control-label ml-2' htmlFor='dueCheckbox'>
+											Due
+										</label>
+									</div>
+								</div>
+								<div className='col-xs-12 col-md-2'>
+									<div className='form-group'>
+										<label className='control-label'>Start Date</label>
+										<Controller
+											name='DynamicModel[StartDate]'
+											control={control}
+											id='dynamicmodel-startdate'
+											render={({field: {onChange, value}}) => (
+												<>
+													<Flatpickr
+														value={value}
+														{...register("DynamicModel[StartDate]")}
+														onChange={(val) => {
+															onChange(moment(val[0]).format("DD/MM/YYYY"));
+														}}
+														className='form-control StartDate'
+														id='dynamicmodel-startdate'
+														options={{
+															dateFormat: "d/m/Y",
+														}}
+													/>
+												</>
+											)}
+										/>
+									</div>
+								</div>
 
+								<div className='col-xs-12 col-md-2'>
+									<div className='form-group'>
+										<label className='control-label'>End Date</label>
+										<Controller
+											name='DynamicModel[EndDate]'
+											control={control}
+											id='dynamicmodel-enddate'
+											render={({field: {onChange, value}}) => (
+												<>
+													<Flatpickr
+														value={value}
+														{...register("DynamicModel[EndDate]")}
+														onChange={(val) => {
+															onChange(moment(val[0]).format("DD/MM/YYYY"));
+														}}
+														className='form-control EndDate'
+														id='dynamicmodel-enddate'
+														options={{
+															dateFormat: "d/m/Y",
+														}}
+													/>
+												</>
+											)}
+										/>
+									</div>
+								</div>
 
-        <div className="card card-primary">
+								<div className='col-xs-12 col-md-2'>
+									<div className='form-group'>
+										<label className='control-label'>Company</label>
+										<Controller
+											name='DynamicModel[Company]'
+											id='Company'
+											control={control}
+											render={({field: {onChange, value}}) => (
+												<AsyncSelect
+													isClearable={true}
+													{...register("DynamicModel[Company]")}
+													value={defaultCompanyState}
+													cacheOptions
+													placeholder={globalContext.asyncSelectPlaceHolder}
+													onChange={(e) => {
+														e == null ? onChange(null) : onChange(e.id);
+														setDefaultCompanyState(e);
+														handleChangeCompany(e);
+													}}
+													getOptionLabel={(e) => e.CompanyName}
+													getOptionValue={(e) => e.CompanyUUID}
+													loadOptions={loadOptionsCompany}
+													menuPortalTarget={document.body}
+													className='form-control'
+													classNamePrefix='select'
+													styles={globalContext.customStyles}
+												/>
+											)}
+										/>
+									</div>
+								</div>
 
-            <div className="card-body">
-                <div className="card lvl1">
-                    <div className="card-body">
-                        <div className="row">
+								<div className='col-xs-12 col-md-3'>
+									<div className='form-group'>
+										<label className='control-label'>Branch</label>
+										<Controller
+											name='DynamicModel[Branch]'
+											id='Branch'
+											control={control}
+											render={({field: {onChange, value}}) => (
+												<Select
+													isClearable={true}
+													{...register("DynamicModel[Branch]")}
+													value={
+														value ? branch.find((c) => c.value === value) : null
+													}
+													onChange={(val) =>
+														val == null ? onChange(null) : onChange(val.value)
+													}
+													options={branch}
+													className='form-control Branch'
+													classNamePrefix='select'
+													styles={globalContext.customStyles}
+												/>
+											)}
+										/>
+									</div>
+								</div>
 
-                            <div className="col-xs-12 col-md-1 mt-2">
-                                <div className="form-group mt-4 mb-1">
-                                    <input type="checkbox" className="dueCheckbox" id="dueCheckbox" onChange={handleDue} />
-                                    <input type="text" className="form-control d-none dueField" {...register('DynamicModel[Due]')} />
-                                    <label className="control-label ml-2" htmlFor='dueCheckbox'>Due</label>
-                                </div>
-                            </div>
-                            <div className="col-xs-12 col-md-2">
+								<div className='col-xs-12 col-md-2'>
+									<button
+										type='button'
+										id='PreviewLifting'
+										className={`${
+											previewAccess.find(
+												(item) => item == `preview-${modelLinkTemp}`
+											) !== undefined
+												? ""
+												: "disabledAccess"
+										} btn btn-success mt-4 float-right`}
+										onClick={() => handlePreview()}>
+										Preview
+									</button>
+									{props.data.modelLink == "statement-of-account" ? (
+										<button
+											type='button'
+											id='generateListing'
+											className='btn btn-success mt-4  float-right mr-1'
+											onClick={() => handleGenerate()}>
+											Generate
+										</button>
+									) : (
+										<button
+											type='button'
+											id='generateListing'
+											className='btn btn-success mt-4  float-right mr-1'
+											onClick={() => handleGenerateCustomerStatement()}>
+											Generate
+										</button>
+									)}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
-                                <div className="form-group">
-                                    <label className="control-label">Start Date
-                                    </label>
-                                    <Controller
-                                        name="DynamicModel[StartDate]"
-                                        control={control}
-                                        id="dynamicmodel-startdate"
-                                        render={({ field: { onChange, value } }) => (
-                                            <>
-                                                <Flatpickr
-                                                    value={value}
-                                                    {...register('DynamicModel[StartDate]')}
+				<div className='card-body' style={{width: "90%", margin: "0 auto"}}>
+					<div className=''>
+						<div className=''>
+							<table
+								id='StatementOfAccountTable'
+								style={{width: "100%"}}
+								className='table table-bordered commontable container-items d-none'></table>
+						</div>
+					</div>
+					<br></br>
+					<div className='table_wrap'>
+						<div className='table_wrap_inner'>
+							<table
+								id='AgingAnalysisTable'
+								style={{width: "100%"}}
+								className='table table-bordered commontable container-items d-none'></table>
+						</div>
+					</div>
+				</div>
 
-                                                    onChange={val => {
-
-                                                        onChange(moment(val[0]).format("DD/MM/YYYY"))
-                                                    }}
-                                                    className="form-control StartDate"
-                                                    id="dynamicmodel-startdate"
-                                                    options={{
-                                                        dateFormat: "d/m/Y"
-                                                    }}
-
-                                                />
-                                            </>
-                                        )}
-                                    />
-                                </div>
-
-                            </div>
-
-                            <div className="col-xs-12 col-md-2">
-
-                                <div className="form-group">
-                                    <label className="control-label">End Date
-                                    </label>
-                                    <Controller
-                                        name="DynamicModel[EndDate]"
-                                        control={control}
-                                        id="dynamicmodel-enddate"
-                                        render={({ field: { onChange, value } }) => (
-                                            <>
-                                                <Flatpickr
-                                                    value={value}
-                                                    {...register('DynamicModel[EndDate]')}
-
-                                                    onChange={val => {
-
-                                                        onChange(moment(val[0]).format("DD/MM/YYYY"))
-                                                    }}
-                                                    className="form-control EndDate"
-                                                    id="dynamicmodel-enddate"
-                                                    options={{
-                                                        dateFormat: "d/m/Y"
-                                                    }}
-
-                                                />
-                                            </>
-                                        )}
-                                    />
-                                </div>
-
-                            </div>
-
-
-                            <div className="col-xs-12 col-md-2">
-                                <div className="form-group">
-                                    <label className="control-label" >Company
-                                    </label>
-                                    <Controller
-                                        name="DynamicModel[Company]"
-                                        id="Company"
-                                        control={control}
-
-                                        render={({ field: { onChange, value } }) => (
-
-                                            <AsyncSelect
-                                                isClearable={true}
-                                                {...register("DynamicModel[Company]")}
-                                                value={defaultCompanyState}
-                                                cacheOptions
-                                                placeholder={globalContext.asyncSelectPlaceHolder}
-                                                onChange={e => { e == null ? onChange(null) : onChange(e.id); setDefaultCompanyState(e); handleChangeCompany(e) }}
-                                                getOptionLabel={e => e.CompanyName}
-                                                getOptionValue={e => e.CompanyUUID}
-                                                loadOptions={loadOptionsCompany}
-                                                menuPortalTarget={document.body}
-                                                className="form-control"
-                                                classNamePrefix="select"
-                                                styles={globalContext.customStyles}
-
-                                            />
-                                        )}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="col-xs-12 col-md-3">
-                                <div className="form-group">
-                                    <label className="control-label" >Branch
-                                    </label>
-                                    <Controller
-                                        name="DynamicModel[Branch]"
-                                        id="Branch"
-                                        control={control}
-                                        render={({ field: { onChange, value } }) => (
-                                            <Select
-                                                isClearable={true}
-                                                {...register("DynamicModel[Branch]")}
-                                                value={value ? branch.find(c => c.value === value) : null}
-                                                onChange={val => val == null ? onChange(null) : onChange(val.value)}
-                                                options={branch}
-                                                className="form-control Branch"
-                                                classNamePrefix="select"
-                                                styles={globalContext.customStyles}
-
-                                            />
-                                        )}
-                                    />
-                                </div>
-                            </div>
-
-
-                            <div className="col-xs-12 col-md-2">
-                                <button type="button" id="PreviewLifting" className={`${previewAccess.find((item) => item == `preview-${modelLinkTemp}`) !== undefined ? "" : "disabledAccess"} btn btn-success mt-4 float-right`} onClick={() => handlePreview()}>Preview</button>
-                                {props.data.modelLink == "statement-of-account" ?
-                                    <button type="button" id="generateListing" className="btn btn-success mt-4  float-right mr-1" onClick={() => handleGenerate()}>Generate</button> :
-                                    <button type="button" id="generateListing" className="btn btn-success mt-4  float-right mr-1" onClick={() => handleGenerateCustomerStatement()}>Generate</button>
-
-                                }
-
-
-
-
-                            </div>
-                        </div>
-
-
-
-                    </div>
-                </div>
-
-
-            </div>
-
-            <div className="card-body" style={{ width: "90%", margin: "0 auto" }}>
-                <div class="">
-                    <div class="">
-                        <table id="StatementOfAccountTable" style={{ width: "100%" }} className="table table-bordered commontable container-items d-none">
-
-                        </table>
-                    </div>
-                </div>
-                <br></br>
-                <div class="table_wrap">
-                    <div class="table_wrap_inner">
-                        <table id="AgingAnalysisTable" style={{ width: "100%" }} className="table table-bordered commontable container-items d-none">
-
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div className="modal fade" id="PreviewPdfModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog modal-xl" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div className="modal-body">
-                            <iframe id="pdfFrame" src="preview?id=" width="100%" height="700"></iframe>
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div >
-
-
-
-
-
-
-    )
+				<div
+					className='modal fade'
+					id='PreviewPdfModal'
+					tabIndex='-1'
+					role='dialog'
+					aria-labelledby='exampleModalLabel'
+					aria-hidden='true'>
+					<div className='modal-dialog modal-xl' role='document'>
+						<div className='modal-content'>
+							<div className='modal-header'>
+								<button
+									type='button'
+									className='close'
+									data-dismiss='modal'
+									aria-label='Close'>
+									<span aria-hidden='true'>&times;</span>
+								</button>
+							</div>
+							<div className='modal-body'>
+								<iframe
+									id='pdfFrame'
+									src='preview?id='
+									width='100%'
+									height='700'></iframe>
+							</div>
+							<div className='modal-footer'>
+								<button
+									type='button'
+									className='btn btn-secondary'
+									data-dismiss='modal'>
+									Close
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
 }
 
 

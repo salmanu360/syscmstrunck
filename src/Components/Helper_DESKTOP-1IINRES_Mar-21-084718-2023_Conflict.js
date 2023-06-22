@@ -2113,26 +2113,26 @@ export function numberToWords(number) {
 }
 
 export async function InitAttachment (data,id) {
-  window.$('#'+id).filer({
-    showThumbs: true,
-    addMore: true,
-    allowDuplicates: false,
-    theme: 'default',
-    templates: {
-      itemAppendToEnd: true,
-      box: '<ul class="jFiler-items-list jFiler-items-default"></ul>',
-      item: '<li class="jFiler-item">\
-              <div class="jFiler-item-container">\
-                <div class="jFiler-item-inner">\
-                  <div class="jFiler-item-icon pull-left"></div>\
-                    <div class="jFiler-item-info pull-left">\
-                      <span class="jFiler-item-title" title="{{fi-name}}">{{fi-name | limitTo:30}}</span>\
-                      <span class="jFiler-item-others">\
-                        <span>| size: {{fi-size2}} | </span><span>type: {{fi-extension}}</span><span class="jFiler-item-status">{{fi-progressBar}}</span>\
+  window.$("#" + id).filer({
+		showThumbs: true,
+		addMore: true,
+		allowDuplicates: false,
+		theme: "default",
+		templates: {
+			itemAppendToEnd: true,
+			box: '<ul className="jFiler-items-list jFiler-items-default"></ul>',
+			item: '<li className="jFiler-item">\
+              <div className="jFiler-item-container">\
+                <div className="jFiler-item-inner">\
+                  <div className="jFiler-item-icon pull-left"></div>\
+                    <div className="jFiler-item-info pull-left">\
+                      <span className="jFiler-item-title" title="{{fi-name}}">{{fi-name | limitTo:30}}</span>\
+                      <span className="jFiler-item-others">\
+                        <span>| size: {{fi-size2}} | </span><span>type: {{fi-extension}}</span><span className="jFiler-item-status">{{fi-progressBar}}</span>\
                       </span>\
-                      <div class="jFiler-item-assets">\
-                        <ul class="list-inline">\
-                          <li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li>\
+                      <div className="jFiler-item-assets">\
+                        <ul className="list-inline">\
+                          <li><a className="icon-jfi-trash jFiler-item-trash-action"></a></li>\
                       </ul>\
                     </div>\
                     <div><input type="hidden" name="Unit[AttachmentsName][]" value="{{fi-name}}"></div>\
@@ -2140,20 +2140,21 @@ export async function InitAttachment (data,id) {
                 </div>\
               </div>\
             </li>',
-      itemAppend: '<li class="jFiler-item">\
-      <div class="jFiler-item-container">\
-        <div class="jFiler-item-inner">\
-          <div class="jFiler-item-icon pull-left"></div>\
-            <div class="jFiler-item-info pull-left">\
-              <span class="jFiler-item-title" title="{{fi-name}}">{{fi-name | limitTo:30}}</span>\
-              <span class="jFiler-item-others">\
-                <span>| size: {{fi-size2}} | </span><span>type: {{fi-extension}}</span><span class="jFiler-item-status">{{fi-progressBar}}</span>\
+			itemAppend:
+				'<li className="jFiler-item">\
+      <div className="jFiler-item-container">\
+        <div className="jFiler-item-inner">\
+          <div className="jFiler-item-icon pull-left"></div>\
+            <div className="jFiler-item-info pull-left">\
+              <span className="jFiler-item-title" title="{{fi-name}}">{{fi-name | limitTo:30}}</span>\
+              <span className="jFiler-item-others">\
+                <span>| size: {{fi-size2}} | </span><span>type: {{fi-extension}}</span><span className="jFiler-item-status">{{fi-progressBar}}</span>\
               </span>\
-              <div class="jFiler-item-assets">\
-                <ul class="list-inline">\
-                  <li><a href="{{fi-url}}" class="text-secondary" target="_blank"><i class="fa fa-search-plus"></i></a></li>\
-                  <li><a href="{{fi-url}}" class="text-secondary" download><i class="fa fa-download"></i></a></li>\
-                  <li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li>\
+              <div className="jFiler-item-assets">\
+                <ul className="list-inline">\
+                  <li><a href="{{fi-url}}" className="text-secondary" target="_blank"><i className="fa fa-search-plus"></i></a></li>\
+                  <li><a href="{{fi-url}}" className="text-secondary" download><i className="fa fa-download"></i></a></li>\
+                  <li><a className="icon-jfi-trash jFiler-item-trash-action"></a></li>\
               </ul>\
             </div>\
             <div><input type="hidden" name="Unit[AttachmentsName][]" value="{{fi-name}}"></div>\
@@ -2161,9 +2162,9 @@ export async function InitAttachment (data,id) {
         </div>\
       </div>\
     </li>',
-    },
-    files: data,
-  });
+		},
+		files: data,
+	});
   ControlOverlay(false)
 }
 

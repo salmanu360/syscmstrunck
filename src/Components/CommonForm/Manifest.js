@@ -1197,663 +1197,915 @@ function Manifest(props) {
     });
 
     return (
-
-        <>
-            <div className="card card-primary">
-                <div className="card-body">
-
-                    <div className="card lvl1">
-
-                        {/* <div class="row">
-                            <div class="col">
+			<>
+				<div className='card card-primary'>
+					<div className='card-body'>
+						<div className='card lvl1'>
+							{/* <div className="row">
+                            <div className="col">
                         
-                                    <label for="DocDate" class="ml-4">Date:</label>
+                                    <label for="DocDate" className="ml-4">Date:</label>
                             </div>
-                            <div class="col-2">
-                                <div class="form-group">
-                                    <input type="text" class="form-control DateFrom flatDatePicker mx-sm-3" id="DateFrom"></input>
+                            <div className="col-2">
+                                <div className="form-group">
+                                    <input type="text" className="form-control DateFrom flatDatePicker mx-sm-3" id="DateFrom"></input>
                                 </div>
                             </div>
-                            <div class="col-md-1">
-                                <div class="form-group">
-                                    <input type="text" class="form-control mx-sm-3 borderless" value='To' readonly></input>
+                            <div className="col-md-1">
+                                <div className="form-group">
+                                    <input type="text" className="form-control mx-sm-3 borderless" value='To' readonly></input>
                                 </div>
                             </div>
-                            <div class="col-2">
-                                <div class="form-group">
-                                    <input type="text" class="form-control DateTo flatDatePicker mx-sm-3" id="DateTo"></input>
+                            <div className="col-2">
+                                <div className="form-group">
+                                    <input type="text" className="form-control DateTo flatDatePicker mx-sm-3" id="DateTo"></input>
                                 </div>
                             </div>
-                            <div class="col-3"></div>
-                            <div class="col-3"></div>
-                            <div class="col-3"></div>
+                            <div className="col-3"></div>
+                            <div className="col-3"></div>
+                            <div className="col-3"></div>
                         </div> */}
 
+							<table className='mt-2 mb-2 ml-2'>
+								<thead>
+									<tr>
+										<th style={{width: "10%"}}></th>
+										<th style={{width: "20%"}}></th>
+										<th style={{width: "10%"}}></th>
+										<th style={{width: "20%"}}></th>
+										<th style={{width: "10%"}}></th>
+										<th style={{width: "20%"}}></th>
+									</tr>
+								</thead>
 
-                        <table className="mt-2 mb-2 ml-2">
-                            <thead>
-                                <tr>
-                                    <th style={{ width: "10%" }}></th>
-                                    <th style={{ width: "20%" }}></th>
-                                    <th style={{ width: "10%" }}></th>
-                                    <th style={{ width: "20%" }}></th>
-                                    <th style={{ width: "10%" }}></th>
-                                    <th style={{ width: "20%" }}></th>
-                                </tr>
+								<tbody>
+									<tr>
+										<td>
+											<div className='col mb-1'>
+												<label> Date:</label>
+											</div>
+										</td>
 
-                            </thead>
+										<td>
+											<div className='col mb-1'>
+												<div className='form-group'>
+													<Controller
+														control={control}
+														name={"DynamicModel[DateFrom]"}
+														render={({field: {onChange, value}}) => (
+															<>
+																<Flatpickr
+																	value={value ? value : ""}
+																	{...register(`DynamicModel[DateFrom]`)}
+																	onChange={(val) => {
+																		onChange(
+																			moment(val[0]).format("DD/MM/YYYY")
+																		);
+																	}}
+																	className={`form-control flatpickr-input`}
+																	options={{
+																		dateFormat: "d/m/Y",
+																	}}
+																/>
+															</>
+														)}
+													/>
+												</div>
+											</div>
+										</td>
 
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <div className="col mb-1">
-                                            <label> Date:</label>
+										<td>
+											<div className='col mb-1'>To</div>
+										</td>
 
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div className="col mb-1">
-                                            <div className="form-group">
-                                                <Controller
-
-                                                    control={control}
-                                                    name={"DynamicModel[DateFrom]"}
-                                                    render={({ field: { onChange, value } }) => (
-                                                        <>
-                                                            <Flatpickr
-
-                                                                value={value ? value : ""}
-                                                                {...register(`DynamicModel[DateFrom]`)}
-                                                                onChange={val => {
-
-                                                                    onChange(moment(val[0]).format("DD/MM/YYYY"))
-                                                                }}
-                                                                className={`form-control flatpickr-input`}
-                                                                options={{
-
-                                                                    dateFormat: "d/m/Y"
-                                                                }}
-
-                                                            />
-                                                        </>
-                                                    )}
-                                                />
-                                            </div>
-
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div className="col mb-1">
-                                            To
-
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div className="col mb-1">
-                                            <div className="form-group">
-                                                <Controller
-
-                                                    control={control}
-                                                    name={"DynamicModel[DateTo]"}
-                                                    render={({ field: { onChange, value } }) => (
-                                                        <>
-                                                            <Flatpickr
-
-                                                                value={value ? value : ""}
-                                                                {...register(`DynamicModel[DateTo]`)}
-                                                                onChange={val => {
-
-                                                                    onChange(moment(val[0]).format("DD/MM/YYYY"))
-                                                                }}
-                                                                className={`form-control flatpickr-input`}
-                                                                options={{
-
-                                                                    dateFormat: "d/m/Y"
-                                                                }}
-
-                                                            />
-                                                        </>
-                                                    )}
-                                                />
-                                            </div>
-
-                                        </div>
-                                    </td>
-
-
-
-                                </tr>
-                                <tr>
-
-
-                                    {/* <td>
+										<td>
+											<div className='col mb-1'>
+												<div className='form-group'>
+													<Controller
+														control={control}
+														name={"DynamicModel[DateTo]"}
+														render={({field: {onChange, value}}) => (
+															<>
+																<Flatpickr
+																	value={value ? value : ""}
+																	{...register(`DynamicModel[DateTo]`)}
+																	onChange={(val) => {
+																		onChange(
+																			moment(val[0]).format("DD/MM/YYYY")
+																		);
+																	}}
+																	className={`form-control flatpickr-input`}
+																	options={{
+																		dateFormat: "d/m/Y",
+																	}}
+																/>
+															</>
+														)}
+													/>
+												</div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										{/* <td>
                                         <div className="col mb-1">
                                             <label> Date:</label>
 
                                         </div>
                                     </td> */}
 
-
-
-                                    <td>
-                                        <div className="col mb-1">
-                                            <label> Agent:</label>
-
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="col-xs-12 col-md-12 mt-2">
-                                            <div className="form-group">
-                                                <Controller
-                                                    name="DynamicModel[Agent]"
-                                                    id="Agent"
-                                                    control={control}
-
-                                                    render={({ field: { onChange, value } }) => (
-
-                                                        <AsyncSelect
-                                                            isClearable={true}
-                                                            value={(value)}
-                                                            {...register("DynamicModel[Agent]")}
-                                                            cacheOptions
-                                                            placeholder={globalContext.asyncSelectPlaceHolder}
-                                                            onChange={e => { e == null ? onChange(null) : onChange(e.id); }}
-                                                            getOptionLabel={e => e.CompanyName}
-                                                            getOptionValue={e => e.CompanyUUID}
-                                                            loadOptions={loadOptionsCompany}
-                                                            menuPortalTarget={document.body}
-                                                            className="form-control"
-                                                            classNamePrefix="select"
-                                                            styles={globalContext.customStyles}
-
-                                                        />
-                                                    )}
-                                                />
-
-
-                                            </div>
-
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="col mb-1">
-                                            <label>Shipper:</label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="col-xs-12 col-md-12 mt-2 ">
-                                            <div className="form-group">
-                                                <Controller
-                                                    name="DynamicModel[Shipper]"
-                                                    id="Shipper"
-                                                    control={control}
-
-                                                    render={({ field: { onChange, value } }) => (
-
-                                                        <AsyncSelect
-                                                            isClearable={true}
-                                                            value={(value)}
-                                                            {...register("DynamicModel[Shipper]")}
-                                                            cacheOptions
-                                                            placeholder={globalContext.asyncSelectPlaceHolder}
-                                                            onChange={e => { e == null ? onChange(null) : onChange(e.id); }}
-                                                            getOptionLabel={e => e.CompanyName}
-                                                            getOptionValue={e => e.CompanyUUID}
-                                                            loadOptions={loadOptionsCompany}
-                                                            menuPortalTarget={document.body}
-                                                            className="form-control"
-                                                            classNamePrefix="select"
-                                                            styles={globalContext.customStyles}
-
-                                                        />
-                                                    )}
-                                                />
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="col mb-1">
-                                            <label>Consignee:</label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="col-xs-12 col-md-12 mt-2">
-                                            <div className="form-group">
-
-                                                <Controller
-                                                    name="DynamicModel[Consignee]"
-                                                    id="Consignee"
-                                                    control={control}
-
-                                                    render={({ field: { onChange, value } }) => (
-
-                                                        <AsyncSelect
-                                                            isClearable={true}
-                                                            value={value}
-                                                            {...register("DynamicModel[Consignee]")}
-                                                            cacheOptions
-                                                            placeholder={globalContext.asyncSelectPlaceHolder}
-                                                            onChange={e => { e == null ? onChange(null) : onChange(e.id); }}
-                                                            getOptionLabel={e => e.CompanyName}
-                                                            getOptionValue={e => e.CompanyUUID}
-                                                            loadOptions={loadOptionsCompany}
-                                                            menuPortalTarget={document.body}
-                                                            className="form-control"
-                                                            classNamePrefix="select"
-                                                            styles={globalContext.customStyles}
-
-                                                        />
-                                                    )}
-                                                />
-
-                                            </div>
-
-                                        </div>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div className="col mb-1">
-                                            <label>Voyage No:</label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="col-xs-12 col-md-12 mt-2">
-                                            <div className="form-group">
-                                                <Controller
-                                                    name={"DynamicModel[VoyageNumber]"}
-
-                                                    control={control}
-
-                                                    render={({ field: { onChange, value } }) => (
-                                                        <Select
-                                                            isClearable={true}
-                                                            {...register("DynamicModel[VoyageNumber]")}
-                                                            value={value ? voyage.find(c => c.value === value) : null}
-                                                            onChange={val => val == null ? onChange(null) : onChange(val.value)}
-                                                            options={voyage}
-                                                            menuPortalTarget={document.body}
-                                                            className="basic-single voyageNumber"
-                                                            classNamePrefix="select"
-                                                            styles={globalContext.customStyles}
-
-                                                        />
-                                                    )}
-                                                />
-
-                                            </div>
-
-                                        </div>
-
-                                    </td>
-
-                                    <td>
-                                        <div className="col mb-1">
-                                            <label>Container Type:</label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="col-xs-12 col-md-12 mt-2">
-                                            <div className="form-group">
-                                                <Controller
-                                                    name={"DynamicModel[ContainerType]"}
-
-                                                    control={control}
-
-                                                    render={({ field: { onChange, value } }) => (
-                                                        <Select
-                                                            isClearable={true}
-                                                            {...register("DynamicModel[ContainerType]")}
-                                                            value={value ? containerType.find(c => c.value === value) : null}
-                                                            onChange={val => val == null ? onChange(null) : onChange(val.value)}
-                                                            options={containerType}
-                                                            menuPortalTarget={document.body}
-                                                            className="basic-single containerType"
-                                                            classNamePrefix="select"
-                                                            styles={globalContext.customStyles}
-
-                                                        />
-                                                    )}
-                                                />
-
-                                            </div>
-
-                                        </div>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div className="col mb-1">
-                                            <label>POL:</label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="col-xs-12 col-md-12 mt-2">
-                                            <div className="form-group">
-                                                <Controller
-                                                    name={"DynamicModel[POL]"}
-
-                                                    control={control}
-
-                                                    render={({ field: { onChange, value } }) => (
-                                                        <Select
-                                                            isClearable={true}
-                                                            {...register("DynamicModel[POL]")}
-                                                            value={value ? port.find(c => c.value === value) : null}
-                                                            onChange={val => val == null ? onChange(null) : onChange(val.value)}
-                                                            options={port}
-                                                            menuPortalTarget={document.body}
-                                                            className="basic-single POL"
-                                                            classNamePrefix="select"
-                                                            styles={globalContext.customStyles}
-
-                                                        />
-                                                    )}
-                                                />
-
-                                            </div>
-
-                                        </div>
-
-                                    </td>
-
-
-                                    <td>
-                                        <div className="col mb-1">
-                                            <label>POT:</label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="col-xs-12 col-md-12 mt-2">
-                                            <div className="form-group">
-                                                <Controller
-                                                    name={"DynamicModel[POT]"}
-
-                                                    control={control}
-
-                                                    render={({ field: { onChange, value } }) => (
-                                                        <Select
-                                                            isClearable={true}
-                                                            {...register("DynamicModel[POT]")}
-                                                            value={value ? port.find(c => c.value === value) : null}
-                                                            onChange={val => val == null ? onChange(null) : onChange(val.value)}
-                                                            options={port}
-                                                            menuPortalTarget={document.body}
-                                                            className="basic-single POT"
-                                                            classNamePrefix="select"
-                                                            styles={globalContext.customStyles}
-
-                                                        />
-                                                    )}
-                                                />
-
-                                            </div>
-
-                                        </div>
-
-                                    </td>
-
-                                    <td>
-                                        <div className="col mb-1">
-                                            <label>POD:</label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="col-xs-12 col-md-12 mt-2">
-                                            <div className="form-group">
-                                                <Controller
-                                                    name={"DynamicModel[POD]"}
-
-                                                    control={control}
-
-                                                    render={({ field: { onChange, value } }) => (
-                                                        <Select
-                                                            isClearable={true}
-                                                            {...register("DynamicModel[POD]")}
-                                                            value={value ? port.find(c => c.value === value) : null}
-                                                            onChange={val => val == null ? onChange(null) : onChange(val.value)}
-                                                            options={port}
-                                                            menuPortalTarget={document.body}
-                                                            className="basic-single POD"
-                                                            classNamePrefix="select"
-                                                            styles={globalContext.customStyles}
-
-                                                        />
-                                                    )}
-                                                />
-
-                                            </div>
-
-                                        </div>
-
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <div className="col">
-                            <button type="button" className="btn btn-success float-right mb-3 mr-1" onClick={() => handleFindList(props.data.modelLink)}>Generate</button>
-                        </div>
-                    </div>
-
-                    <div id="toolbar">
-                        <button id="submit" type="button" className={`${filteredAp.find((item) => item == `submission-${modelLinkTemp}`) !== undefined ? "" : "disabledAccess"} btn btn-success  mr-1`} onClick={() =>handleSubmitManifest(props.data.modelLink)}>
-                            <i className="fa fa-send"></i> Submit
-                        </button>
-                        <button type="button" id="previewpdf" className={`${filteredAp.find((item) => item == `preview-${modelLinkTemp}`) !== undefined ? "" : "disabledAccess"} btn btn-success  mr-1`} onClick={() =>handlePDFPreview(props.data.modelLink)}>
-                            <i className="fa fa-send"></i> Preview PDF
-                        </button>
-                        <button type="button" id="Export" className={`${filteredAp.find((item) => item == `export-${modelLinkTemp}`) !== undefined ? "" : "disabledAccess"} btn btn-success  mr-1`} onClick={() => handleExport(props.data.modelLink)}>
-                            <i className="fa fa-send"></i> Export
-                        </button>
-                        <button type="button" id="ReviewStatus" className={`${filteredAp.find((item) => item == `status-review-${modelLinkTemp}`) !== undefined ? "" : "disabledAccess"} btn btn-success mr-1`} onClick={() => handleReviewStatus(props.data.modelLink)}>
-                            <i className="fa fa-send"></i> Review Status
-                        </button>
-                        {props.data.modelLink =="manifest-import"? 
-                            <button type="button" id="MyVoyage" className={`btn btn-success mr-1`} onClick={() => handleMyVoyageSelect()}>
-                                <i className="fa fa-send"></i> My Voyage
-                            </button>
-                        :""}
-                        <button type="button" id="Email" title="Email" className={`${filteredAp.find((item) => item == `status-review-${modelLinkTemp}`) !== undefined ? "" : "disabledAccess"} btn btn-success mr-1`} onClick={() => handleEmail(props.data.modelLink)}>
-                            <i className="fa fa-send"></i> Email
-                        </button>
-                        <button type="button" id="NOA" title="Notice Of Arrival" className={`${filteredAp.find((item) => item == `status-review-${modelLinkTemp}`) !== undefined ? "" : "disabledAccess"} btn btn-success`} onClick={() => handleNOA(props.data.modelLink)}>
-                            <i className="fa fa-send"></i> NOA
-                        </button>
-                    </div>
-
-                    <div className="indexTableCard">
-                        <table id={`${props.data.modelLink}-table`} class="bootstrap_table">
-
-                        </table>
-                    </div>
-
-
-                </div>
-
-                <div className="modal fade" id="PreviewPdfModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Preview</h5>
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div className="modal-body">
-                                <button type="button" className="btn btn-primary mr-2" href="/syscms/backend/manifest-export/#" id="PDFPort" data-toggle="modal" data-target="#PreviewPdfModalPortManifest" onClick={handlePreviewPortManifest}>Port Manifest</button>
-                                <button type="button" className="btn btn-primary mr-2" href="/syscms/backend/manifest-export/#" id="PDFCustom" data-toggle="modal" data-target="#PreviewPdfModalCustomManifest" onClick={handlePreviewCustomManifest}>Custom Manifest</button>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div className="modal fade" id="PreviewPdfModalPortManifest" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog modal-xl" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div className="modal-body">
-                                <iframe id="pdfFrame" src="" width="100%" height="700"></iframe>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div className="modal fade" id="PreviewPdfModalCustomManifest" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog modal-xl" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div className="modal-body">
-                                <iframe id="pdfFrame2" src="" width="100%" height="700"></iframe>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="modal fade" id="ReviewStatusModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog modal-lg" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title" id="exampleModalLabel">Review Status</h5>
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div className="modal-body">
-                                <table style={{ width: "100%" }} className="BLStatustable table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th width="20%">BL</th>
-                                            <th width="20%">Status</th>
-                                            <th width="60%">Reference</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="BLStatustableBody">
-
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="modal fade" id="NOAModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog modal-lg" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title" id="exampleModalLabel">Notice of Arrival</h5>
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div className="modal-body"> 
-                            <input type="hidden" className="manifestType"></input>          
-                            <button type="button" className="btn btn-primary mr-2"  onClick={()=>handleCustomer("single")}>Single Customer</button>
-                            <button type="button" className="btn btn-primary mr-2" onClick={()=>handleCustomer("multiple")}>Multiple Customer</button>                    
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="modal fade" id="CustomerModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog modal-lg" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title" id="exampleModalLabel">Notice of Arrival</h5>
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div className="modal-body">
-                            <input type="hidden" class="customerModalType"></input>
-                            <button type="button" className="btn btn-primary mr-2" onClick={()=>previewPDFNOAWithoutEdit($(".customerModalType").val())}>Preview </button>
-                            <button type="button" className="btn btn-primary mr-2" onClick={()=>handleMakeChanges($(".customerModalType").val())}>Make Changes</button>                    
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="modal fade" id="MakeChangesModal" tabIndex="-1" role="dialog" aria-
-                labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog modal-lg" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title" id="exampleModalLabel">Notice of Arrival</h5>
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div className="modal-body">
-                                <NoticeOfArrival modelLink={props.data.modelLink} selectedState={selectedState} customerType={makeChangesState} customerTypeData={customerTypeData}/>
-                                    
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-success" onClick={()=>HandlePreviewNOA($(".customerModalType").val())}>Preview</button>
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="modal fade" id="PreviewPdfModalNOA" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog modal-xl" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        </div>
-                        <div className="modal-body">
-                        <iframe id="pdfFrameNOAList" src="" width="100%" height="700"></iframe>
-
-                        </div>
-                        <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-            </div>
-            
-            <MyVoyageModal voyage={voyage} register={register} setValue={setValue} control={control}/>
-            <ManifestEmailModal register={register} setValue={setValue} control={control} reset={reset} getValues={getValues} />
-        </>
-
-
-    )
+										<td>
+											<div className='col mb-1'>
+												<label> Agent:</label>
+											</div>
+										</td>
+										<td>
+											<div className='col-xs-12 col-md-12 mt-2'>
+												<div className='form-group'>
+													<Controller
+														name='DynamicModel[Agent]'
+														id='Agent'
+														control={control}
+														render={({field: {onChange, value}}) => (
+															<AsyncSelect
+																isClearable={true}
+																value={value}
+																{...register("DynamicModel[Agent]")}
+																cacheOptions
+																placeholder={
+																	globalContext.asyncSelectPlaceHolder
+																}
+																onChange={(e) => {
+																	e == null ? onChange(null) : onChange(e.id);
+																}}
+																getOptionLabel={(e) => e.CompanyName}
+																getOptionValue={(e) => e.CompanyUUID}
+																loadOptions={loadOptionsCompany}
+																menuPortalTarget={document.body}
+																className='form-control'
+																classNamePrefix='select'
+																styles={globalContext.customStyles}
+															/>
+														)}
+													/>
+												</div>
+											</div>
+										</td>
+										<td>
+											<div className='col mb-1'>
+												<label>Shipper:</label>
+											</div>
+										</td>
+										<td>
+											<div className='col-xs-12 col-md-12 mt-2 '>
+												<div className='form-group'>
+													<Controller
+														name='DynamicModel[Shipper]'
+														id='Shipper'
+														control={control}
+														render={({field: {onChange, value}}) => (
+															<AsyncSelect
+																isClearable={true}
+																value={value}
+																{...register("DynamicModel[Shipper]")}
+																cacheOptions
+																placeholder={
+																	globalContext.asyncSelectPlaceHolder
+																}
+																onChange={(e) => {
+																	e == null ? onChange(null) : onChange(e.id);
+																}}
+																getOptionLabel={(e) => e.CompanyName}
+																getOptionValue={(e) => e.CompanyUUID}
+																loadOptions={loadOptionsCompany}
+																menuPortalTarget={document.body}
+																className='form-control'
+																classNamePrefix='select'
+																styles={globalContext.customStyles}
+															/>
+														)}
+													/>
+												</div>
+											</div>
+										</td>
+										<td>
+											<div className='col mb-1'>
+												<label>Consignee:</label>
+											</div>
+										</td>
+										<td>
+											<div className='col-xs-12 col-md-12 mt-2'>
+												<div className='form-group'>
+													<Controller
+														name='DynamicModel[Consignee]'
+														id='Consignee'
+														control={control}
+														render={({field: {onChange, value}}) => (
+															<AsyncSelect
+																isClearable={true}
+																value={value}
+																{...register("DynamicModel[Consignee]")}
+																cacheOptions
+																placeholder={
+																	globalContext.asyncSelectPlaceHolder
+																}
+																onChange={(e) => {
+																	e == null ? onChange(null) : onChange(e.id);
+																}}
+																getOptionLabel={(e) => e.CompanyName}
+																getOptionValue={(e) => e.CompanyUUID}
+																loadOptions={loadOptionsCompany}
+																menuPortalTarget={document.body}
+																className='form-control'
+																classNamePrefix='select'
+																styles={globalContext.customStyles}
+															/>
+														)}
+													/>
+												</div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div className='col mb-1'>
+												<label>Voyage No:</label>
+											</div>
+										</td>
+										<td>
+											<div className='col-xs-12 col-md-12 mt-2'>
+												<div className='form-group'>
+													<Controller
+														name={"DynamicModel[VoyageNumber]"}
+														control={control}
+														render={({field: {onChange, value}}) => (
+															<Select
+																isClearable={true}
+																{...register("DynamicModel[VoyageNumber]")}
+																value={
+																	value
+																		? voyage.find((c) => c.value === value)
+																		: null
+																}
+																onChange={(val) =>
+																	val == null
+																		? onChange(null)
+																		: onChange(val.value)
+																}
+																options={voyage}
+																menuPortalTarget={document.body}
+																className='basic-single voyageNumber'
+																classNamePrefix='select'
+																styles={globalContext.customStyles}
+															/>
+														)}
+													/>
+												</div>
+											</div>
+										</td>
+
+										<td>
+											<div className='col mb-1'>
+												<label>Container Type:</label>
+											</div>
+										</td>
+										<td>
+											<div className='col-xs-12 col-md-12 mt-2'>
+												<div className='form-group'>
+													<Controller
+														name={"DynamicModel[ContainerType]"}
+														control={control}
+														render={({field: {onChange, value}}) => (
+															<Select
+																isClearable={true}
+																{...register("DynamicModel[ContainerType]")}
+																value={
+																	value
+																		? containerType.find(
+																				(c) => c.value === value
+																		  )
+																		: null
+																}
+																onChange={(val) =>
+																	val == null
+																		? onChange(null)
+																		: onChange(val.value)
+																}
+																options={containerType}
+																menuPortalTarget={document.body}
+																className='basic-single containerType'
+																classNamePrefix='select'
+																styles={globalContext.customStyles}
+															/>
+														)}
+													/>
+												</div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div className='col mb-1'>
+												<label>POL:</label>
+											</div>
+										</td>
+										<td>
+											<div className='col-xs-12 col-md-12 mt-2'>
+												<div className='form-group'>
+													<Controller
+														name={"DynamicModel[POL]"}
+														control={control}
+														render={({field: {onChange, value}}) => (
+															<Select
+																isClearable={true}
+																{...register("DynamicModel[POL]")}
+																value={
+																	value
+																		? port.find((c) => c.value === value)
+																		: null
+																}
+																onChange={(val) =>
+																	val == null
+																		? onChange(null)
+																		: onChange(val.value)
+																}
+																options={port}
+																menuPortalTarget={document.body}
+																className='basic-single POL'
+																classNamePrefix='select'
+																styles={globalContext.customStyles}
+															/>
+														)}
+													/>
+												</div>
+											</div>
+										</td>
+
+										<td>
+											<div className='col mb-1'>
+												<label>POT:</label>
+											</div>
+										</td>
+										<td>
+											<div className='col-xs-12 col-md-12 mt-2'>
+												<div className='form-group'>
+													<Controller
+														name={"DynamicModel[POT]"}
+														control={control}
+														render={({field: {onChange, value}}) => (
+															<Select
+																isClearable={true}
+																{...register("DynamicModel[POT]")}
+																value={
+																	value
+																		? port.find((c) => c.value === value)
+																		: null
+																}
+																onChange={(val) =>
+																	val == null
+																		? onChange(null)
+																		: onChange(val.value)
+																}
+																options={port}
+																menuPortalTarget={document.body}
+																className='basic-single POT'
+																classNamePrefix='select'
+																styles={globalContext.customStyles}
+															/>
+														)}
+													/>
+												</div>
+											</div>
+										</td>
+
+										<td>
+											<div className='col mb-1'>
+												<label>POD:</label>
+											</div>
+										</td>
+										<td>
+											<div className='col-xs-12 col-md-12 mt-2'>
+												<div className='form-group'>
+													<Controller
+														name={"DynamicModel[POD]"}
+														control={control}
+														render={({field: {onChange, value}}) => (
+															<Select
+																isClearable={true}
+																{...register("DynamicModel[POD]")}
+																value={
+																	value
+																		? port.find((c) => c.value === value)
+																		: null
+																}
+																onChange={(val) =>
+																	val == null
+																		? onChange(null)
+																		: onChange(val.value)
+																}
+																options={port}
+																menuPortalTarget={document.body}
+																className='basic-single POD'
+																classNamePrefix='select'
+																styles={globalContext.customStyles}
+															/>
+														)}
+													/>
+												</div>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+
+							<div className='col'>
+								<button
+									type='button'
+									className='btn btn-success float-right mb-3 mr-1'
+									onClick={() => handleFindList(props.data.modelLink)}>
+									Generate
+								</button>
+							</div>
+						</div>
+
+						<div id='toolbar'>
+							<button
+								id='submit'
+								type='button'
+								className={`${
+									filteredAp.find(
+										(item) => item == `submission-${modelLinkTemp}`
+									) !== undefined
+										? ""
+										: "disabledAccess"
+								} btn btn-success  mr-1`}
+								onClick={() => handleSubmitManifest(props.data.modelLink)}>
+								<i className='fa fa-send'></i> Submit
+							</button>
+							<button
+								type='button'
+								id='previewpdf'
+								className={`${
+									filteredAp.find(
+										(item) => item == `preview-${modelLinkTemp}`
+									) !== undefined
+										? ""
+										: "disabledAccess"
+								} btn btn-success  mr-1`}
+								onClick={() => handlePDFPreview(props.data.modelLink)}>
+								<i className='fa fa-send'></i> Preview PDF
+							</button>
+							<button
+								type='button'
+								id='Export'
+								className={`${
+									filteredAp.find(
+										(item) => item == `export-${modelLinkTemp}`
+									) !== undefined
+										? ""
+										: "disabledAccess"
+								} btn btn-success  mr-1`}
+								onClick={() => handleExport(props.data.modelLink)}>
+								<i className='fa fa-send'></i> Export
+							</button>
+							<button
+								type='button'
+								id='ReviewStatus'
+								className={`${
+									filteredAp.find(
+										(item) => item == `status-review-${modelLinkTemp}`
+									) !== undefined
+										? ""
+										: "disabledAccess"
+								} btn btn-success mr-1`}
+								onClick={() => handleReviewStatus(props.data.modelLink)}>
+								<i className='fa fa-send'></i> Review Status
+							</button>
+							{props.data.modelLink == "manifest-import" ? (
+								<button
+									type='button'
+									id='MyVoyage'
+									className={`btn btn-success mr-1`}
+									onClick={() => handleMyVoyageSelect()}>
+									<i className='fa fa-send'></i> My Voyage
+								</button>
+							) : (
+								""
+							)}
+							<button
+								type='button'
+								id='Email'
+								title='Email'
+								className={`${
+									filteredAp.find(
+										(item) => item == `status-review-${modelLinkTemp}`
+									) !== undefined
+										? ""
+										: "disabledAccess"
+								} btn btn-success mr-1`}
+								onClick={() => handleEmail(props.data.modelLink)}>
+								<i className='fa fa-send'></i> Email
+							</button>
+							<button
+								type='button'
+								id='NOA'
+								title='Notice Of Arrival'
+								className={`${
+									filteredAp.find(
+										(item) => item == `status-review-${modelLinkTemp}`
+									) !== undefined
+										? ""
+										: "disabledAccess"
+								} btn btn-success`}
+								onClick={() => handleNOA(props.data.modelLink)}>
+								<i className='fa fa-send'></i> NOA
+							</button>
+						</div>
+
+						<div className='indexTableCard'>
+							<table
+								id={`${props.data.modelLink}-table`}
+								className='bootstrap_table'></table>
+						</div>
+					</div>
+
+					<div
+						className='modal fade'
+						id='PreviewPdfModal'
+						tabIndex='-1'
+						role='dialog'
+						aria-labelledby='exampleModalLabel'
+						aria-hidden='true'>
+						<div className='modal-dialog' role='document'>
+							<div className='modal-content'>
+								<div className='modal-header'>
+									<h5 className='modal-title'>Preview</h5>
+									<button
+										type='button'
+										className='close'
+										data-dismiss='modal'
+										aria-label='Close'>
+										<span aria-hidden='true'>&times;</span>
+									</button>
+								</div>
+								<div className='modal-body'>
+									<button
+										type='button'
+										className='btn btn-primary mr-2'
+										href='/syscms/backend/manifest-export/#'
+										id='PDFPort'
+										data-toggle='modal'
+										data-target='#PreviewPdfModalPortManifest'
+										onClick={handlePreviewPortManifest}>
+										Port Manifest
+									</button>
+									<button
+										type='button'
+										className='btn btn-primary mr-2'
+										href='/syscms/backend/manifest-export/#'
+										id='PDFCustom'
+										data-toggle='modal'
+										data-target='#PreviewPdfModalCustomManifest'
+										onClick={handlePreviewCustomManifest}>
+										Custom Manifest
+									</button>
+								</div>
+								<div className='modal-footer'>
+									<button
+										type='button'
+										className='btn btn-secondary'
+										data-dismiss='modal'>
+										Close
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div
+						className='modal fade'
+						id='PreviewPdfModalPortManifest'
+						tabIndex='-1'
+						role='dialog'
+						aria-labelledby='exampleModalLabel'
+						aria-hidden='true'>
+						<div className='modal-dialog modal-xl' role='document'>
+							<div className='modal-content'>
+								<div className='modal-header'>
+									<button
+										type='button'
+										className='close'
+										data-dismiss='modal'
+										aria-label='Close'>
+										<span aria-hidden='true'>&times;</span>
+									</button>
+								</div>
+								<div className='modal-body'>
+									<iframe
+										id='pdfFrame'
+										src=''
+										width='100%'
+										height='700'></iframe>
+								</div>
+								<div className='modal-footer'>
+									<button
+										type='button'
+										className='btn btn-secondary'
+										data-dismiss='modal'>
+										Close
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div
+						className='modal fade'
+						id='PreviewPdfModalCustomManifest'
+						tabIndex='-1'
+						role='dialog'
+						aria-labelledby='exampleModalLabel'
+						aria-hidden='true'>
+						<div className='modal-dialog modal-xl' role='document'>
+							<div className='modal-content'>
+								<div className='modal-header'>
+									<button
+										type='button'
+										className='close'
+										data-dismiss='modal'
+										aria-label='Close'>
+										<span aria-hidden='true'>&times;</span>
+									</button>
+								</div>
+								<div className='modal-body'>
+									<iframe
+										id='pdfFrame2'
+										src=''
+										width='100%'
+										height='700'></iframe>
+								</div>
+								<div className='modal-footer'>
+									<button
+										type='button'
+										className='btn btn-secondary'
+										data-dismiss='modal'>
+										Close
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div
+						className='modal fade'
+						id='ReviewStatusModal'
+						tabIndex='-1'
+						role='dialog'
+						aria-labelledby='exampleModalLabel'
+						aria-hidden='true'>
+						<div className='modal-dialog modal-lg' role='document'>
+							<div className='modal-content'>
+								<div className='modal-header'>
+									<h5 className='modal-title' id='exampleModalLabel'>
+										Review Status
+									</h5>
+									<button
+										type='button'
+										className='close'
+										data-dismiss='modal'
+										aria-label='Close'>
+										<span aria-hidden='true'>&times;</span>
+									</button>
+								</div>
+								<div className='modal-body'>
+									<table
+										style={{width: "100%"}}
+										className='BLStatustable table-bordered'>
+										<thead>
+											<tr>
+												<th width='20%'>BL</th>
+												<th width='20%'>Status</th>
+												<th width='60%'>Reference</th>
+											</tr>
+										</thead>
+										<tbody id='BLStatustableBody'></tbody>
+									</table>
+								</div>
+								<div className='modal-footer'>
+									<button
+										type='button'
+										className='btn btn-secondary'
+										data-dismiss='modal'>
+										Close
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div
+						className='modal fade'
+						id='NOAModal'
+						tabIndex='-1'
+						role='dialog'
+						aria-labelledby='exampleModalLabel'
+						aria-hidden='true'>
+						<div className='modal-dialog modal-lg' role='document'>
+							<div className='modal-content'>
+								<div className='modal-header'>
+									<h5 className='modal-title' id='exampleModalLabel'>
+										Notice of Arrival
+									</h5>
+									<button
+										type='button'
+										className='close'
+										data-dismiss='modal'
+										aria-label='Close'>
+										<span aria-hidden='true'>&times;</span>
+									</button>
+								</div>
+								<div className='modal-body'>
+									<input type='hidden' className='manifestType'></input>
+									<button
+										type='button'
+										className='btn btn-primary mr-2'
+										onClick={() => handleCustomer("single")}>
+										Single Customer
+									</button>
+									<button
+										type='button'
+										className='btn btn-primary mr-2'
+										onClick={() => handleCustomer("multiple")}>
+										Multiple Customer
+									</button>
+								</div>
+								<div className='modal-footer'>
+									<button
+										type='button'
+										className='btn btn-secondary'
+										data-dismiss='modal'>
+										Close
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div
+						className='modal fade'
+						id='CustomerModal'
+						tabIndex='-1'
+						role='dialog'
+						aria-labelledby='exampleModalLabel'
+						aria-hidden='true'>
+						<div className='modal-dialog modal-lg' role='document'>
+							<div className='modal-content'>
+								<div className='modal-header'>
+									<h5 className='modal-title' id='exampleModalLabel'>
+										Notice of Arrival
+									</h5>
+									<button
+										type='button'
+										className='close'
+										data-dismiss='modal'
+										aria-label='Close'>
+										<span aria-hidden='true'>&times;</span>
+									</button>
+								</div>
+								<div className='modal-body'>
+									<input type='hidden' className='customerModalType'></input>
+									<button
+										type='button'
+										className='btn btn-primary mr-2'
+										onClick={() =>
+											previewPDFNOAWithoutEdit($(".customerModalType").val())
+										}>
+										Preview{" "}
+									</button>
+									<button
+										type='button'
+										className='btn btn-primary mr-2'
+										onClick={() =>
+											handleMakeChanges($(".customerModalType").val())
+										}>
+										Make Changes
+									</button>
+								</div>
+								<div className='modal-footer'>
+									<button
+										type='button'
+										className='btn btn-secondary'
+										data-dismiss='modal'>
+										Close
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div
+						className='modal fade'
+						id='MakeChangesModal'
+						tabIndex='-1'
+						role='dialog'
+						aria-
+						labelledby='exampleModalLabel'
+						aria-hidden='true'>
+						<div className='modal-dialog modal-lg' role='document'>
+							<div className='modal-content'>
+								<div className='modal-header'>
+									<h5 className='modal-title' id='exampleModalLabel'>
+										Notice of Arrival
+									</h5>
+									<button
+										type='button'
+										className='close'
+										data-dismiss='modal'
+										aria-label='Close'>
+										<span aria-hidden='true'>&times;</span>
+									</button>
+								</div>
+								<div className='modal-body'>
+									<NoticeOfArrival
+										modelLink={props.data.modelLink}
+										selectedState={selectedState}
+										customerType={makeChangesState}
+										customerTypeData={customerTypeData}
+									/>
+								</div>
+								<div className='modal-footer'>
+									<button
+										type='button'
+										className='btn btn-success'
+										onClick={() =>
+											HandlePreviewNOA($(".customerModalType").val())
+										}>
+										Preview
+									</button>
+									<button
+										type='button'
+										className='btn btn-secondary'
+										data-dismiss='modal'>
+										Close
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div
+						className='modal fade'
+						id='PreviewPdfModalNOA'
+						tabIndex='-1'
+						role='dialog'
+						aria-labelledby='exampleModalLabel'
+						aria-hidden='true'>
+						<div className='modal-dialog modal-xl' role='document'>
+							<div className='modal-content'>
+								<div className='modal-header'>
+									<button
+										type='button'
+										className='close'
+										data-dismiss='modal'
+										aria-label='Close'>
+										<span aria-hidden='true'>&times;</span>
+									</button>
+								</div>
+								<div className='modal-body'>
+									<iframe
+										id='pdfFrameNOAList'
+										src=''
+										width='100%'
+										height='700'></iframe>
+								</div>
+								<div className='modal-footer'>
+									<button
+										type='button'
+										className='btn btn-secondary'
+										data-dismiss='modal'>
+										Close
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<MyVoyageModal
+					voyage={voyage}
+					register={register}
+					setValue={setValue}
+					control={control}
+				/>
+				<ManifestEmailModal
+					register={register}
+					setValue={setValue}
+					control={control}
+					reset={reset}
+					getValues={getValues}
+				/>
+			</>
+		);
 }
 
 

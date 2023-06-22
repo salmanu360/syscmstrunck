@@ -338,71 +338,63 @@ function Index(props) {
 
 
     return (
+			<div className='card card-primary'>
+				<div className='card-body'>
+					<div className='card lvl1'>
+						<div className='row'></div>
+						<table className='mt-2 mb-2'>
+							<thead>
+								<tr>
+									<th style={{width: "10%"}}></th>
+									<th style={{width: "20%"}}></th>
+								</tr>
+							</thead>
 
+							<tbody>
+								<tr>
+									<td>
+										<div className='col mb-3 mt-3'>
+											<label>Container Code:</label>
+										</div>
+									</td>
+									<td>
+										<div className='col-xs-12 col-md-12 mt-2'>
+											<div className='form-group'>
+												<input
+													defaultValue=''
+													{...register("DynamicModel[ContainerCOde]")}
+													id='ContainerCodeTrack'
+													className={`form-control`}
+												/>
+											</div>
+										</div>
+									</td>
 
-        <div className="card card-primary">
-            <div className="card-body">
-
-                <div className="card lvl1">
-                    <div className="row">
-                    </div>
-                    <table className="mt-2 mb-2">
-                        <thead>
-                            <tr>
-                                <th style={{ width: "10%" }}></th>
-                                <th style={{ width: "20%" }}></th>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody>
-                            <tr>
-
-                                <td>
-                                    <div className="col mb-3 mt-3">
-                                        <label>Container Code:</label>
-
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="col-xs-12 col-md-12 mt-2">
-                                        <div className="form-group">
-
-                                        <input defaultValue='' {...register("DynamicModel[ContainerCOde]")} id="ContainerCodeTrack" className={`form-control`} />
-
-                                        </div>
-
-                                    </div>
-                                </td>
-
-
-
-                                <td>
-                                    <div className="col">
-                                        <button type="button" className="btn btn-success float-right" onClick={() => handleGenerate()}>Generate</button>
-                                    </div>
-                                </td>
-
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-            <div class="card-body" style={{ width: "55%", margin: "0 auto" }} >
-                <div>
-                    <table id={`${props.data.modelLink}-table`} className="bootstrap_table" data-sort-name="ContainerDocument.CreatedAt">
-
-                    </table>
-                </div>
-            </div>
-        </div>
-
-
-
-
-    )
+									<td>
+										<div className='col'>
+											<button
+												type='button'
+												className='btn btn-success float-right'
+												onClick={() => handleGenerate()}>
+												Generate
+											</button>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div className='card-body' style={{width: "55%", margin: "0 auto"}}>
+					<div>
+						<table
+							id={`${props.data.modelLink}-table`}
+							className='bootstrap_table'
+							data-sort-name='ContainerDocument.CreatedAt'></table>
+					</div>
+				</div>
+			</div>
+		);
 }
 
 

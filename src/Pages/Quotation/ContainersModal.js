@@ -19,6 +19,10 @@ const ContainersModal = ({
     setSingleSelectValue("");
   };
 
+  useEffect(() => {
+		console.log("New values", selectedValue);
+	}, [selectedValue]);
+  
   const handleConfirmSelected = () => {
     if (singleSelectValue) {
       setSelectedValue([...selectedValue, singleSelectValue]);

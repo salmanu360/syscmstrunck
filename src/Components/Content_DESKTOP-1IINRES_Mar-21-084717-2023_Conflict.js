@@ -33,39 +33,30 @@ function Content(props) {
       
     }
     return (
-      
-        <div className="content-wrapper">
-            <section className="content-header">
-
-
-
-                <div class="content-header">
-                    <div class="container-fluid">
-                        <div class="row mb-2">
-                            <div class="col-sm-6">
-                                <h1 class="m-0 text-dark ContentTitle">
-                                    {props.Title}
-                                </h1>
-                            </div>
-                            <div class="col-sm-6">
-                                <ol className="breadcrumb float-sm-right"><BreadCrumb /></ol>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </section>
-            <section class="content">
-                <Suspense>
-           
-                    <MyComponent data={props}/>
-                </Suspense>
-
-            </section>
-
-        </div>
-        
-    )
+			<div className='content-wrapper'>
+				<section className='content-header'>
+					<div className='content-header'>
+						<div className='container-fluid'>
+							<div className='row mb-2'>
+								<div className='col-sm-6'>
+									<h1 className='m-0 text-dark ContentTitle'>{props.Title}</h1>
+								</div>
+								<div className='col-sm-6'>
+									<ol className='breadcrumb float-sm-right'>
+										<BreadCrumb />
+									</ol>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+				<section className='content'>
+					<Suspense>
+						<MyComponent data={props} />
+					</Suspense>
+				</section>
+			</div>
+		);
 }
 
 export default Content

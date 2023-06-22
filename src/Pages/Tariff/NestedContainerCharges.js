@@ -1226,201 +1226,373 @@ function ContainerCharges(props) {
         name: "TariffHasContainerTypeCharges" + '[' + props.containerIndex + ']'
     });
     return (
-        <div className="card  col-xs-12 col-md-12">
+			<div className='card  col-xs-12 col-md-12'>
+				<div className='card-body' style={{backgroundColor: "white"}}>
+					<div
+						className='btn-group float-right mb-2 columnchooserdropdown'
+						id='columnchooserdropdown'>
+						<button
+							type='button'
+							className='btn btn-secondary btn-xs dropdown-toggle'
+							data-toggle='dropdown'
+							aria-haspopup='true'
+							aria-expanded='true'>
+							<i className='fa fa-th-list'></i>
+						</button>
+						<div
+							className='dropdown-menu dropdown-menu-right  scrollable-columnchooser charges'
+							id={`chargesColumChooser-${props.containerIndex}`}>
+							{chargesColumn.map((item, index) => {
+								return (
+									<label className='dropdown-item dropdown-item-marker'>
+										{item.defaultChecked ? (
+											<input
+												type='checkbox'
+												className='columnChooserCharges'
+												defaultChecked
+											/>
+										) : (
+											<input type='checkbox' className='columnChooserCharges' />
+										)}
+										{item.columnName}
+									</label>
+								);
+							})}
+						</div>
+					</div>
 
-            <div className="card-body" style={{ "backgroundColor": "white" }}>
+					<div className='table_wrap'>
+						<div className='table_wrap_inner'>
+							<table
+								className='table table-bordered commontable chargesTable'
+								style={{width: "100%"}}>
+								<thead>
+									<tr>
+										{fields.length > 0
+											? fields[0].Charges.map((item, index) => {
+													return (
+														<th className={item.class}>{item.columnName}</th>
+													);
+											  })
+											: chargesColumn.map((item, index) => {
+													return (
+														<th className={item.class}>{item.columnName}</th>
+													);
+											  })}
+									</tr>
+								</thead>
+								<tbody>
+									{fields.map((item, index) => {
+										return (
+											<tr key={item.id}>
+												{item.Charges.map((item2, index2) => {
+													if (item2.inputType == "single-select") {
+														if (index2 == 0) {
+															return (
+																<td className={item2.class}>
+																	<div className='row'>
+																		<div className='col-md-2'>
+																			<div className='dropdownbar float-left ml-1'>
+																				<button
+																					style={{
+																						position: "relative",
+																						left: "0px",
+																						top: "-5px",
+																						padding: "0px 3px 0px 3px",
+																					}}
+																					className='btn btn-xs mt-2 btn-secondary dropdown-toggle float-right mr-1'
+																					type='button'
+																					data-toggle='dropdown'
+																					aria-haspopup='true'
+																					aria-expanded='false'>
+																					<i className='fa fa-ellipsis-v'></i>
+																				</button>
+																				<div
+																					className='dropdown-menu'
+																					aria-labelledby='dropdownMenuButton'>
+																					<button
+																						className='dropdown-item remove-container'
+																						type='button'
+																						onClick={() =>
+																							removeContainerHandle(index)
+																						}>
+																						Remove
+																					</button>
+																				</div>
+																			</div>
+																		</div>
+																		<input
+																			{...register(
+																				"TariffHasContainerTypeCharges" +
+																					"[" +
+																					props.containerIndex +
+																					"]" +
+																					"[" +
+																					index +
+																					"]" +
+																					"[TariffHasContainerTypeChargesUUID]"
+																			)}
+																			className={`form-control d-none`}
+																		/>
+																		<div className='col-md-10'>
+																			<Controller
+																				name={
+																					"TariffHasContainerTypeCharges" +
+																					"[" +
+																					props.containerIndex +
+																					"]" +
+																					"[" +
+																					index +
+																					"]" +
+																					"[" +
+																					item2.name +
+																					"]"
+																				}
+																				control={control}
+																				render={({
+																					field: {onChange, value},
+																				}) => (
+																					<Select
+																						isClearable={true}
+																						{...register(
+																							"TariffHasContainerTypeCharges" +
+																								"[" +
+																								props.containerIndex +
+																								"]" +
+																								"[" +
+																								index +
+																								"]" +
+																								"[" +
+																								item2.name +
+																								"]"
+																						)}
+																						value={
+																							value
+																								? item2.options.find(
+																										(c) => c.value === value
+																								  )
+																								: null
+																						}
+																						onChange={(val) => {
+																							val == null
+																								? onChange(null)
+																								: onChange(val.value);
+																							item2.onChange(
+																								val,
+																								props.containerIndex,
+																								index
+																							);
+																						}}
+																						options={item2.options}
+																						onMenuOpen={() => {
+																							handleOpenMenu(
+																								item2.name,
+																								item2.options,
+																								props.containerIndex,
+																								index
+																							);
+																						}}
+																						isOptionDisabled={(selectedValue) =>
+																							selectedValue.selected == true
+																						}
+																						menuPortalTarget={document.body}
+																						className='basic-single ChargesCode'
+																						classNamePrefix='select'
+																						onKeyDown={handleKeydown}
+																						styles={globalContext.customStyles}
+																					/>
+																				)}
+																			/>
+																			<input
+																				type='hidden'
+																				id='select-options'
+																				value={JSON.stringify(item2.options)}
+																			/>
+																		</div>
+																	</div>
+																</td>
+															);
+														} else {
+															return (
+																<td className={item2.class}>
+																	<Controller
+																		name={
+																			"TariffHasContainerTypeCharges" +
+																			"[" +
+																			props.containerIndex +
+																			"]" +
+																			"[" +
+																			index +
+																			"]" +
+																			"[" +
+																			item2.name +
+																			"]"
+																		}
+																		control={control}
+																		defaultValue={
+																			item2.defaultValue
+																				? item2.defaultValue
+																				: ""
+																		}
+																		render={({field: {onChange, value}}) => (
+																			<Select
+																				isClearable={true}
+																				{...register(
+																					"TariffHasContainerTypeCharges" +
+																						"[" +
+																						props.containerIndex +
+																						"]" +
+																						"[" +
+																						index +
+																						"]" +
+																						"[" +
+																						item2.name +
+																						"]"
+																				)}
+																				value={
+																					value
+																						? item2.options.find(
+																								(c) => c.value === value
+																						  )
+																						: null
+																				}
+																				onChange={(val) => {
+																					val == null
+																						? onChange(null)
+																						: onChange(val.value);
+																					item2.onChange(
+																						val,
+																						props.containerIndex,
+																						index
+																					);
+																				}}
+																				options={item2.options}
+																				menuPortalTarget={document.body}
+																				onMenuOpen={() => {
+																					handleOpenMenu(
+																						item2.name,
+																						item2.options,
+																						props.containerIndex,
+																						index
+																					);
+																				}}
+																				isOptionDisabled={(selectedValue) =>
+																					selectedValue.selected == true
+																				}
+																				className={`basic-single ${
+																					item2.fieldClass
+																						? item2.fieldClass
+																						: ""
+																				}`}
+																				classNamePrefix='select'
+																				onKeyDown={handleKeydown}
+																				styles={globalContext.customStyles}
+																			/>
+																		)}
+																	/>
+																	{item2.columnName == "UOM" ? (
+																		<input
+																			type='hidden'
+																			className='ArrayUOM'></input>
+																	) : (
+																		""
+																	)}
+																</td>
+															);
+														}
+													}
+													if (item2.inputType == "input") {
+														return (
+															<td className={item2.class}>
+																<input
+																	defaultValue=''
+																	readOnly={
+																		item2.readOnly ? item2.readOnly : false
+																	}
+																	{...register(
+																		"TariffHasContainerTypeCharges" +
+																			"[" +
+																			props.containerIndex +
+																			"]" +
+																			"[" +
+																			index +
+																			"]" +
+																			"[" +
+																			item2.name +
+																			"]"
+																	)}
+																	className={`form-control ${
+																		item2.fieldClass ? item2.fieldClass : ""
+																	}`}
+																	onBlur={(val) =>
+																		handleChangeInput(
+																			item2.name,
+																			props.containerIndex,
+																			index,
+																			val
+																		)
+																	}
+																/>
+															</td>
+														);
+													}
 
-                <div className="btn-group float-right mb-2 columnchooserdropdown" id="columnchooserdropdown">
-                    <button type="button" className="btn btn-secondary btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <i className="fa fa-th-list"></i>
-                    </button>
-                    <div className="dropdown-menu dropdown-menu-right  scrollable-columnchooser charges" id={`chargesColumChooser-${props.containerIndex}`}>
-                        {chargesColumn.map((item, index) => {
+													if (item2.inputType == "date") {
+														return (
+															<td className={item2.class}>
+																<Controller
+																	control={control}
+																	name={`TariffHasContainerTypeCharges[${props.containerIndex}][${index}][${item2.name}]`}
+																	render={({field: {onChange, value}}) => (
+																		<>
+																			<Flatpickr
+																				value={value ? value : ""}
+																				{...register(
+																					"TariffHasContainerTypeCharges" +
+																						"[" +
+																						props.containerIndex +
+																						"]" +
+																						"[" +
+																						index +
+																						"]" +
+																						"[" +
+																						item2.name +
+																						"]"
+																				)}
+																				onChange={(val) => {
+																					onChange(
+																						moment(val[0]).format("DD/MM/YYYY")
+																					);
+																				}}
+																				className='form-control dateformat'
+																				options={{
+																					dateFormat: "d/m/Y",
+																				}}
+																			/>
+																		</>
+																	)}
+																/>
+															</td>
+														);
+													}
+												})}
+											</tr>
+										);
+									})}
+								</tbody>
+							</table>
+						</div>
+					</div>
 
-                            return (
-                                <label className="dropdown-item dropdown-item-marker">
-                                    {item.defaultChecked ? <input type="checkbox" className="columnChooserCharges" defaultChecked /> : <input type="checkbox" className="columnChooserCharges" />}
-                                    {item.columnName}
-
-                                </label>
-                            )
-
-                        })}
-
-                    </div>
-                </div>
-
-                <div class="table_wrap">
-                    <div class="table_wrap_inner">
-                        <table className="table table-bordered commontable chargesTable" style={{ width: "100%" }}>
-                            <thead>
-                                <tr>
-                                  
-                                    {fields.length > 0 ? fields[0].Charges.map((item, index) => {
-                                        return (
-                                            <th className={item.class}>{item.columnName}</th>
-                                        )
-
-                                    }) : chargesColumn.map((item, index) => {
-                                        return (
-                                            <th className={item.class}>{item.columnName}</th>
-
-                                        )
-
-                                    })}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                    
-                                {fields.map((item, index) => {
-                                  
-                                    return (
-                                           
-                                        <tr key={item.id}>
-
-                                            {item.Charges.map((item2, index2) => {
-
-                                                if (item2.inputType == "single-select") {
-                                                    if (index2 == 0) {
-                                                        return (
-                                                            <td className={item2.class}>
-                                                                <div className="row">
-                                                                    <div className="col-md-2">
-                                                                        <div className="dropdownbar float-left ml-1">
-                                                                            <button style={{ position: "relative", left: "0px", top: "-5px", padding: "0px 3px 0px 3px" }} className="btn btn-xs mt-2 btn-secondary dropdown-toggle float-right mr-1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                                <i className="fa fa-ellipsis-v"></i></button>
-                                                                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                                <button className="dropdown-item remove-container" type="button" onClick={() => removeContainerHandle(index)}>Remove</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <input  {...register("TariffHasContainerTypeCharges" + '[' + props.containerIndex + ']' + '[' + index + ']' + '[TariffHasContainerTypeChargesUUID]')} className={`form-control d-none`}/>
-                                                                    <div className="col-md-10">
-                                                                        <Controller
-                                                                            name={("TariffHasContainerTypeCharges" + '[' + props.containerIndex + ']' + '[' + index + ']' + '[' + item2.name + ']')}
-
-                                                                            control={control}
-
-                                                                            render={({ field: { onChange, value } }) => (
-                                                                                <Select
-                                                                                    isClearable={true}
-                                                                                    {...register("TariffHasContainerTypeCharges" + '[' + props.containerIndex + ']' + '[' + index + ']' + '[' + item2.name + ']')}
-                                                                                    value={value ? item2.options.find(c => c.value === value) : null}
-                                                                                    onChange={val => { val == null ? onChange(null) : onChange(val.value); item2.onChange(val, props.containerIndex, index) }}
-                                                                                    options={item2.options}
-                                                                                    onMenuOpen={() => { handleOpenMenu(item2.name, item2.options, props.containerIndex,index) }}
-                                                                                    isOptionDisabled={(selectedValue) => selectedValue.selected == true}
-                                                                                    menuPortalTarget={document.body}
-                                                                                    className="basic-single ChargesCode"
-                                                                                    classNamePrefix="select"
-                                                                                    onKeyDown={handleKeydown}
-                                                                                    styles={globalContext.customStyles}
-
-                                                                                />
-                                                                            )}
-                                                                        />
-                                                                        <input type="hidden" id="select-options" value={JSON.stringify(item2.options)} />
-                                                                    </div>
-
-                                                                </div>
-
-                                                            </td>
-                                                        )
-                                                    }
-                                                    else {
-                                                        return (
-                                                            <td className={item2.class}>
-                                                                <Controller
-                                                                    name={("TariffHasContainerTypeCharges" + '[' + props.containerIndex + ']' + '[' + index + ']' + '[' + item2.name + ']')}
-
-                                                                    control={control}
-                                                                    defaultValue={item2.defaultValue ? item2.defaultValue : ""}
-                                                                    render={({ field: { onChange, value } }) => (
-                                                                        <Select
-                                                                            isClearable={true}
-                                                                            {...register("TariffHasContainerTypeCharges" + '[' + props.containerIndex + ']' + '[' + index + ']' + '[' + item2.name + ']')}
-                                                                            value={value ? item2.options.find(c => c.value === value) : null}
-                                                                            onChange={val => { val == null ? onChange(null) : onChange(val.value); item2.onChange(val, props.containerIndex, index) }}
-                                                                            options={item2.options}
-
-                                                                            menuPortalTarget={document.body}
-                                                                            onMenuOpen={() => { handleOpenMenu(item2.name, item2.options, props.containerIndex, index) }}
-                                                                            isOptionDisabled={(selectedValue) => selectedValue.selected == true}
-                                                                            className={`basic-single ${item2.fieldClass ? item2.fieldClass : ""}`}
-                                                                            classNamePrefix="select"
-                                                                            onKeyDown={handleKeydown}
-                                                                            styles={globalContext.customStyles}
-
-                                                                        />
-                                                                    )}
-                                                                />
-                                                                {item2.columnName == "UOM" ? <input type="hidden" className="ArrayUOM"></input> : ""}
-                                                            </td>
-                                                        )
-                                                    }
-
-
-                                                }
-                                                if (item2.inputType == "input") {
-                                                    return (
-                                                        <td className={item2.class}>
-
-                                                            <input defaultValue='' readOnly={item2.readOnly ? item2.readOnly : false} {...register("TariffHasContainerTypeCharges" + '[' + props.containerIndex + ']' + '[' + index + ']' + '[' + item2.name + ']')} className={`form-control ${item2.fieldClass ? item2.fieldClass : ""}`} onBlur={val => handleChangeInput(item2.name, props.containerIndex, index, val)} />
-                                                        </td>
-
-                                                    )
-                                                }
-
-                                                if (item2.inputType == "date") {
-                                                    return (
-                                                        <td className={item2.class}>
-
-                                                            <Controller
-
-                                                                control={control}
-                                                                name={`TariffHasContainerTypeCharges[${props.containerIndex}][${index}][${item2.name}]`}
-                                                                render={({ field: { onChange, value } }) => (
-                                                                    <>
-                                                                        <Flatpickr
-                                                                            value={value ? value : ""}
-                                                                            {...register("TariffHasContainerTypeCharges" + '[' + props.containerIndex + ']' + '[' + index + ']' + '[' + item2.name + ']')}
-                                                                            onChange={val => {
-
-                                                                                onChange(moment(val[0]).format("DD/MM/YYYY"))
-                                                                            }}
-                                                                            className="form-control dateformat"
-                                                                            options={{
-                                                                                dateFormat: "d/m/Y"
-                                                                            }}
-
-                                                                        />
-                                                                    </>
-                                                                )}
-                                                            />
-                                                        </td>
-
-                                                    )
-                                                }
-
-
-                                            })}
-                                        </tr>
-
-
-                                    )
-                                })}
-                            </tbody>
-
-
-
-                        </table>
-                    </div>
-                </div>
-
-                <button type="button" className="add-container btn btn-success btn-xs mb-2 mt-2" onClick={handleAddCharges} ><span class="fa fa-plus"></span>Add Charges</button>
-            </div>
-        </div>
-    )
+					<button
+						type='button'
+						className='add-container btn btn-success btn-xs mb-2 mt-2'
+						onClick={handleAddCharges}>
+						<span className='fa fa-plus'></span>Add Charges
+					</button>
+				</div>
+			</div>
+		);
 }
 
 export default ContainerCharges

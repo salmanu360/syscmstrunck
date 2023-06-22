@@ -88,117 +88,194 @@ function Form(props) {
 
     function RoutePoint() {
         return (
+					<div className='card Ports lvl1 col-xs-12 col-md-12'>
+						<div className='card-header'>
+							<h3 className='card-title'>Route</h3>
+						</div>
+						<div className='card-body'>
+							<div className='table_wrap'>
+								<div className='table_wrap_inner'>
+									<table
+										className='table table-bordered commontable'
+										style={{width: "100%"}}>
+										<thead>
+											<tr>
+												<th>Port Code</th>
+												<th>Area</th>
+												<th>Terminal Code</th>
+												<th>Terminal Name</th>
+												<th>Description</th>
+											</tr>
+										</thead>
+										<tbody>
+											{fields.map((item, index) => (
+												<tr key={item.id}>
+													<td>
+														<div className='row'>
+															<div className='col-md-2'>
+																<div className='dropdownbar float-left ml-1'>
+																	<button
+																		style={{
+																			position: "relative",
+																			left: "0px",
+																			top: "-5px",
+																			padding: "0px 3px 0px 3px",
+																		}}
+																		className='btn btn-xs mt-2 btn-secondary dropdown-toggle float-right mr-1'
+																		type='button'
+																		data-toggle='dropdown'
+																		aria-haspopup='true'
+																		aria-expanded='false'>
+																		<i className='fa fa-ellipsis-v'></i>
+																	</button>
+																	<div
+																		className='dropdown-menu'
+																		aria-labelledby='dropdownMenuButton'>
+																		<button
+																			className='dropdown-item remove-container'
+																			type='button'
+																			onClick={() => remove(index)}>
+																			Remove
+																		</button>
+																	</div>
+																</div>
+															</div>
+															<div className='col-md-10'>
+																<Controller
+																	name={
+																		"RoutePoint" +
+																		"[" +
+																		index +
+																		"]" +
+																		"[PortCode]"
+																	}
+																	control={control}
+																	render={({field: {onChange, value}}) => (
+																		<Select
+																			isClearable={true}
+																			{...register(
+																				"RoutePoint" +
+																					"[" +
+																					index +
+																					"]" +
+																					"[PortCode]"
+																			)}
+																			value={
+																				value
+																					? port.find((c) => c.value === value)
+																					: null
+																			}
+																			onChange={(val) => {
+																				val == null
+																					? onChange(null)
+																					: onChange(val.value);
+																				handleChangePortCode(val, index);
+																			}}
+																			options={port}
+																			menuPortalTarget={document.body}
+																			className='basic-single'
+																			classNamePrefix='select'
+																			styles={globalContext.customStyles}
+																		/>
+																	)}
+																/>
+															</div>
+														</div>
+													</td>
+													<td>
+														<input
+															{...register(
+																"RoutePoint" + "[" + index + "]" + "[Area]"
+															)}
+															className={`form-control area`}
+															readOnly
+														/>
+													</td>
+													<td>
+														<Controller
+															name={
+																"RoutePoint" +
+																"[" +
+																index +
+																"]" +
+																"[LocationCode]"
+															}
+															control={control}
+															render={({field: {onChange, value}}) => (
+																<Select
+																	isClearable={true}
+																	{...register(
+																		"RoutePoint" +
+																			"[" +
+																			index +
+																			"]" +
+																			"[LocationCode]"
+																	)}
+																	value={
+																		value
+																			? item.terminalOptions.find(
+																					(c) => c.value === value
+																			  )
+																			: null
+																	}
+																	onChange={(val) => {
+																		val == null
+																			? onChange(null)
+																			: onChange(val.value);
+																		handleChangeTerminalCode(val, index);
+																	}}
+																	options={item.terminalOptions}
+																	menuPortalTarget={document.body}
+																	className='basic-single'
+																	classNamePrefix='select'
+																	styles={globalContext.customStyles}
+																/>
+															)}
+														/>
+													</td>
+													<td>
+														<input
+															{...register(
+																"RoutePoint" +
+																	"[" +
+																	index +
+																	"]" +
+																	"[TerminalName]"
+															)}
+															className={`form-control`}
+															readOnly
+														/>
+													</td>
+													<td>
+														<input
+															{...register(
+																"RoutePoint" +
+																	"[" +
+																	index +
+																	"]" +
+																	"[Description]"
+															)}
+															className={`form-control`}
+														/>
+													</td>
+												</tr>
+											))}
+										</tbody>
+									</table>
+								</div>
+							</div>
 
-            <div className="card Ports lvl1 col-xs-12 col-md-12">
-                <div className="card-header">
-                    <h3 className="card-title">Route</h3>
-
-                </div>
-                <div className="card-body">
-
-                    <div class="table_wrap">
-                        <div class="table_wrap_inner">
-                            <table className="table table-bordered commontable" style={{ width: "100%" }}>
-                                <thead>
-                                    <tr>
-                                        <th>Port Code</th>
-                                        <th>Area</th>
-                                        <th>Terminal Code</th>
-                                        <th>Terminal Name</th>
-                                        <th>Description</th>
-
-                                    </tr>
-
-                                </thead>
-                                <tbody>
-                                    {fields.map((item, index) => (
-                                    
-                                        <tr key={item.id}>
-                                               
-                                            <td>
-
-                                                <div className="row">
-                                                    <div className="col-md-2">
-                                                        <div className="dropdownbar float-left ml-1">
-                                                            <button style={{ position: "relative", left: "0px", top: "-5px",padding:"0px 3px 0px 3px" }} className="btn btn-xs mt-2 btn-secondary dropdown-toggle float-right mr-1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                <i className="fa fa-ellipsis-v"></i></button>
-                                                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                <button className="dropdown-item remove-container" type="button" onClick={() => remove(index)}>Remove</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-10">
-                                                        <Controller
-                                                            name={("RoutePoint" + '[' + index + ']' + '[PortCode]')}
-
-                                                            control={control}
-
-                                                            render={({ field: { onChange, value } }) => (
-                                                                <Select
-                                                                    isClearable={true}
-                                                                    {...register("RoutePoint" + '[' + index + ']' + '[PortCode]')}
-                                                                    value={value ? port.find(c => c.value === value) : null}
-                                                                    onChange={val =>{val == null ? onChange(null) : onChange(val.value);handleChangePortCode(val,index)}}
-                                                                    options={port}
-                                                                    menuPortalTarget={document.body}
-                                                                    className="basic-single"
-                                                                    classNamePrefix="select"
-                                                                    styles={globalContext.customStyles}
-
-                                                                />
-                                                            )}
-                                                        />
-                                                    </div>
-
-                                                </div>
-                                            </td>
-                                            <td><input  {...register("RoutePoint" + '[' + index + ']' + '[Area]')} className={`form-control area`} readOnly /></td>
-                                            <td>
-
-                                                <Controller
-                                                    name={("RoutePoint" + '[' + index + ']' + '[LocationCode]')}
-
-                                                    control={control}
-
-                                                    render={({ field: { onChange, value } }) => (
-                                                        <Select
-                                                            isClearable={true}
-                                                            {...register("RoutePoint" + '[' + index + ']' + '[LocationCode]')}
-                                                            value={value ? item.terminalOptions.find(c => c.value === value) : null}
-                                                            onChange={val => {val == null ? onChange(null) : onChange(val.value);handleChangeTerminalCode(val,index)}}
-                                                            options={item.terminalOptions}
-                                                            menuPortalTarget={document.body}
-                                                            className="basic-single"
-                                                            classNamePrefix="select"
-                                                            styles={globalContext.customStyles}
-
-                                                        />
-                                                    )}
-                                                />
-
-                                            </td>
-                                            <td><input  {...register("RoutePoint" + '[' + index + ']' + '[TerminalName]')} className={`form-control`} readOnly/></td>
-                                            <td><input  {...register("RoutePoint" + '[' + index + ']' + '[Description]')} className={`form-control`} /></td>
-
-
-
-                                        </tr>
-
-                                    ))}
-                                </tbody>
-
-
-
-                            </table>
-                        </div>
-                    </div>
-
-                    <button type="button" className="add-container btn btn-success btn-xs mb-2 mt-2" onClick={() => { append({ Name: "RoutePoint",terminalOptions:terminal }) }} ><span class="fa fa-plus"></span>Add Route Point</button>
-                </div>
-            </div>
-
-
-        )
+							<button
+								type='button'
+								className='add-container btn btn-success btn-xs mb-2 mt-2'
+								onClick={() => {
+									append({Name: "RoutePoint", terminalOptions: terminal});
+								}}>
+								<span className='fa fa-plus'></span>Add Route Point
+							</button>
+						</div>
+					</div>
+				);
 
 
     }

@@ -156,165 +156,156 @@ function Index(props) {
 
 
     return (
+			<div className='card card-primary'>
+				<div className='card-body'>
+					<div className='card lvl1'>
+						<div className='row'></div>{" "}
+						<table className='mt-2 mb-2'>
+							<tbody>
+								<tr>
+									<td>
+										<div className='col'>POL ETA:</div>
+									</td>
+									<td>
+										<div className='col'>
+											<Controller
+												control={control}
+												name={"DynamicModal[POLETA]"}
+												render={({field: {onChange, value}}) => (
+													<>
+														<Flatpickr
+															value={value ? value : ""}
+															{...register(`DynamicModal[POLETA]`)}
+															onChange={(val) => {
+																onChange(
+																	moment(val[0]).format("DD/MM/YYYY HH:mm")
+																);
+															}}
+															className={`form-control POLETA flatpickr-input`}
+															options={{
+																enableTime: true,
+																time_24hr: true,
+																dateFormat: "d/m/Y H:i",
+															}}
+														/>
+													</>
+												)}
+											/>
+										</div>
+									</td>
+									<td>
+										<div className='col'>POD ETA:</div>
+									</td>
+									<td>
+										<div className='col'>
+											<Controller
+												control={control}
+												name={"DynamicModal[PODETA]"}
+												render={({field: {onChange, value}}) => (
+													<>
+														<Flatpickr
+															value={value ? value : ""}
+															{...register(`DynamicModal[PODETA]`)}
+															onChange={(val) => {
+																onChange(
+																	moment(val[0]).format("DD/MM/YYYY HH:mm")
+																);
+															}}
+															className={`form-control PODETA flatpickr-input`}
+															options={{
+																enableTime: true,
+																time_24hr: true,
+																dateFormat: "d/m/Y H:i",
+															}}
+														/>
+													</>
+												)}
+											/>
+										</div>
+									</td>
+									<td>
+										<div className='col'>POL:</div>
+									</td>
+									<td>
+										<div className='col'>
+											<Controller
+												name='DynamicModal[POL]'
+												id='POL'
+												control={control}
+												render={({field: {onChange, value}}) => (
+													<Select
+														isClearable={true}
+														{...register("DynamicModal[POL]")}
+														value={
+															value ? port.find((c) => c.value === value) : null
+														}
+														onChange={(val) => {
+															val == null
+																? onChange(null)
+																: onChange(val.value);
+														}}
+														options={port}
+														className='POL'
+														classNamePrefix='select'
+														styles={globalContext.customStyles}
+													/>
+												)}
+											/>
+										</div>
+									</td>
 
+									<td>
+										<div className='col'>POD:</div>
+									</td>
+									<td>
+										<div className='col'>
+											<Controller
+												name='DynamicModal[POD]'
+												id='POD'
+												control={control}
+												render={({field: {onChange, value}}) => (
+													<Select
+														isClearable={true}
+														{...register("DynamicModal[POD]")}
+														value={
+															value ? port.find((c) => c.value === value) : null
+														}
+														onChange={(val) => {
+															val == null
+																? onChange(null)
+																: onChange(val.value);
+														}}
+														options={port}
+														className='POD'
+														classNamePrefix='select'
+														styles={globalContext.customStyles}
+													/>
+												)}
+											/>
+										</div>
+									</td>
 
-        <div className="card card-primary">
-            <div className="card-body">
+									<td>
+										<div className='col'>
+											<button
+												type='button'
+												className='btn btn-success float-right'
+												onClick={handleFindVoyage}>
+												Find
+											</button>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 
-                <div className="card lvl1">
-                    <div className="row">
-                    </div>   <table className="mt-2 mb-2">
-                        <tbody><tr>
-
-                            <td>
-                                <div className="col">
-                                    POL ETA:
-                                </div>
-                            </td>
-                            <td>
-                                <div className="col">
-                                    <Controller
-
-                                        control={control}
-                                        name={"DynamicModal[POLETA]"}
-                                        render={({ field: { onChange, value } }) => (
-                                            <>
-                                                <Flatpickr
-                                            
-                                                    value={value ? value : ""}
-                                                    {...register(`DynamicModal[POLETA]`)}
-                                                    onChange={val => {
-                                                     
-                                                        onChange(moment(val[0]).format("DD/MM/YYYY HH:mm"))
-                                                    }}
-                                                    className={`form-control POLETA flatpickr-input`}
-                                                    options={{
-                                                        enableTime: true,
-                                                        time_24hr: true,
-                                                        dateFormat: "d/m/Y H:i"
-                                                    }}
-
-                                                />
-                                            </>
-                                        )}
-                                    />
-                                </div>
-                            </td>
-                            <td>
-                                <div className="col">
-                                    POD ETA:
-                                </div>
-                            </td>
-                            <td>
-                                <div className="col">
-                                    <Controller
-
-                                        control={control}
-                                        name={"DynamicModal[PODETA]"}
-                                        render={({ field: { onChange, value } }) => (
-                                            <>
-                                                <Flatpickr
-                                                    value={value ? value : ""}
-                                                    {...register(`DynamicModal[PODETA]`)}
-                                                    onChange={val => {
-
-                                                        onChange(moment(val[0]).format("DD/MM/YYYY HH:mm"))
-                                                    }}
-                                                    className={`form-control PODETA flatpickr-input`}
-                                                    options={{
-                                                        enableTime: true,
-                                                        time_24hr: true,
-                                                        dateFormat: "d/m/Y H:i"
-                                                    }}
-
-                                                />
-                                            </>
-                                        )}
-                                    />
-                                </div>
-                            </td>
-                            <td>
-                                <div className="col">
-                                    POL:
-                                </div>
-                            </td>
-                            <td>
-                                <div className="col">
-
-                                    <Controller
-                                        name="DynamicModal[POL]"
-                                        id="POL"
-                                        control={control}
-                                        render={({ field: { onChange, value } }) => (
-                                            <Select
-                                                isClearable={true}
-                                                {...register("DynamicModal[POL]")}
-                                                value={value ? port.find(c => c.value === value) : null}
-                                                onChange={val => { val == null ? onChange(null) : onChange(val.value) }}
-                                                options={port}
-                                                className="POL"
-                                                classNamePrefix="select"
-                                                styles={globalContext.customStyles}
-
-                                            />
-                                        )}
-                                    />
-                                </div>
-
-                            </td>
-
-                            <td>
-                                <div className="col">
-                                    POD:
-                                </div>
-                            </td>
-                            <td>
-                                <div className="col">
-
-                                    <Controller
-                                        name="DynamicModal[POD]"
-                                        id="POD"
-                                        control={control}
-                                        render={({ field: { onChange, value } }) => (
-                                            <Select
-                                                isClearable={true}
-                                                {...register("DynamicModal[POD]")}
-                                                value={value ? port.find(c => c.value === value) : null}
-                                                onChange={val => { val == null ? onChange(null) : onChange(val.value) }}
-                                                options={port}
-                                                className="POD"
-                                                classNamePrefix="select"
-                                                styles={globalContext.customStyles}
-
-                                            />
-                                        )}
-                                    />
-                                </div>
-                            </td>
-
-                            <td>
-                                <div className="col">
-                                    <button type="button" className="btn btn-success float-right" onClick={handleFindVoyage}>Find</button>
-                                </div>
-                            </td>
-
-                        </tr></tbody></table>
-                </div>
-
-                <div class="indexTableCard">
-                    <table id="voyage-suggestion-table">
-
-                    </table>
-                </div>
-
-
-            </div>
-        </div>
-
-
-
-
-    )
+					<div className='indexTableCard'>
+						<table id='voyage-suggestion-table'></table>
+					</div>
+				</div>
+			</div>
+		);
 }
 
 

@@ -593,67 +593,212 @@ function QuickForm(props) {
   }
   
   return (
-    <>
-      <div className="QuickForm">
-          <div className="row">
-              
-              <QuickFormDocument register={props.register} control={props.control} errors={props.errors} setValue={props.setValue} DocumentItem={props.modelLink == "sales-invoice-barge"?DocumentItemBarge:DocumentItem}/>
-             {props.modelLink == "sales-invoice-barge"?
-              <QuickFormShippingInstruction trigger={props.trigger} register={props.register} control={props.control} errors={props.errors} setValue={props.setValue} getValues={props.getValues} ShippingInstructionItem={ShippingInstructionItem} port={props.port} />
-             :""} 
-          
-              <QuickFormMiddleCard model={props.modelLink}  register={props.register} control={props.control} errors={props.errors} getValues={props.getValues} setValue={props.setValue} trigger={props.trigger} MiddleCardItem={MiddleCardItem}/>
-              <QuickFormContainer barge={props.modelLink == "sales-invoice-barge"?true:false} register={props.register} control={props.control} errors={props.errors} setValue={props.setValue} getValues={props.getValues} ContainerItem={ContainerItem} containerType={props.containerType} port={props.port} freightTerm={props.freightTerm} taxCode={props.taxCode} currency={props.currency} cargoType={props.cargoType} containerTypeAndChargesData={props.containerTypeAndChargesData} documentData={props.documentData} setContainerTypeAndChargesData={props.setContainerTypeAndChargesData}/>
-          </div>
-      </div>
+		<>
+			<div className='QuickForm'>
+				<div className='row'>
+					<QuickFormDocument
+						register={props.register}
+						control={props.control}
+						errors={props.errors}
+						setValue={props.setValue}
+						DocumentItem={
+							props.modelLink == "sales-invoice-barge"
+								? DocumentItemBarge
+								: DocumentItem
+						}
+					/>
+					{props.modelLink == "sales-invoice-barge" ? (
+						<QuickFormShippingInstruction
+							trigger={props.trigger}
+							register={props.register}
+							control={props.control}
+							errors={props.errors}
+							setValue={props.setValue}
+							getValues={props.getValues}
+							ShippingInstructionItem={ShippingInstructionItem}
+							port={props.port}
+						/>
+					) : (
+						""
+					)}
 
-      {(formContext.formState.formType=="Update" && formContext.verificationStatus == "Approved") &&
-        <>
-          <div className="modal fade" id="TransferPartialToCNDNModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div className="modal-dialog modal-xl" role="document">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title" id="exampleModalLabel">Transfer To {transferToPage == "CN"? "Credit Note" : "Debit Note"}</h5>
-                  <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div className="modal-body">
-                  <QuickFormContainer barge={props.modelLink == "sales-invoice-barge"?true:false} transferPartial={TransferToPageName} register={props.register} control={props.control} errors={props.errors} setValue={props.setValue} getValues={props.getValues} ContainerItem={ContainerItemTransferPartial} ownershipType={OwnershipType} containerType={props.containerType} port={props.port} freightTerm={props.freightTerm} taxCode={props.taxCode} currency={props.currency} cargoType={props.cargoType} containerTypeAndChargesData={containerTypeAndChargesDataPartial} documentData={props.documentData} />
-                </div> 
-                <div className="modal-footer">
-                <button type="button" class="btn btn-primary mb-1" id="comfirmTransferTO" onClick={()=> confirmTransferTo(transferToPage == "CN"? "CreditNote" : "DebitNote")}>Confirm</button>
-                  <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </>
-      }
-      
-      {(formContext.formState.formType=="New" || formContext.formState.formType=="TransferFromBooking") &&
-        <div className="modal fade" id="TransferToSalesInvoiceModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div className="modal-dialog modal-xl" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalLabel">Transfer To Sales Invoice</h5>
-                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">  
-                <QuickFormContainer barge={props.modelLink == "sales-invoice-barge"?true:false} transferPartial={"BookingConfirmation"} register={props.register} control={props.control} errors={props.errors} setValue={props.setValue} getValues={props.getValues} ContainerItem={ContainerItemTransferPartialBC} ownershipType={OwnershipType} containerType={props.containerType} port={props.port} freightTerm={props.freightTerm} taxCode={props.taxCode} currency={props.currency} cargoType={props.cargoType} containerTypeAndChargesData={containerTypeAndChargesDataPartial} documentData={props.documentData} />
-              </div> 
-              <div className="modal-footer">
-              <button type="button" class="btn btn-primary mb-1" id="comfirmTransferTO" onClick={()=> confirmTransferTo("BookingConfirmation")}>Confirm</button>
-                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      }
-    </>
-  )
+					<QuickFormMiddleCard
+						model={props.modelLink}
+						register={props.register}
+						control={props.control}
+						errors={props.errors}
+						getValues={props.getValues}
+						setValue={props.setValue}
+						trigger={props.trigger}
+						MiddleCardItem={MiddleCardItem}
+					/>
+					<QuickFormContainer
+						barge={props.modelLink == "sales-invoice-barge" ? true : false}
+						register={props.register}
+						control={props.control}
+						errors={props.errors}
+						setValue={props.setValue}
+						getValues={props.getValues}
+						ContainerItem={ContainerItem}
+						containerType={props.containerType}
+						port={props.port}
+						freightTerm={props.freightTerm}
+						taxCode={props.taxCode}
+						currency={props.currency}
+						cargoType={props.cargoType}
+						containerTypeAndChargesData={props.containerTypeAndChargesData}
+						documentData={props.documentData}
+						setContainerTypeAndChargesData={
+							props.setContainerTypeAndChargesData
+						}
+					/>
+				</div>
+			</div>
+
+			{formContext.formState.formType == "Update" &&
+				formContext.verificationStatus == "Approved" && (
+					<>
+						<div
+							className='modal fade'
+							id='TransferPartialToCNDNModal'
+							tabIndex='-1'
+							role='dialog'
+							aria-labelledby='exampleModalLabel'
+							aria-hidden='true'>
+							<div className='modal-dialog modal-xl' role='document'>
+								<div className='modal-content'>
+									<div className='modal-header'>
+										<h5 className='modal-title' id='exampleModalLabel'>
+											Transfer To{" "}
+											{transferToPage == "CN" ? "Credit Note" : "Debit Note"}
+										</h5>
+										<button
+											type='button'
+											className='close'
+											data-dismiss='modal'
+											aria-label='Close'>
+											<span aria-hidden='true'>&times;</span>
+										</button>
+									</div>
+									<div className='modal-body'>
+										<QuickFormContainer
+											barge={
+												props.modelLink == "sales-invoice-barge" ? true : false
+											}
+											transferPartial={TransferToPageName}
+											register={props.register}
+											control={props.control}
+											errors={props.errors}
+											setValue={props.setValue}
+											getValues={props.getValues}
+											ContainerItem={ContainerItemTransferPartial}
+											ownershipType={OwnershipType}
+											containerType={props.containerType}
+											port={props.port}
+											freightTerm={props.freightTerm}
+											taxCode={props.taxCode}
+											currency={props.currency}
+											cargoType={props.cargoType}
+											containerTypeAndChargesData={
+												containerTypeAndChargesDataPartial
+											}
+											documentData={props.documentData}
+										/>
+									</div>
+									<div className='modal-footer'>
+										<button
+											type='button'
+											className='btn btn-primary mb-1'
+											id='comfirmTransferTO'
+											onClick={() =>
+												confirmTransferTo(
+													transferToPage == "CN" ? "CreditNote" : "DebitNote"
+												)
+											}>
+											Confirm
+										</button>
+										<button
+											type='button'
+											className='btn btn-secondary'
+											data-dismiss='modal'>
+											Close
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</>
+				)}
+
+			{(formContext.formState.formType == "New" ||
+				formContext.formState.formType == "TransferFromBooking") && (
+				<div
+					className='modal fade'
+					id='TransferToSalesInvoiceModal'
+					tabIndex='-1'
+					role='dialog'
+					aria-labelledby='exampleModalLabel'
+					aria-hidden='true'>
+					<div className='modal-dialog modal-xl' role='document'>
+						<div className='modal-content'>
+							<div className='modal-header'>
+								<h5 className='modal-title' id='exampleModalLabel'>
+									Transfer To Sales Invoice
+								</h5>
+								<button
+									type='button'
+									className='close'
+									data-dismiss='modal'
+									aria-label='Close'>
+									<span aria-hidden='true'>&times;</span>
+								</button>
+							</div>
+							<div className='modal-body'>
+								<QuickFormContainer
+									barge={
+										props.modelLink == "sales-invoice-barge" ? true : false
+									}
+									transferPartial={"BookingConfirmation"}
+									register={props.register}
+									control={props.control}
+									errors={props.errors}
+									setValue={props.setValue}
+									getValues={props.getValues}
+									ContainerItem={ContainerItemTransferPartialBC}
+									ownershipType={OwnershipType}
+									containerType={props.containerType}
+									port={props.port}
+									freightTerm={props.freightTerm}
+									taxCode={props.taxCode}
+									currency={props.currency}
+									cargoType={props.cargoType}
+									containerTypeAndChargesData={
+										containerTypeAndChargesDataPartial
+									}
+									documentData={props.documentData}
+								/>
+							</div>
+							<div className='modal-footer'>
+								<button
+									type='button'
+									className='btn btn-primary mb-1'
+									id='comfirmTransferTO'
+									onClick={() => confirmTransferTo("BookingConfirmation")}>
+									Confirm
+								</button>
+								<button
+									type='button'
+									className='btn btn-secondary'
+									data-dismiss='modal'>
+									Close
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			)}
+		</>
+	);
 }
 
 export default QuickForm

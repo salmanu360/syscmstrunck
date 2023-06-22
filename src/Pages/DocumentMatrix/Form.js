@@ -90,143 +90,209 @@ function Form(props) {
   }
   
   function BLFormatterDocNum(value, row, index) {
-    if (!row.BillOfLadingUUID == true) {
-      return null;
-    }
-    else {
-      var arrayDocNum = (row.BillOfLadingDocNum).split(",")
-      var arrayUUID = (row.BillOfLadingUUID).split(",")
-      var LinkID="";
-      $.each(arrayDocNum, function (key, value) {
-        $.each(arrayUUID, function (key2, value2) {
-          if (key == key2) {
-            if (row.ContainerType == "") {
-              LinkID += "<a href='../../../operation/standard/bill-of-lading-barge/update/id=" + value2 + "' class='checkPermissionLinkBL' target='_blank'>" + value + "</a>, ";
-            } else {
-              LinkID += "<a href='../../../operation/container/bill-of-lading/update/id=" + value2 + "' class='checkPermissionLinkBL' target='_blank'>" + value + "</a>, ";
-            }
-          }
-        })
-      });
-      LinkID = LinkID.replace(/,\s*$/, "");
-      return LinkID;
-    }
-  }
+		if (!row.BillOfLadingUUID == true) {
+			return null;
+		} else {
+			var arrayDocNum = row.BillOfLadingDocNum.split(",");
+			var arrayUUID = row.BillOfLadingUUID.split(",");
+			var LinkID = "";
+			$.each(arrayDocNum, function (key, value) {
+				$.each(arrayUUID, function (key2, value2) {
+					if (key == key2) {
+						if (row.ContainerType == "") {
+							LinkID +=
+								"<a href='../../../operation/standard/bill-of-lading-barge/update/id=" +
+								value2 +
+								"' className='checkPermissionLinkBL' target='_blank'>" +
+								value +
+								"</a>, ";
+						} else {
+							LinkID +=
+								"<a href='../../../operation/container/bill-of-lading/update/id=" +
+								value2 +
+								"' className='checkPermissionLinkBL' target='_blank'>" +
+								value +
+								"</a>, ";
+						}
+					}
+				});
+			});
+			LinkID = LinkID.replace(/,\s*$/, "");
+			return LinkID;
+		}
+	}
 
-  function BRFormatterDocNum(value, row, index) {
-    if (!row.BookingReservationUUID == true) {
-      return null;
-    } else {
-      if (row.ContainerType == "") {
-        return "<a href='../../standard/booking-reservation-barge/update/id=" + row.BookingReservationUUID + "' class = 'checkPermissionLinkBR' target='_blank'>" + value + "</a>";
-      } else {
-        return "<a href='../../container/booking-reservation/update/id=" + row.BookingReservationUUID + "' class = 'checkPermissionLinkBR' target='_blank'>" + value + "</a>";
-      }
-    }
-  }
-  function QTFormatterDocNum(value, row, index) {
-    if (!row.QuotationUUID == true) {
-      return null;
-    } else {
-      if (row.ContainerType == "") {
-        return "<a href='../../standard/quotation-barge/update/id=" + row.QuotationUUID + "' class = 'checkPermissionLinkQT' target='_blank'>" + value + "</a>";
-      }
-      else {
-        return "<a href='../../container/quotation/update/id=" + row.QuotationUUID + "' class = 'checkPermissionLinkQT' target='_blank'>" + value + "</a>";
+	function BRFormatterDocNum(value, row, index) {
+		if (!row.BookingReservationUUID == true) {
+			return null;
+		} else {
+			if (row.ContainerType == "") {
+				return (
+					"<a href='../../standard/booking-reservation-barge/update/id=" +
+					row.BookingReservationUUID +
+					"' class = 'checkPermissionLinkBR' target='_blank'>" +
+					value +
+					"</a>"
+				);
+			} else {
+				return (
+					"<a href='../../container/booking-reservation/update/id=" +
+					row.BookingReservationUUID +
+					"' class = 'checkPermissionLinkBR' target='_blank'>" +
+					value +
+					"</a>"
+				);
+			}
+		}
+	}
+	function QTFormatterDocNum(value, row, index) {
+		if (!row.QuotationUUID == true) {
+			return null;
+		} else {
+			if (row.ContainerType == "") {
+				return (
+					"<a href='../../standard/quotation-barge/update/id=" +
+					row.QuotationUUID +
+					"' class = 'checkPermissionLinkQT' target='_blank'>" +
+					value +
+					"</a>"
+				);
+			} else {
+				return (
+					"<a href='../../container/quotation/update/id=" +
+					row.QuotationUUID +
+					"' class = 'checkPermissionLinkQT' target='_blank'>" +
+					value +
+					"</a>"
+				);
+			}
+		}
+	}
 
-      }
-    }
-  }
+	function SalesInvoiceFormatterDocNum(value, row, index) {
+		if (!row.SalesInvoiceUUID == true) {
+			return null;
+		} else {
+			var arrayDocNum = [];
+			var arrayUUID = [];
+			arrayDocNum = row.SalesInvoiceDocNum.split(",");
+			arrayUUID = row.SalesInvoiceUUID.split(",");
+			var LinkID = "";
+			$.each(arrayDocNum, function (key, value) {
+				$.each(arrayUUID, function (key2, value2) {
+					if (key == key2) {
+						if (row.ContainerType == "") {
+							LinkID +=
+								"<a href='../../standard/sales-invoice-barge/update/id=" +
+								value2 +
+								"' className='checkPermissionLinkINV' target='_blank'>" +
+								value +
+								"</a>, ";
+						} else {
+							LinkID +=
+								"<a href='../../container/sales-invoice/update/id=" +
+								value2 +
+								"' className='checkPermissionLinkINV' target='_blank'>" +
+								value +
+								"</a>, ";
+						}
+					}
+				});
+			});
+			LinkID = LinkID.replace(/,\s*$/, "");
+			return LinkID;
+		}
+	}
 
-  function SalesInvoiceFormatterDocNum(value, row, index) {
-    if (!row.SalesInvoiceUUID == true) {
-      return null;
-    } else {
-      var arrayDocNum = []
-      var arrayUUID = []
-      arrayDocNum = (row.SalesInvoiceDocNum).split(",")
-      arrayUUID = (row.SalesInvoiceUUID).split(",")
-      var LinkID="";
-      $.each(arrayDocNum, function (key, value) {
-        $.each(arrayUUID, function (key2, value2) {
-          if (key == key2) {
-            if (row.ContainerType == "") {
-              LinkID += "<a href='../../standard/sales-invoice-barge/update/id=" + value2 + "' class='checkPermissionLinkINV' target='_blank'>" + value + "</a>, ";
-            } else {
-              LinkID += "<a href='../../container/sales-invoice/update/id=" + value2 + "' class='checkPermissionLinkINV' target='_blank'>" + value + "</a>, ";
-            }
-          }
-        })
-      });
-      LinkID = LinkID.replace(/,\s*$/, "");
-      return LinkID;
-    }
-  }
+	function ORFormatterDocNum(value, row, index) {
+		if (!row.CustomerPaymentDocNum == true) {
+			return null;
+		} else {
+			var arrayDocNum = row.CustomerPaymentDocNum.split(",");
+			var arrayUUID = row.CustomerPaymentUUID.split(",");
+			var LinkID = "";
+			$.each(arrayDocNum, function (key, value) {
+				$.each(arrayUUID, function (key2, value2) {
+					if (key == key2) {
+						LinkID +=
+							"<a href='../../container/customer-payment/update/id=" +
+							value2 +
+							"' className='checkPermissionLinkOR' target='_blank'>" +
+							value +
+							"</a>, ";
+					}
+				});
+			});
+			LinkID = LinkID.replace(/,\s*$/, "");
+			return LinkID;
+		}
+	}
 
-  function ORFormatterDocNum(value, row, index) {
-    if (!row.CustomerPaymentDocNum == true) {
-      return null;
-    } else {
-      var arrayDocNum = (row.CustomerPaymentDocNum).split(",")
-      var arrayUUID = (row.CustomerPaymentUUID).split(",")
-      var LinkID="";
-      $.each(arrayDocNum, function (key, value) {
-        $.each(arrayUUID, function (key2, value2) {
-          if (key == key2) {
-            LinkID += "<a href='../../container/customer-payment/update/id=" + value2 + "' class='checkPermissionLinkOR' target='_blank'>" + value + "</a>, ";
-          }
-        })
-      });
-      LinkID = LinkID.replace(/,\s*$/, "");
-      return LinkID;
-    }
-  }
+	function CNFormatterDocNum(value, row, index) {
+		if (!row.SalesCreditNoteDocNum == true) {
+			return null;
+		} else {
+			var arrayDocNum = row.SalesCreditNoteDocNum.split(",");
+			var arrayUUID = row.SalesCreditNoteUUID.split(",");
+			var LinkID = "";
+			$.each(arrayDocNum, function (key, value) {
+				$.each(arrayUUID, function (key2, value2) {
+					if (key == key2) {
+						if (row.ContainerType == "") {
+							LinkID +=
+								"<a href='../../standard/credit-note-barge/update/id=" +
+								value2 +
+								"' className='checkPermissionLinkCN' target='_blank'>" +
+								value +
+								"</a>, ";
+						} else {
+							LinkID +=
+								"<a href='../../container/credit-note/update/id=" +
+								value2 +
+								"' className='checkPermissionLinkCN' target='_blank'>" +
+								value +
+								"</a>, ";
+						}
+					}
+				});
+			});
+			LinkID = LinkID.replace(/,\s*$/, "");
+			return LinkID;
+		}
+	}
 
-  function CNFormatterDocNum(value, row, index) {
-    if (!row.SalesCreditNoteDocNum == true) {
-      return null;
-    } else {
-      var arrayDocNum = (row.SalesCreditNoteDocNum).split(",")
-      var arrayUUID = (row.SalesCreditNoteUUID).split(",")
-      var LinkID="";
-      $.each(arrayDocNum, function (key, value) {
-        $.each(arrayUUID, function (key2, value2) {
-          if (key == key2) {
-            if (row.ContainerType == "") {
-              LinkID += "<a href='../../standard/credit-note-barge/update/id=" + value2 + "' class='checkPermissionLinkCN' target='_blank'>" + value + "</a>, ";
-            } else {
-              LinkID += "<a href='../../container/credit-note/update/id=" + value2 + "' class='checkPermissionLinkCN' target='_blank'>" + value + "</a>, ";
-            }
-          }
-        })
-      });
-      LinkID = LinkID.replace(/,\s*$/, "");
-      return LinkID;
-    }
-  }
-
-  function DNFormatterDocNum(value, row, index) {
-    if (!row.SalesDebitNoteDocNum == true) {
-      return null;
-    } else {
-      var arrayDocNum = (row.SalesDebitNoteDocNum).split(",")
-      var arrayUUID = (row.SalesDebitNoteUUID).split(",")
-      var LinkID="";
-      $.each(arrayDocNum, function (key, value) {
-        $.each(arrayUUID, function (key2, value2) {
-          if (key == key2) {
-            if (row.ContainerType == "") {
-              LinkID += "<a href='../../standard/debit-note-barge/update/id=" + value2 + "' class='checkPermissionLinkDN' target='_blank'>" + value + "</a>, ";
-            } else {
-              LinkID += "<a href='../../container/debit-note/update/id=" + value2 + "' class='checkPermissionLinkDN' target='_blank'>" + value + "</a>, ";
-            }
-          }
-        })
-      });
-      LinkID = LinkID.replace(/,\s*$/, "");
-      return LinkID;
-    }
-  }
+	function DNFormatterDocNum(value, row, index) {
+		if (!row.SalesDebitNoteDocNum == true) {
+			return null;
+		} else {
+			var arrayDocNum = row.SalesDebitNoteDocNum.split(",");
+			var arrayUUID = row.SalesDebitNoteUUID.split(",");
+			var LinkID = "";
+			$.each(arrayDocNum, function (key, value) {
+				$.each(arrayUUID, function (key2, value2) {
+					if (key == key2) {
+						if (row.ContainerType == "") {
+							LinkID +=
+								"<a href='../../standard/debit-note-barge/update/id=" +
+								value2 +
+								"' className='checkPermissionLinkDN' target='_blank'>" +
+								value +
+								"</a>, ";
+						} else {
+							LinkID +=
+								"<a href='../../container/debit-note/update/id=" +
+								value2 +
+								"' className='checkPermissionLinkDN' target='_blank'>" +
+								value +
+								"</a>, ";
+						}
+					}
+				});
+			});
+			LinkID = LinkID.replace(/,\s*$/, "");
+			return LinkID;
+		}
+	}
 
   function handleGenerate() {
     var BLID = getValues("DynamicModel[BillOfLading]")

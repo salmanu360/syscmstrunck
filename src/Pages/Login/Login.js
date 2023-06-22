@@ -100,77 +100,150 @@ useEffect(() => {
 
 
 return (
+	<div className='Auth-form-container'>
+		{resetForm ? (
+			<form className='Auth-form resetForm' onSubmit={handleSubmit(onSubmit2)}>
+				<div className='Auth-form-content'>
+					<h3 className='Auth-form-title'>Change Password</h3>
 
-  <div className="Auth-form-container">
-    {resetForm ? <form className="Auth-form resetForm" onSubmit={handleSubmit(onSubmit2)}>
-      <div className="Auth-form-content">
-   
-        <h3 className="Auth-form-title">Change Password</h3>
+					<div className='form-group mt-3'>
+						<label
+							className={`control-label ${
+								errors.ChangePasswordForm
+									? errors.ChangePasswordForm.new_password
+										? "has-error-label"
+										: ""
+									: ""
+							}`}>
+							New Password
+						</label>
 
-        <div className="form-group mt-3">
-          <label className={`control-label ${errors.ChangePasswordForm ? errors.ChangePasswordForm.new_password ? "has-error-label" : "" : ""}`} >New Password
-          </label>
+						<input
+							type='password'
+							defaultValue=''
+							{...register("ChangePasswordForm[new_password]", {
+								required: "Current Password cannot be blank.",
+								minLength: 6,
+							})}
+							className={`form-control ${
+								errors.ChangePasswordForm
+									? errors.ChangePasswordForm.new_password
+										? "has-error"
+										: ""
+									: ""
+							}`}
+						/>
+						<p>
+							{errors.ChangePasswordForm
+								? errors.ChangePasswordForm.new_password && (
+										<span style={{color: "#A94442"}}>
+											{errors.ChangePasswordForm.new_password.message}
+										</span>
+								  )
+								: ""}
+						</p>
+						<p>
+							{errors.ChangePasswordForm
+								? errors.ChangePasswordForm.new_password &&
+								  errors.ChangePasswordForm.new_password.type ===
+										"minLength" && (
+										<span style={{color: "#A94442"}}>
+											Password must be at least 6 characters
+										</span>
+								  )
+								: ""}
+						</p>
+					</div>
+					<div className='form-group mt-3'>
+						<label
+							className={`control-label ${
+								errors.ChangePasswordForm
+									? errors.ChangePasswordForm.confirm_password
+										? "has-error-label"
+										: ""
+									: ""
+							}`}>
+							Confirm Password
+						</label>
+						<input
+							type='password'
+							defaultValue=''
+							className={`form-control ${
+								errors.ChangePasswordForm
+									? errors.ChangePasswordForm.confirm_password
+										? "has-error"
+										: ""
+									: ""
+							}`}
+							{...register("ChangePasswordForm[confirm_password]", {
+								validate: (value) =>
+									value === password.current ||
+									"Confirm Password must be equal to New Password.",
+							})}
+						/>
+						{errors.ChangePasswordForm
+							? errors.ChangePasswordForm.confirm_password && (
+									<span style={{color: "#A94442"}}>
+										{errors.ChangePasswordForm.confirm_password.message}
+									</span>
+							  )
+							: ""}
+					</div>
+					<div className='d-grid gap-2 mt-3'>
+						{/* <button type="button" className="btn btn-primary" onClick={handleChangePassword}> */}
+						<button type='submit' className='btn btn-primary'>
+							Change Password
+						</button>
 
-          <input type="password" defaultValue='' {...register("ChangePasswordForm[new_password]", { required: "Current Password cannot be blank.",minLength: 6 })}
-            className={`form-control ${errors.ChangePasswordForm ? errors.ChangePasswordForm.new_password ? "has-error" : "" : ""}`} />
-          <p>{errors.ChangePasswordForm ? errors.ChangePasswordForm.new_password && <span style={{ color: "#A94442" }}>{errors.ChangePasswordForm.new_password.message}</span> : ""}</p>
-          <p>{errors.ChangePasswordForm ? errors.ChangePasswordForm.new_password && errors.ChangePasswordForm.new_password.type === "minLength" && <span style={{ color: "#A94442" }}>Password must be at least 6 characters</span> : ""}</p>
-        </div>
-        <div className="form-group mt-3">
-          <label className={`control-label ${errors.ChangePasswordForm ? errors.ChangePasswordForm.confirm_password ? "has-error-label" : "" : ""}`} >Confirm Password
-          </label>
-          <input type="password" defaultValue='' className={`form-control ${errors.ChangePasswordForm ? errors.ChangePasswordForm.confirm_password ? "has-error" : "" : ""}`}  {...register("ChangePasswordForm[confirm_password]", {
-            validate: value =>
-              value === password.current || "Confirm Password must be equal to New Password."
-          })}
-          />
-          {errors.ChangePasswordForm ? errors.ChangePasswordForm.confirm_password && <span style={{ color: "#A94442" }}>{errors.ChangePasswordForm.confirm_password.message}</span> : ""}
-        </div>
-        <div className="d-grid gap-2 mt-3">
-          {/* <button type="button" className="btn btn-primary" onClick={handleChangePassword}> */}
-          <button type="submit" className="btn btn-primary">
-            Change Password
-          </button>
+						<button type='button' className='btn btn-primary ml-2'>
+							Reset
+						</button>
+					</div>
+				</div>
+			</form>
+		) : (
+			<form className='Auth-form loginForm' onSubmit={handleSubmit(onSubmit)}>
+				<div className='Auth-form-content'>
+					<div className='PageOverlay d-none'>
+						{" "}
+						<div className='PageSpinner'>
+							<i className='fas fa-3x fa fa-spinner fa-spin'></i>
+							<p className='loadingText'>
+								<b>Loading</b>
+							</p>
+						</div>
+					</div>
+					<h3 className='Auth-form-title'>Login</h3>
 
-          <button type="button" className="btn btn-primary ml-2">
-            Reset
-          </button>
-        </div>
-
-      </div>
-    </form> :
-      <form className="Auth-form loginForm" onSubmit={handleSubmit(onSubmit)}>
-        <div className="Auth-form-content">
-        <div class="PageOverlay d-none"> <div class="PageSpinner"><i class="fas fa-3x fa fa-spinner fa-spin"></i><p class="loadingText"><b>Loading</b></p></div></div>
-          <h3 className="Auth-form-title">Login</h3>
-
-          <div className="text-center">
-            Please fill out the following fields to login:
-
-          </div>
-          <div className="form-group mt-3">
-            <label>Username</label>
-            <input defaultValue='' {...register("username", { required: "Please enter Username." })} className={`form-control`} />
-
-          </div>
-          <div className="form-group mt-3">
-            <label>Password</label>
-            <input type="password" {...register("password", { required: "Please enter Password." })} className={`form-control`} />
-          </div>
-          <div className="d-grid gap-2 mt-3">
-            <button type="submit" className="btn btn-primary">
-              Login
-            </button>
-          </div>
-
-        </div>
-      </form>
-
-
-    }
-
-  </div>
-)
+					<div className='text-center'>
+						Please fill out the following fields to login:
+					</div>
+					<div className='form-group mt-3'>
+						<label>Username</label>
+						<input
+							defaultValue=''
+							{...register("username", {required: "Please enter Username."})}
+							className={`form-control`}
+						/>
+					</div>
+					<div className='form-group mt-3'>
+						<label>Password</label>
+						<input
+							type='password'
+							{...register("password", {required: "Please enter Password."})}
+							className={`form-control`}
+						/>
+					</div>
+					<div className='d-grid gap-2 mt-3'>
+						<button type='submit' className='btn btn-primary'>
+							Login
+						</button>
+					</div>
+				</div>
+			</form>
+		)}
+	</div>
+);
 
 }
 

@@ -1185,443 +1185,717 @@ function QuickFormShippingInstructionMultiplePOD(props) {
     }, [])
 
     return (
-        <>
-            <div className={`${props.ShippingInstructionItem.cardLength}`}>
-                <div className="card document lvl1">
-                    <div className="card-header">
-                        <input type="hidden" id="UserUUID" />
-                        <h3 className="card-title">Shipping Instructions
-                            <input type="hidden" id="UserPortCode" />
-                        </h3>
-                        <div className="card-tools">
-                            <button type="button" className="btn btn-tool" data-card-widget="collapse">
-                                <i className="fas fa-minus" data-toggle="tooltip" title="" data-placement="top" data-original-title="Collapse"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div className="card-body">
-                        <div className="row">
-                            <div className="col-md-3">
-                                <div className="form-group field-dynamicmodel-polportcode">
-                                    <label className={`control-label ${props.errors.DynamicModel ? props.errors.DynamicModel.POLPortCode ? "has-error-label" : "" : ""}`} htmlFor="dynamicmodel-polportcode">POL Port Code</label>
-                                    <Controller
-                                        name={"DynamicModel[POLPortCode]"}
-                                        id={"dynamicmodel-polportcode"}
-                                        control={props.control}
-                                        render={({ field: { onChange, value } }) => (
-                                            <Select
-                                                {...props.register("DynamicModel[POLPortCode]", { required: "POL Port Code cannot be blank." })}
-                                                isClearable={true}
-                                                data-target={"POLPortCode-ShippingInstructions"}
-                                                id={"dynamicmodel-polportcode"}
-                                                value={
-                                                    value
-                                                        ? props.port.find((c) => c.value === value)
-                                                        : null
-                                                }
-                                                onChange={(val) => {
-                                                    val == null ? onChange(null) : onChange(val.value);
-                                                    ChangeReflectField(val, "POLPortCode");
-                                                    formName == "BookingReservation" ? formContext.QuotationRequiredFields() : val == null ? onChange(null) : onChange(val.value);
+			<>
+				<div className={`${props.ShippingInstructionItem.cardLength}`}>
+					<div className='card document lvl1'>
+						<div className='card-header'>
+							<input type='hidden' id='UserUUID' />
+							<h3 className='card-title'>
+								Shipping Instructions
+								<input type='hidden' id='UserPortCode' />
+							</h3>
+							<div className='card-tools'>
+								<button
+									type='button'
+									className='btn btn-tool'
+									data-card-widget='collapse'>
+									<i
+										className='fas fa-minus'
+										data-toggle='tooltip'
+										title=''
+										data-placement='top'
+										data-original-title='Collapse'></i>
+								</button>
+							</div>
+						</div>
+						<div className='card-body'>
+							<div className='row'>
+								<div className='col-md-3'>
+									<div className='form-group field-dynamicmodel-polportcode'>
+										<label
+											className={`control-label ${
+												props.errors.DynamicModel
+													? props.errors.DynamicModel.POLPortCode
+														? "has-error-label"
+														: ""
+													: ""
+											}`}
+											htmlFor='dynamicmodel-polportcode'>
+											POL Port Code
+										</label>
+										<Controller
+											name={"DynamicModel[POLPortCode]"}
+											id={"dynamicmodel-polportcode"}
+											control={props.control}
+											render={({field: {onChange, value}}) => (
+												<Select
+													{...props.register("DynamicModel[POLPortCode]", {
+														required: "POL Port Code cannot be blank.",
+													})}
+													isClearable={true}
+													data-target={"POLPortCode-ShippingInstructions"}
+													id={"dynamicmodel-polportcode"}
+													value={
+														value
+															? props.port.find((c) => c.value === value)
+															: null
+													}
+													onChange={(val) => {
+														val == null ? onChange(null) : onChange(val.value);
+														ChangeReflectField(val, "POLPortCode");
+														formName == "BookingReservation"
+															? formContext.QuotationRequiredFields()
+															: val == null
+															? onChange(null)
+															: onChange(val.value);
+													}}
+													onKeyDown={handleKeydown}
+													options={props.port}
+													className={`form-control AllocatePortCode pol_portcode getTerminalPortCode quotationRequired liveData Live_Area ${
+														props.ShippingInstructionItem.formName ==
+														defaultReadOnlyVoyage
+															? "readOnlySelect"
+															: ""
+													} ${
+														props.errors[`DynamicModel`]
+															? props.errors[`DynamicModel`][`POLPortCode`]
+																? "has-error-select"
+																: ""
+															: ""
+													}`}
+													classNamePrefix='select'
+													menuPortalTarget={document.body}
+													styles={
+														props.verificationStatus
+															? globalContext.customStylesReadonly
+															: globalContext.customStyles
+													}
+												/>
+											)}
+										/>
+										<p>
+											{props.errors.DynamicModel
+												? props.errors.DynamicModel.POLPortCode && (
+														<span style={{color: "#A94442"}}>
+															{props.errors.DynamicModel.POLPortCode.message}
+														</span>
+												  )
+												: ""}
+										</p>
+									</div>
+								</div>
 
-                                                }}
-                                                onKeyDown={handleKeydown}
-                                                options={props.port}
-                                                className={`form-control AllocatePortCode pol_portcode getTerminalPortCode quotationRequired liveData Live_Area ${props.ShippingInstructionItem.formName == defaultReadOnlyVoyage ? "readOnlySelect" : ""} ${props.errors[`DynamicModel`] ? props.errors[`DynamicModel`][`POLPortCode`] ? "has-error-select" : "" : ""}`}
-                                                classNamePrefix="select"
-                                                menuPortalTarget={document.body}
-                                                styles={props.verificationStatus ? globalContext.customStylesReadonly : globalContext.customStyles}
-                                            />
-                                        )}
-                                    />
-                                    <p>{props.errors.DynamicModel ? props.errors.DynamicModel.POLPortCode && <span style={{ color: "#A94442" }}>{props.errors.DynamicModel.POLPortCode.message}</span> : ""}</p>
+								<div className='col-md-3'>
+									<div className='form-group field-POLPortTerm'>
+										<label className='control-label' htmlFor='POLPortTerm'>
+											POL Port Term
+										</label>
+										<Controller
+											name={"DynamicModel[POLPortTerm]"}
+											id={"dynamicmodel-polportterm"}
+											control={props.control}
+											render={({field: {onChange, value}}) => (
+												<Select
+													{...props.register("DynamicModel[POLPortTerm]")}
+													isClearable={true}
+													data-target={"POLPortTerm-ShippingInstructions"}
+													id={"dynamicmodel-polportterm"}
+													value={
+														value
+															? formContext.portTerm
+																? formContext.portTerm.find(
+																		(c) => c.value === value
+																  )
+																: null
+															: null
+													}
+													onKeyDown={handleKeydown}
+													onChange={(val) => {
+														val == null ? onChange(null) : onChange(val.value);
+														ChangeReflectField(val, "POLPortTerm");
+													}}
+													options={formContext.portTerm}
+													className={`form-control pol_portterm liveData Live_PortTerm`}
+													classNamePrefix='select'
+													menuPortalTarget={document.body}
+													styles={
+														props.verificationStatus
+															? globalContext.customStylesReadonly
+															: globalContext.customStyles
+													}
+												/>
+											)}
+										/>
+									</div>
+								</div>
+								{props.barge ? (
+									<>
+										<div className='col-md-3'>
+											<div className='form-group field-BargeCode'>
+												<label className='control-label' htmlFor='BargeCode'>
+													Barge Code
+												</label>
+												<Controller
+													name={"DynamicModel[BargeCode]"}
+													id={"dynamicmodel-bargecode"}
+													control={props.control}
+													render={({field: {onChange, value}}) => (
+														<Select
+															{...props.register("DynamicModel[BargeCode]")}
+															isClearable={true}
+															data-target={"BargeCode-ShippingInstructions"}
+															id={"dynamicmodel-bargecode"}
+															value={
+																value
+																	? formContext.bargeCode
+																		? formContext.bargeCode.find(
+																				(c) => c.value === value
+																		  )
+																		: null
+																	: null
+															}
+															onKeyDown={handleKeydown}
+															onChange={(val) => {
+																val == null
+																	? onChange(null)
+																	: onChange(val.value);
+																ChangeReflectField(val, "BargeCode");
+																handleQuickFormBarge(val);
+															}}
+															options={formContext.bargeCode}
+															className={`form-control`}
+															classNamePrefix='select'
+															menuPortalTarget={document.body}
+															styles={
+																props.verificationStatus
+																	? globalContext.customStylesReadonly
+																	: globalContext.customStyles
+															}
+														/>
+													)}
+												/>
+											</div>
+										</div>
 
-                                </div>
-                            </div>
+										<div className='form-group col-md-3'>
+											<label className='control-label'>Barge Name</label>
+											<input
+												className='form-control'
+												{...props.register(`DynamicModel[BargeName]`)}
+												readOnly></input>
+										</div>
+									</>
+								) : (
+									""
+								)}
+							</div>
+							<div className='row'>
+								{/* <div className="col-md-12 transhipmentQuickForm"></div> */}
+								{formContext.fields.map((item, index) => {
+									var checkQuotationType =
+										props.getValues(`${formName}[QuotationType]`) === "One-Off"
+											? true
+											: false;
 
-                            <div className="col-md-3">
-                                <div className="form-group field-POLPortTerm">
-                                    <label className="control-label" htmlFor="POLPortTerm">POL Port Term</label>
-                                    <Controller
-                                        name={"DynamicModel[POLPortTerm]"}
-                                        id={"dynamicmodel-polportterm"}
-                                        control={props.control}
-                                        render={({ field: { onChange, value } }) => (
-                                            <Select
-                                                {...props.register("DynamicModel[POLPortTerm]")}
-                                                isClearable={true}
-                                                data-target={"POLPortTerm-ShippingInstructions"}
-                                                id={"dynamicmodel-polportterm"}
-                                                value={
-                                                    value
-                                                        ? formContext.portTerm ? formContext.portTerm.find((c) => c.value === value)
-                                                            : null
-                                                        : null
-                                                }
-                                                onKeyDown={handleKeydown}
-                                                onChange={(val) => {
-                                                    val == null ? onChange(null) : onChange(val.value);
-                                                    ChangeReflectField(val, "POLPortTerm")
-                                                }}
-                                                options={formContext.portTerm}
-                                                className={`form-control pol_portterm liveData Live_PortTerm`}
-                                                classNamePrefix="select"
-                                                menuPortalTarget={document.body}
-                                                styles={props.verificationStatus ? globalContext.customStylesReadonly : globalContext.customStyles}
-                                            />
-                                        )}
-                                    />
-                                </div>
-                            </div>
-                            {props.barge ?
-                                <>
-                                    <div className="col-md-3">
-                                        <div className="form-group field-BargeCode">
-                                            <label className="control-label" htmlFor="BargeCode">Barge Code</label>
-                                            <Controller
-                                                name={"DynamicModel[BargeCode]"}
-                                                id={"dynamicmodel-bargecode"}
-                                                control={props.control}
-                                                render={({ field: { onChange, value } }) => (
-                                                    <Select
-                                                        {...props.register("DynamicModel[BargeCode]")}
-                                                        isClearable={true}
-                                                        data-target={"BargeCode-ShippingInstructions"}
-                                                        id={"dynamicmodel-bargecode"}
-                                                        value={
-                                                            value
-                                                                ? formContext.bargeCode ? formContext.bargeCode.find((c) => c.value === value)
-                                                                    : null
-                                                                : null
-                                                        }
-                                                        onKeyDown={handleKeydown}
-                                                        onChange={(val) => {
-                                                            val == null ? onChange(null) : onChange(val.value);
-                                                            ChangeReflectField(val, "BargeCode")
-                                                            handleQuickFormBarge(val)
-                                                        }}
-                                                        options={formContext.bargeCode}
-                                                        className={`form-control`}
-                                                        classNamePrefix="select"
-                                                        menuPortalTarget={document.body}
-                                                        styles={props.verificationStatus ? globalContext.customStylesReadonly : globalContext.customStyles}
-                                                    />
-                                                )}
-                                            />
-                                        </div>
-                                    </div>
+									return formName == "ContainerReleaseOrder" ? (
+										<></>
+									) : (
+										<div
+											key={item.id}
+											className='col-md-12 transhipmentQuickForm'>
+											<div className='col-12 transhipment'>
+												<div className='row'>
+													<div className='align-self-center'>
+														<button
+															type='button'
+															className='remove-quickformtranshipment btn btn-danger btn-xs'
+															onClick={() =>
+																formContext.FieldArrayHandle("remove", index)
+															}>
+															<span className='fa fa-times'></span>
+														</button>
+													</div>
+													<div className='col-md-2'>
+														<label style={{fontSize: "12px"}}>
+															POT Port Code
+														</label>
+														<div className='form-group input-group mb-3'>
+															<Controller
+																name={`${formName}HasTranshipment[${index}][QuickFormPortCode]`}
+																id={`${formNameLowerCase}hastranshipment-${index}-quickformportcode`}
+																control={props.control}
+																render={({field: {onChange, value}}) => (
+																	<Select
+																		{...props.register(
+																			`${formName}HasTranshipment[${index}][QuickFormPortCode]`
+																		)}
+																		isClearable={true}
+																		data-target={
+																			"PODPortCode-ShippingInstructions"
+																		}
+																		id={`${formNameLowerCase}hastranshipment-${index}-quickformportcode`}
+																		value={
+																			value
+																				? props.port.find(
+																						(c) => c.value === value
+																				  )
+																				: null
+																		}
+																		onKeyDown={handleKeydown}
+																		onChange={(val) => {
+																			val == null
+																				? onChange(null)
+																				: onChange(val.value);
+																			onChangePOTPortCode(
+																				val,
+																				`${formNameLowerCase}hastranshipment-${index}-portcode`,
+																				index
+																			);
+																		}}
+																		options={props.port}
+																		className={`transhipmentQuickform QuickFormPortCode form-control AllocatePortCode liveData Live_Area`}
+																		classNamePrefix='select'
+																		menuPortalTarget={document.body}
+																		styles={
+																			props.verificationStatus
+																				? globalContext.customStylesReadonly
+																				: globalContext.customStyles
+																		}
+																	/>
+																)}
+															/>
+														</div>
+													</div>
+													<div className='col-md-3'>
+														<label style={{fontSize: "12px"}}>
+															POT Port Term
+														</label>
+														<div className='form-group input-group mb-3'>
+															<Controller
+																name={`${formName}HasTranshipment[${index}][QuickFormPOTPortTerm]`}
+																id={`${formNameLowerCase}hastranshipment-${index}-quickformpotportterm`}
+																control={props.control}
+																render={({field: {onChange, value}}) => (
+																	<Select
+																		{...props.register(
+																			`${formName}HasTranshipment[${index}][QuickFormPOTPortTerm]`
+																		)}
+																		isClearable={true}
+																		id={`${formNameLowerCase}hastranshipment-${index}-quickformpotportterm`}
+																		value={
+																			value
+																				? formContext.portTerm
+																					? formContext.portTerm.find(
+																							(c) => c.value === value
+																					  )
+																					: null
+																				: null
+																		}
+																		onKeyDown={handleKeydown}
+																		onChange={(val) => {
+																			val == null
+																				? onChange(null)
+																				: onChange(val.value);
+																		}}
+																		options={
+																			formContext.portTerm
+																				? formContext.portTerm
+																				: ""
+																		}
+																		className={`transhipmentQuickform QuickFormPortTerm form-control liveData Live_PortTerm`}
+																		classNamePrefix='select'
+																		menuPortalTarget={document.body}
+																		styles={
+																			props.verificationStatus
+																				? globalContext.customStylesReadonly
+																				: globalContext.customStyles
+																		}
+																	/>
+																)}
+															/>
+														</div>
+													</div>
 
-                                    <div class='form-group col-md-3'>
-                                        <label className="control-label">Barge Name</label>
-                                        <input class='form-control' {...props.register(`DynamicModel[BargeName]`)} readOnly></input>
-                                    </div>
-                                </>
-                                : ""
+													<div
+														className={`col-md-3 mr-4 transhipmentVoyagedisplay ${
+															formName == "Quotation" &&
+															(checkQuotationType === true ? "" : "d-none")
+														}`}>
+														<label style={{fontSize: "12px"}}>Voyage Num</label>
+														<div className='form-group input-group mb-3'>
+															<Controller
+																name={`${formName}HasTranshipment[${index}][QuickFormPOTVoyage]`}
+																id={`${formNameLowerCase}hastranshipment-${index}-quickformpotvoyage`}
+																control={props.control}
+																render={({field: {onChange, value}}) => (
+																	<Select
+																		{...props.register(
+																			`${formName}HasTranshipment[${index}][QuickFormPOTVoyage]`
+																		)}
+																		isClearable={true}
+																		id={`${formNameLowerCase}hastranshipment-${index}-quickformpotvoyage`}
+																		value={
+																			value
+																				? item.optionFromVoyage
+																					? item.optionFromVoyage.find(
+																							(c) => c.value === value
+																					  )
+																					: null
+																				: null
+																		}
+																		onKeyDown={handleKeydown}
+																		onChange={(val) => {
+																			val == null
+																				? onChange(null)
+																				: onChange(val.value);
+																			FindVoyageFromTranshipmentDetails(
+																				val,
+																				`${formNameLowerCase}hastranshipment-${index}-fromvoyagenum`,
+																				index
+																			);
+																			onChangePOTVoyageNum(
+																				val,
+																				`${formNameLowerCase}hastranshipment-${index}-fromvoyagenum`,
+																				index
+																			);
+																		}}
+																		options={item.optionFromVoyage}
+																		className={`transhipmentQuickform QuickFormVoyageNum AllocateVoyage form-control`}
+																		classNamePrefix='select'
+																		menuPortalTarget={document.body}
+																		onMenuOpen={() => {
+																			FindPOTVoyage(index);
+																		}}
+																		styles={
+																			props.verificationStatus
+																				? globalContext.customStylesReadonly
+																				: globalContext.customStyles
+																		}
+																	/>
+																)}
+															/>
 
-                            }
+															<div
+																className='input-group-btn'
+																style={{height: "31px"}}>
+																<button
+																	className='btn btn-outline-secondary AllocateVoyageButton1'
+																	type='button'
+																	style={{height: "31px"}}
+																	data-toggle='popover'
+																	onClick={(val) => potVoyageAllocation(val)}>
+																	<i className='fa fa-info'></i>
+																</button>
+															</div>
+														</div>
+													</div>
+													<div
+														className={`col-md-3 transhipmentVesseldisplay ${
+															formName == "Quotation" &&
+															(checkQuotationType === true ? "" : "d-none")
+														}`}>
+														<label style={{fontSize: "12px"}}>
+															Vessel Code
+														</label>
+														<div className='form-group input-group mb-3'>
+															<input
+																className='transhipmentQuickform QuickFormVesselCode form-control'
+																{...props.register(
+																	`${formName}HasTranshipment[${index}][QuickFormPOTVesselCode]`
+																)}></input>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									);
+								})}
 
+								<div className='col-md-3 d-none'>
+									<div className='form-group field-dynamicmodel-podportcode'>
+										<label
+											className={`control-label`}
+											htmlFor='dynamicmodel-podportcode'>
+											POD Port Code
+										</label>
+										<Controller
+											name={"DynamicModel[PODPortCode]"}
+											id={"dynamicmodel-podportcode"}
+											control={props.control}
+											render={({field: {onChange, value}}) => (
+												<Select
+													{...props.register("DynamicModel[PODPortCode]")}
+													isClearable={true}
+													data-target={"PODPortCode-ShippingInstructions"}
+													id={"dynamicmodel-podportcode"}
+													value={
+														value
+															? props.port.find((c) => c.value === value)
+															: null
+													}
+													onKeyDown={handleKeydown}
+													onChange={(val) => {
+														val == null ? onChange(null) : onChange(val.value);
+														ChangeReflectField(val, "PODPortCode");
+														formName == "BookingReservation"
+															? formContext.QuotationRequiredFields()
+															: val == null
+															? onChange(null)
+															: onChange(val.value);
+													}}
+													options={props.port}
+													className={`form-control pod_portcode getTerminalPortCode quotationRequired liveData Live_Area ${
+														props.ShippingInstructionItem.formName ==
+														defaultReadOnlyVoyage
+															? "readOnlySelect"
+															: ""
+													}`}
+													classNamePrefix='select'
+													menuPortalTarget={document.body}
+													styles={
+														props.verificationStatus
+															? globalContext.customStylesReadonly
+															: globalContext.customStyles
+													}
+												/>
+											)}
+										/>
+									</div>
+								</div>
 
-                        </div>
-                        <div className="row">
+								<div className='col-md-3 d-none'>
+									<div className='form-group field-PODPortTerm'>
+										<label className='control-label' htmlFor='PODPortTerm'>
+											POD Port Term
+										</label>
+										<Controller
+											name={"DynamicModel[PODPortTerm]"}
+											id={"dynamicmodel-podportterm"}
+											control={props.control}
+											render={({field: {onChange, value}}) => (
+												<Select
+													{...props.register("DynamicModel[PODPortTerm]")}
+													isClearable={true}
+													data-target={"PODPortTerm-ShippingInstructions"}
+													id={"dynamicmodel-podportterm"}
+													value={
+														value
+															? formContext.portTerm
+																? formContext.portTerm.find(
+																		(c) => c.value === value
+																  )
+																: null
+															: null
+													}
+													onKeyDown={handleKeydown}
+													onChange={(val) => {
+														val == null ? onChange(null) : onChange(val.value);
+														ChangeReflectField(val, "PODPortTerm");
+													}}
+													options={formContext.portTerm}
+													className={`form-control pod_portterm liveData Live_PortTerm`}
+													classNamePrefix='select'
+													menuPortalTarget={document.body}
+													styles={
+														props.verificationStatus
+															? globalContext.customStylesReadonly
+															: globalContext.customStyles
+													}
+												/>
+											)}
+										/>
+									</div>
+								</div>
 
-                            {/* <div className="col-md-12 transhipmentQuickForm"></div> */}
-                            {formContext.fields.map((item, index) => {
-                                var checkQuotationType = props.getValues(`${formName}[QuotationType]`) === "One-Off" ? true : false
-
-                                return formName == "ContainerReleaseOrder" ? (<></>) : (
-
-                                    <div key={item.id} className="col-md-12 transhipmentQuickForm">
-                                        <div className='col-12 transhipment'>
-                                            <div className='row'>
-                                                <div className='align-self-center'>
-                                                    <button type='button' className='remove-quickformtranshipment btn btn-danger btn-xs' onClick={() => formContext.FieldArrayHandle("remove", index)}><span className='fa fa-times'></span></button>
-                                                </div>
-                                                <div className='col-md-2'>
-                                                    <label style={{ fontSize: "12px" }}>POT Port Code</label>
-                                                    <div className='form-group input-group mb-3'>
-                                                        <Controller
-                                                            name={`${formName}HasTranshipment[${index}][QuickFormPortCode]`}
-                                                            id={`${formNameLowerCase}hastranshipment-${index}-quickformportcode`}
-                                                            control={props.control}
-                                                            render={({ field: { onChange, value } }) => (
-                                                                <Select
-                                                                    {...props.register(`${formName}HasTranshipment[${index}][QuickFormPortCode]`)}
-                                                                    isClearable={true}
-                                                                    data-target={"PODPortCode-ShippingInstructions"}
-                                                                    id={`${formNameLowerCase}hastranshipment-${index}-quickformportcode`}
-                                                                    value={
-                                                                        value
-                                                                            ? props.port.find((c) => c.value === value)
-                                                                            : null
-                                                                    }
-                                                                    onKeyDown={handleKeydown}
-                                                                    onChange={(val) => {
-                                                                        val == null ? onChange(null) : onChange(val.value);
-                                                                        onChangePOTPortCode(val, `${formNameLowerCase}hastranshipment-${index}-portcode`, index)
-                                                                    }}
-                                                                    options={props.port}
-                                                                    className={`transhipmentQuickform QuickFormPortCode form-control AllocatePortCode liveData Live_Area`}
-                                                                    classNamePrefix="select"
-                                                                    menuPortalTarget={document.body}
-                                                                    styles={props.verificationStatus ? globalContext.customStylesReadonly : globalContext.customStyles}
-                                                                />
-                                                            )}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div class='col-md-3'>
-                                                    <label style={{ fontSize: "12px" }}>POT Port Term</label>
-                                                    <div class='form-group input-group mb-3'>
-                                                        <Controller
-                                                            name={`${formName}HasTranshipment[${index}][QuickFormPOTPortTerm]`}
-                                                            id={`${formNameLowerCase}hastranshipment-${index}-quickformpotportterm`}
-                                                            control={props.control}
-                                                            render={({ field: { onChange, value } }) => (
-                                                                <Select
-                                                                    {...props.register(`${formName}HasTranshipment[${index}][QuickFormPOTPortTerm]`)}
-                                                                    isClearable={true}
-                                                                    id={`${formNameLowerCase}hastranshipment-${index}-quickformpotportterm`}
-                                                                    value={
-                                                                        value
-                                                                            ? formContext.portTerm ? formContext.portTerm.find((c) => c.value === value)
-                                                                                : null
-                                                                            : null
-                                                                    }
-                                                                    onKeyDown={handleKeydown}
-                                                                    onChange={(val) => {
-                                                                        val == null ? onChange(null) : onChange(val.value);
-                                                                    }}
-                                                                    options={formContext.portTerm ? formContext.portTerm : ""}
-                                                                    className={`transhipmentQuickform QuickFormPortTerm form-control liveData Live_PortTerm`}
-                                                                    classNamePrefix="select"
-                                                                    menuPortalTarget={document.body}
-                                                                    styles={props.verificationStatus ? globalContext.customStylesReadonly : globalContext.customStyles}
-                                                                />
-                                                            )}
-                                                        />
-                                                    </div>
-                                                </div>
-
-                                                <div class={`col-md-3 mr-4 transhipmentVoyagedisplay ${formName == "Quotation" && (checkQuotationType === true ? "" : "d-none")}`}>
-                                                    <label style={{ fontSize: "12px" }}>Voyage Num</label>
-                                                    <div class='form-group input-group mb-3'>
-                                                        <Controller
-                                                            name={`${formName}HasTranshipment[${index}][QuickFormPOTVoyage]`}
-                                                            id={`${formNameLowerCase}hastranshipment-${index}-quickformpotvoyage`}
-                                                            control={props.control}
-                                                            render={({ field: { onChange, value } }) => (
-                                                                <Select
-                                                                    {...props.register(`${formName}HasTranshipment[${index}][QuickFormPOTVoyage]`)}
-                                                                    isClearable={true}
-                                                                    id={`${formNameLowerCase}hastranshipment-${index}-quickformpotvoyage`}
-                                                                    value={
-                                                                        value
-                                                                            ? item.optionFromVoyage ? item.optionFromVoyage.find((c) => c.value === value)
-                                                                                : null
-                                                                            : null
-                                                                    }
-                                                                    onKeyDown={handleKeydown}
-                                                                    onChange={(val) => {
-                                                                        val == null ? onChange(null) : onChange(val.value);
-                                                                        FindVoyageFromTranshipmentDetails(val, `${formNameLowerCase}hastranshipment-${index}-fromvoyagenum`, index);
-                                                                        onChangePOTVoyageNum(val, `${formNameLowerCase}hastranshipment-${index}-fromvoyagenum`, index)
-                                                                    }}
-                                                                    options={item.optionFromVoyage}
-                                                                    className={`transhipmentQuickform QuickFormVoyageNum AllocateVoyage form-control`}
-                                                                    classNamePrefix="select"
-                                                                    menuPortalTarget={document.body}
-                                                                    onMenuOpen={() => { FindPOTVoyage(index) }}
-                                                                    styles={props.verificationStatus ? globalContext.customStylesReadonly : globalContext.customStyles}
-                                                                />
-                                                            )}
-                                                        />
-
-                                                        <div class='input-group-btn' style={{ height: "31px" }}>
-                                                            <button class='btn btn-outline-secondary AllocateVoyageButton1' type='button' style={{ height: "31px" }} data-toggle='popover' onClick={val => potVoyageAllocation(val)}><i class='fa fa-info'></i></button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class={`col-md-3 transhipmentVesseldisplay ${formName == "Quotation" && (checkQuotationType === true ? "" : "d-none")}`}>
-                                                    <label style={{ fontSize: "12px" }}>Vessel Code</label>
-                                                    <div class='form-group input-group mb-3'>
-                                                        <input class='transhipmentQuickform QuickFormVesselCode form-control' {...props.register(`${formName}HasTranshipment[${index}][QuickFormPOTVesselCode]`)}></input>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )
-                            })}
-
-                            <div className="col-md-3 d-none">
-                                <div className="form-group field-dynamicmodel-podportcode">
-                                    <label className={`control-label`} htmlFor="dynamicmodel-podportcode">POD Port Code</label>
-                                    <Controller
-                                        name={"DynamicModel[PODPortCode]"}
-                                        id={"dynamicmodel-podportcode"}
-                                        control={props.control}
-                                        render={({ field: { onChange, value } }) => (
-                                            <Select
-                                                {...props.register("DynamicModel[PODPortCode]")}
-                                                isClearable={true}
-                                                data-target={"PODPortCode-ShippingInstructions"}
-                                                id={"dynamicmodel-podportcode"}
-                                                value={
-                                                    value
-                                                        ? props.port.find((c) => c.value === value)
-                                                        : null
-                                                }
-                                                onKeyDown={handleKeydown}
-                                                onChange={(val) => {
-                                                    val == null ? onChange(null) : onChange(val.value);
-                                                    ChangeReflectField(val, "PODPortCode")
-                                                    formName == "BookingReservation" ? formContext.QuotationRequiredFields() : val == null ? onChange(null) : onChange(val.value);
-
-                                                }}
-                                                options={props.port}
-                                                className={`form-control pod_portcode getTerminalPortCode quotationRequired liveData Live_Area ${props.ShippingInstructionItem.formName == defaultReadOnlyVoyage ? "readOnlySelect" : ""}`}
-                                                classNamePrefix="select"
-                                                menuPortalTarget={document.body}
-                                                styles={props.verificationStatus ? globalContext.customStylesReadonly : globalContext.customStyles}
-                                            />
-                                        )}
-                                    />
-                                  
-                                </div>
-                            </div>
-
-
-                            <div className="col-md-3 d-none">
-                                <div className="form-group field-PODPortTerm">
-                                    <label className="control-label" htmlFor="PODPortTerm">POD Port
-                                        Term</label>
-                                    <Controller
-                                        name={"DynamicModel[PODPortTerm]"}
-                                        id={"dynamicmodel-podportterm"}
-                                        control={props.control}
-                                        render={({ field: { onChange, value } }) => (
-                                            <Select
-                                                {...props.register("DynamicModel[PODPortTerm]")}
-                                                isClearable={true}
-                                                data-target={"PODPortTerm-ShippingInstructions"}
-                                                id={"dynamicmodel-podportterm"}
-                                                value={
-                                                    value
-                                                        ? formContext.portTerm ? formContext.portTerm.find((c) => c.value === value)
-                                                            : null
-                                                        : null
-                                                }
-                                                onKeyDown={handleKeydown}
-                                                onChange={(val) => {
-                                                    val == null ? onChange(null) : onChange(val.value);
-                                                    ChangeReflectField(val, "PODPortTerm")
-                                                }}
-                                                options={formContext.portTerm}
-                                                className={`form-control pod_portterm liveData Live_PortTerm`}
-                                                classNamePrefix="select"
-                                                menuPortalTarget={document.body}
-                                                styles={props.verificationStatus ? globalContext.customStylesReadonly : globalContext.customStyles}
-                                            />
-                                        )}
-                                    />
-                                </div>
-                            </div>
-
-
-                            <div className={`col-md-3 OneOff ${props.ShippingInstructionItem.formName != defaultHideVoyage ? "" : "d-none"}`}>
-                                <div className="form-group field-dynamicmodel-voyagenum">
-                                    <label className="control-label" htmlFor="dynamicmodel-voyagenum">Voyage Num</label>
-                                    <div className="input-group">
-                                        {/* <select className='select2js form-control AllocateVoyage AllScheduleVoyage' id="dynamicmodel-voyagenum" data-target="VoyageNum-ShippingInstructions" >
+								<div
+									className={`col-md-3 OneOff ${
+										props.ShippingInstructionItem.formName != defaultHideVoyage
+											? ""
+											: "d-none"
+									}`}>
+									<div className='form-group field-dynamicmodel-voyagenum'>
+										<label
+											className='control-label'
+											htmlFor='dynamicmodel-voyagenum'>
+											Voyage Num
+										</label>
+										<div className='input-group'>
+											{/* <select className='select2js form-control AllocateVoyage AllScheduleVoyage' id="dynamicmodel-voyagenum" data-target="VoyageNum-ShippingInstructions" >
                                             <option value="">Select...</option>
                                         </select> */}
-                                        {props.ShippingInstructionItem.formName == "BookingReservation" ?
-                                            <Controller
-                                                name={"DynamicModel[VoyageNum]"}
-                                                id={"dynamicmodel-voyagenum"}
-                                                control={props.control}
-                                                render={({ field: { onChange, value } }) => (
-                                                    <Select
-                                                        {...props.register("DynamicModel[VoyageNum]", { required: `Voyage Num cannot be blank.` })}
-                                                        isClearable={true}
-                                                        data-target={"VoyageNum-ShippingInstructions"}
-                                                        id={"dynamicmodel-voyagenum"}
-                                                        value={
-                                                            value
-                                                                ? formContext.quickFormVoyageNum.find((c) => c.value === value)
-                                                                : null
-                                                        }
-                                                        onKeyDown={handleKeydown}
-                                                        onChange={(val) => {
-                                                            val == null ? onChange(null) : onChange(val.value);
-                                                            VoyageNumOnChangeHandle(val);
-                                                            FindVoyageNumberDetail(val)
-                                                        }}
-                                                        options={formContext.quickFormVoyageNum}
-                                                        className={`form-control AllocateVoyage AllScheduleVoyage ${props.ShippingInstructionItem.formName == defaultReadOnlyVoyage ? "readOnlySelect" : ""} ${props.errors[`DynamicModel`] ? props.errors[`DynamicModel`][`VoyageNum`] ? "has-error-select" : "" : ""}`}
-                                                        classNamePrefix="select"
-                                                        menuPortalTarget={document.body}
-                                                        onMenuOpen={val => FindVoyage(val)}
-                                                        styles={props.verificationStatus ? globalContext.customStylesReadonly : globalContext.customStyles}
-                                                    />
-                                                )}
-                                            />
-                                            :
-                                            <Controller
-                                                name={"DynamicModel[VoyageNum]"}
-                                                id={"dynamicmodel-voyagenum"}
-                                                control={props.control}
-                                                render={({ field: { onChange, value } }) => (
-                                                    <Select
-                                                        {...props.register("DynamicModel[VoyageNum]")}
-                                                        isClearable={true}
-                                                        data-target={"VoyageNum-ShippingInstructions"}
-                                                        id={"dynamicmodel-voyagenum"}
-                                                        value={
-                                                            value
-                                                                ? formContext.quickFormVoyageNum.find((c) => c.value === value)
-                                                                : null
-                                                        }
-                                                        onChange={(val) => {
-                                                            val == null ? onChange(null) : onChange(val.value);
-                                                            VoyageNumOnChangeHandle(val);
-                                                            FindVoyageNumberDetail(val)
-                                                        }}
-                                                        onKeyDown={handleKeydown}
-                                                        options={formContext.quickFormVoyageNum}
-                                                        className={`form-control AllocateVoyage AllScheduleVoyage ${props.ShippingInstructionItem.formName == defaultReadOnlyVoyage ? "readOnlySelect" : ""}`}
-                                                        classNamePrefix="select"
-                                                        menuPortalTarget={document.body}
-                                                        onMenuOpen={val => FindVoyage(val)}
-                                                        styles={props.verificationStatus ? globalContext.customStylesReadonly : globalContext.customStyles}
-                                                    />
-                                                )}
-                                            />
-                                        }
-                                        <div className={`input-group-append ${props.ShippingInstructionItem.formName == defaultHideModalVoyage ? "d-none" : ""}`} style={{ cursor: "pointer" }}><button type="button" className="btn btn-outline-secondary openModalVoyage"><i className="fa fa-search"></i></button><button type="button" className="btn btn-outline-secondary AllocateVoyageButton1" data-toggle="popover" onClick={val => potVoyageAllocation(val)} data-placement="bottom"><i className="fa fa-info"></i></button></div>
-                                    </div>
-                                    <p>{props.errors.DynamicModel ? props.errors.DynamicModel[`VoyageNum`] && <span style={{ color: "#A94442" }}>{props.errors.DynamicModel[`VoyageNum`].message}</span> : ""}</p>
-                                </div>
-                            </div>
-                            <div className={`col-md-3 OneOff ${props.ShippingInstructionItem.formName != defaultHideVoyage ? "" : "d-none"}`}>
-                                <div className="form-group field-dynamicmodel-vesselcode">
-                                    <label className="control-label" htmlFor="dynamicmodel-vesselcode">Vessel Code</label>
-                                    <input type="text" id="dynamicmodel-vesselcode" className="form-control" name="DynamicModel[VesselCode]" data-target="VesselCode-Voyage" />
+											{props.ShippingInstructionItem.formName ==
+											"BookingReservation" ? (
+												<Controller
+													name={"DynamicModel[VoyageNum]"}
+													id={"dynamicmodel-voyagenum"}
+													control={props.control}
+													render={({field: {onChange, value}}) => (
+														<Select
+															{...props.register("DynamicModel[VoyageNum]", {
+																required: `Voyage Num cannot be blank.`,
+															})}
+															isClearable={true}
+															data-target={"VoyageNum-ShippingInstructions"}
+															id={"dynamicmodel-voyagenum"}
+															value={
+																value
+																	? formContext.quickFormVoyageNum.find(
+																			(c) => c.value === value
+																	  )
+																	: null
+															}
+															onKeyDown={handleKeydown}
+															onChange={(val) => {
+																val == null
+																	? onChange(null)
+																	: onChange(val.value);
+																VoyageNumOnChangeHandle(val);
+																FindVoyageNumberDetail(val);
+															}}
+															options={formContext.quickFormVoyageNum}
+															className={`form-control AllocateVoyage AllScheduleVoyage ${
+																props.ShippingInstructionItem.formName ==
+																defaultReadOnlyVoyage
+																	? "readOnlySelect"
+																	: ""
+															} ${
+																props.errors[`DynamicModel`]
+																	? props.errors[`DynamicModel`][`VoyageNum`]
+																		? "has-error-select"
+																		: ""
+																	: ""
+															}`}
+															classNamePrefix='select'
+															menuPortalTarget={document.body}
+															onMenuOpen={(val) => FindVoyage(val)}
+															styles={
+																props.verificationStatus
+																	? globalContext.customStylesReadonly
+																	: globalContext.customStyles
+															}
+														/>
+													)}
+												/>
+											) : (
+												<Controller
+													name={"DynamicModel[VoyageNum]"}
+													id={"dynamicmodel-voyagenum"}
+													control={props.control}
+													render={({field: {onChange, value}}) => (
+														<Select
+															{...props.register("DynamicModel[VoyageNum]")}
+															isClearable={true}
+															data-target={"VoyageNum-ShippingInstructions"}
+															id={"dynamicmodel-voyagenum"}
+															value={
+																value
+																	? formContext.quickFormVoyageNum.find(
+																			(c) => c.value === value
+																	  )
+																	: null
+															}
+															onChange={(val) => {
+																val == null
+																	? onChange(null)
+																	: onChange(val.value);
+																VoyageNumOnChangeHandle(val);
+																FindVoyageNumberDetail(val);
+															}}
+															onKeyDown={handleKeydown}
+															options={formContext.quickFormVoyageNum}
+															className={`form-control AllocateVoyage AllScheduleVoyage ${
+																props.ShippingInstructionItem.formName ==
+																defaultReadOnlyVoyage
+																	? "readOnlySelect"
+																	: ""
+															}`}
+															classNamePrefix='select'
+															menuPortalTarget={document.body}
+															onMenuOpen={(val) => FindVoyage(val)}
+															styles={
+																props.verificationStatus
+																	? globalContext.customStylesReadonly
+																	: globalContext.customStyles
+															}
+														/>
+													)}
+												/>
+											)}
+											<div
+												className={`input-group-append ${
+													props.ShippingInstructionItem.formName ==
+													defaultHideModalVoyage
+														? "d-none"
+														: ""
+												}`}
+												style={{cursor: "pointer"}}>
+												<button
+													type='button'
+													className='btn btn-outline-secondary openModalVoyage'>
+													<i className='fa fa-search'></i>
+												</button>
+												<button
+													type='button'
+													className='btn btn-outline-secondary AllocateVoyageButton1'
+													data-toggle='popover'
+													onClick={(val) => potVoyageAllocation(val)}
+													data-placement='bottom'>
+													<i className='fa fa-info'></i>
+												</button>
+											</div>
+										</div>
+										<p>
+											{props.errors.DynamicModel
+												? props.errors.DynamicModel[`VoyageNum`] && (
+														<span style={{color: "#A94442"}}>
+															{props.errors.DynamicModel[`VoyageNum`].message}
+														</span>
+												  )
+												: ""}
+										</p>
+									</div>
+								</div>
+								<div
+									className={`col-md-3 OneOff ${
+										props.ShippingInstructionItem.formName != defaultHideVoyage
+											? ""
+											: "d-none"
+									}`}>
+									<div className='form-group field-dynamicmodel-vesselcode'>
+										<label
+											className='control-label'
+											htmlFor='dynamicmodel-vesselcode'>
+											Vessel Code
+										</label>
+										<input
+											type='text'
+											id='dynamicmodel-vesselcode'
+											className='form-control'
+											name='DynamicModel[VesselCode]'
+											data-target='VesselCode-Voyage'
+										/>
 
-                                    <div className="help-block"></div>
-                                </div>
-                            </div>
-                        </div>
-                        {props.ShippingInstructionItem.formName == defaultHideModalVoyage ? "" :
-                            <button type="button" className="btn btn-link btn-xs mb-2" id="transhipmentQuickForm" onClick={() => formContext.FieldArrayHandle("append")}><span className="fa fa-plus"></span> Add
-                                Transhipment</button>
-                        }
-
-                    </div>
-                </div>
-            </div>
-        </>
-    )
+										<div className='help-block'></div>
+									</div>
+								</div>
+							</div>
+							{props.ShippingInstructionItem.formName ==
+							defaultHideModalVoyage ? (
+								""
+							) : (
+								<button
+									type='button'
+									className='btn btn-link btn-xs mb-2'
+									id='transhipmentQuickForm'
+									onClick={() => formContext.FieldArrayHandle("append")}>
+									<span className='fa fa-plus'></span> Add Transhipment
+								</button>
+							)}
+						</div>
+					</div>
+				</div>
+			</>
+		);
 
 }
 

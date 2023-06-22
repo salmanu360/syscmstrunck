@@ -153,76 +153,64 @@ function Content(props) {
       
     }
 
-    function normalContent(){
-        return (
+    function normalContent() {
+			return (
+				<div className='content-wrapper'>
+					<section className='content-header'>
+						<div className='content-header'>
+							<div className='container-fluid'>
+								<div className='row mb-2'>
+									<div className='col-sm-6'>
+										<h1 className='m-0 text-dark ContentTitle'>
+											{props.Title}
+										</h1>
+									</div>
+									<div className='col-sm-6'>
+										<ol className='breadcrumb float-sm-right'>
+											<BreadCrumb />
+										</ol>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+					<section className='content'>
+						<Suspense>
+							<MyComponent data={props} />
+						</Suspense>
+					</section>
+				</div>
+			);
+		}
 
-            <div className="content-wrapper">
-            <section className="content-header">
+		function forbiddenContent() {
+			return (
+				<div className='content-wrapper'>
+					<section className='content-header'></section>
+					<section className='content'>
+						<div className='redBG'>
+							<h1 className='access_forbidden'>
+								<b>You are not allowed to access this Page</b>
+							</h1>
+							<h4 style={{textAlign: "center"}}>
+								Please check your User Permissions..
+							</h4>
+						</div>
+					</section>
+				</div>
+			);
+		}
 
-
-
-                <div class="content-header">
-                    <div class="container-fluid">
-                        <div class="row mb-2">
-                            <div class="col-sm-6">
-                                <h1 class="m-0 text-dark ContentTitle">
-                                    {props.Title}
-                                </h1>
-                            </div>
-                            <div class="col-sm-6">
-                                <ol className="breadcrumb float-sm-right"><BreadCrumb /></ol>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </section>
-            <section class="content">
-                <Suspense>
-           
-                    <MyComponent data={props}/>
-                </Suspense>
-
-            </section>
-
-        </div>
-        )
-    }
-
-    function forbiddenContent(){
-        return (
-
-            <div className="content-wrapper">
-            <section className="content-header">
-            </section>
-            <section class="content">
-            <div class="redBG">
-                <h1 class="access_forbidden"><b>You are not allowed to access this Page</b></h1>
-                <h4 style={{"textAlign":"center"}}>Please check your User Permissions..</h4></div>
-
-            </section>
-
-        </div>
-        )
-    }
-
-    function loadingContent(){
-        return (
-
-            <div className="content-wrapper">
-            <section className="content-header">
-            </section>
-            <section class="content">
-            <div class="redBG">
-              
-              
-            </div>
-
-            </section>
-
-        </div>
-        )
-    }
+		function loadingContent() {
+			return (
+				<div className='content-wrapper'>
+					<section className='content-header'></section>
+					<section className='content'>
+						<div className='redBG'></div>
+					</section>
+				</div>
+			);
+		}
     return (
         <>   
               

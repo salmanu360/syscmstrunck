@@ -86,8 +86,16 @@ function CreateButtonRow(props) {
                 window.$('.checkingBillToList').append(BCHidden)
                 window.$.each(uniqueData, function (key, value) { 
                   const customerType = window.$('<input type="hidden" name="customerType" value="' + value.CustomerType + '">');
-                  const radio = window.$(`<input type="radio" class="mr-2" id="radio-window.${key}" name="billTo" value="` + value.BillTo.value + '">');
-                  const label = window.$(`<label class="control-label" for="radio-window.${key}">` + value.BillTo.label + '</label>');
+                  const radio = window.$(
+										`<input type="radio" className="mr-2" id="radio-window.${key}" name="billTo" value="` +
+											value.BillTo.value +
+											'">'
+									);
+									const label = window.$(
+										`<label className="control-label" for="radio-window.${key}">` +
+											value.BillTo.label +
+											"</label>"
+									);
                   window.$('.checkingBillToList').append(customerType).append(radio).append(label).append('<br>');
                 })
                 window.$("#TransferFromBCModal").modal("toggle")

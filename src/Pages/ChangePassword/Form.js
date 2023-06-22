@@ -119,87 +119,154 @@ function Form(props) {
       };
 
     return (
-        <form>
+			<form>
+				<div className='col-md-12'>
+					<div className='card card-primary'>
+						<div className='card-header'>Change Password</div>
+						<div className='card-body'>
+							<div className='row'>
+								<div className='col-xs-12 col-md-4'>
+									<div className='form-group'>
+										<label
+											className={`control-label ${
+												errors.ChangePasswordForm
+													? errors.ChangePasswordForm.current_password
+														? "has-error-label"
+														: ""
+													: ""
+											}`}>
+											Current Password
+										</label>
 
-            <div className="col-md-12">
-                <div className="card card-primary">
-                    <div className="card-header">Change Password</div>
-                    <div className="card-body">
+										<input
+											type='password'
+											defaultValue=''
+											{...register("ChangePasswordForm[current_password]", {
+												required: "Current Password cannot be blank.",
+											})}
+											className={`form-control ${
+												errors.ChangePasswordForm
+													? errors.ChangePasswordForm.current_password
+														? "has-error"
+														: ""
+													: ""
+											}`}
+										/>
+										<p>
+											{errors.ChangePasswordForm
+												? errors.ChangePasswordForm.current_password && (
+														<span style={{color: "#A94442"}}>
+															{
+																errors.ChangePasswordForm.current_password
+																	.message
+															}
+														</span>
+												  )
+												: ""}
+										</p>
+									</div>
+								</div>
 
-                        <div className="row">
+								<div className='col-xs-12 col-md-4'>
+									<div className='form-group'>
+										<label
+											className={`control-label ${
+												errors.ChangePasswordForm
+													? errors.ChangePasswordForm.new_password
+														? "has-error-label"
+														: ""
+													: ""
+											}`}>
+											New Password
+										</label>
+										<input
+											type='password'
+											defaultValue=''
+											{...register("ChangePasswordForm[new_password]", {
+												required: "New Password cannot be blank.",
+											})}
+											className={`form-control ${
+												errors.ChangePasswordForm
+													? errors.ChangePasswordForm.new_password
+														? "has-error"
+														: ""
+													: ""
+											}`}
+										/>
+										<p>
+											{errors.ChangePasswordForm
+												? errors.ChangePasswordForm.new_password && (
+														<span style={{color: "#A94442"}}>
+															{errors.ChangePasswordForm.new_password.message}
+														</span>
+												  )
+												: ""}
+										</p>
+									</div>
+								</div>
 
+								<div className='col-xs-12 col-md-4'>
+									<div className='form-group'>
+										<label
+											className={`control-label ${
+												errors.ChangePasswordForm
+													? errors.ChangePasswordForm.confirm_password
+														? "has-error-label"
+														: ""
+													: ""
+											}`}>
+											Confirm Password
+										</label>
+										<input
+											type='password'
+											defaultValue=''
+											className={`form-control ${
+												errors.ChangePasswordForm
+													? errors.ChangePasswordForm.confirm_password
+														? "has-error"
+														: ""
+													: ""
+											}`}
+											{...register("ChangePasswordForm[confirm_password]", {
+												validate: (value) =>
+													value === password.current ||
+													"Confirm Password must be equal to New Password.",
+											})}
+										/>
+										{errors.ChangePasswordForm
+											? errors.ChangePasswordForm.confirm_password && (
+													<span style={{color: "#A94442"}}>
+														{errors.ChangePasswordForm.confirm_password.message}
+													</span>
+											  )
+											: ""}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
-                            <div className="col-xs-12 col-md-4">
-                                <div className="form-group">
-
-                                    <label className={`control-label ${errors.ChangePasswordForm ? errors.ChangePasswordForm.current_password ? "has-error-label" : "" : ""}`} >Current Password
-                                    </label>
-
-                                    <input type="password" defaultValue='' {...register("ChangePasswordForm[current_password]", { required: "Current Password cannot be blank." })}
-                                        className={`form-control ${errors.ChangePasswordForm ? errors.ChangePasswordForm.current_password ? "has-error" : "" : ""}`} />
-                                    <p>{errors.ChangePasswordForm ? errors.ChangePasswordForm.current_password && <span style={{ color: "#A94442" }}>{errors.ChangePasswordForm.current_password.message}</span> : ""}</p>
-                                </div>
-                            </div>
-
-                            <div className="col-xs-12 col-md-4">
-                                <div className="form-group">
-                                    <label className={`control-label ${errors.ChangePasswordForm ? errors.ChangePasswordForm.new_password ? "has-error-label" : "" : ""}`} >New Password
-                                    </label>
-                                    <input type="password" defaultValue='' {...register("ChangePasswordForm[new_password]", { required: "New Password cannot be blank." })} className={`form-control ${errors.ChangePasswordForm ? errors.ChangePasswordForm.new_password ? "has-error" : "" : ""}`} />
-                                    <p>{errors.ChangePasswordForm ? errors.ChangePasswordForm.new_password && <span style={{ color: "#A94442" }}>{errors.ChangePasswordForm.new_password.message}</span> : ""}</p>
-                                </div>
-                            </div>
-
-                            <div className="col-xs-12 col-md-4">
-                                <div className="form-group">
-                                    <label className={`control-label ${errors.ChangePasswordForm ? errors.ChangePasswordForm.confirm_password ? "has-error-label" : "" : ""}`} >Confirm Password
-                                    </label>
-                                    <input type="password" defaultValue='' className={`form-control ${errors.ChangePasswordForm ? errors.ChangePasswordForm.confirm_password ? "has-error" : "" : ""}`}  {...register("ChangePasswordForm[confirm_password]", {
-                                        validate: value =>
-                                            value === password.current || "Confirm Password must be equal to New Password."
-                                    })}
-                                    />
-                                    {errors.ChangePasswordForm ? errors.ChangePasswordForm.confirm_password && <span style={{ color: "#A94442" }}>{errors.ChangePasswordForm.confirm_password.message}</span> : ""}
-                                </div>
-                            </div>
-
-
-
-
-
-
-                        </div>
-
-
-
-                    </div>
-
-
-
-
-
-                </div>
-
-                <div class="row">
-                    <div class="col-12">
-                        <div class="m-3">
-                            <button type="button" class="btn btn-success mr-2" onClick={handleSubmitForm}>Change Password</button>
-                            <button type="button" class="btn btn-success mr-2" onClick={handleReset}>Reset</button>
-
-                        </div>
-                    </div>
-                </div>
-
-
-
-
-            </div>
-
-        </form>
-
-
-
-    )
+					<div className='row'>
+						<div className='col-12'>
+							<div className='m-3'>
+								<button
+									type='button'
+									className='btn btn-success mr-2'
+									onClick={handleSubmitForm}>
+									Change Password
+								</button>
+								<button
+									type='button'
+									className='btn btn-success mr-2'
+									onClick={handleReset}>
+									Reset
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		);
 }
 
 

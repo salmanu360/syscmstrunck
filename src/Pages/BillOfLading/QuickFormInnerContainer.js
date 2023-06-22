@@ -123,95 +123,122 @@ function QuickFormInnerContainer(props) {
 
     }
     return (
-        <div className="card  col-xs-12 col-md-12">
+			<div className='card  col-xs-12 col-md-12'>
+				<div className='card-body' style={{backgroundColor: "white"}}>
+					<div className='table_wrap'>
+						<div className='table_wrap_inner'>
+							<table
+								className='table table-bordered commontable innerChargesTable'
+								style={{width: "100%"}}
+								id={`innerChargesTable-${props.containerIndex}`}>
+								<thead>
+									<tr>
+										<th>Container Code</th>
+										<th>Seal Number</th>
+									</tr>
+								</thead>
+								<tbody>
+									{fields.map((item, index) => {
+										return (
+											<tr key={item.id}>
+												{item.innerContainerItem.map((item2, index2) => {
+													if (item2.inputType == "input") {
+														return (
+															<td className={item2.class}>
+																<input
+																	defaultValue=''
+																	{...register(
+																		"ContainerReleaseOrderHasContainer" +
+																			"[" +
+																			props.containerIndex +
+																			"][ContainerCode]" +
+																			"[" +
+																			index +
+																			"]" +
+																			"[" +
+																			item2.name +
+																			"]"
+																	)}
+																	className={`form-control ${
+																		item2.fieldClass ? item2.fieldClass : ""
+																	}`}
+																/>
+															</td>
+														);
+													}
 
-            <div className="card-body" style={{ "backgroundColor": "white" }}>
-
-                <div class="table_wrap">
-                    <div class="table_wrap_inner">
-                        <table className="table table-bordered commontable innerChargesTable" style={{ width: "100%" }} id={`innerChargesTable-${props.containerIndex}`}>
-                            <thead>
-                                <tr>
-                                    <th>Container Code</th>
-                                    <th>Seal Number</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                {fields.map((item, index) => {
-                                    return (
-                                        <tr key={item.id}>
-                                            {item.innerContainerItem.map((item2, index2) => {
-                                                if (item2.inputType == "input") {
-                                                    return (
-                                                        <td className={item2.class}>
-                                                            <input defaultValue=''  {...register("ContainerReleaseOrderHasContainer" + '[' + props.containerIndex + '][ContainerCode]' + "[" + index + "]" + "[" + item2.name + "]")} className={`form-control ${item2.fieldClass ? item2.fieldClass : ""}`} />
-                                                        </td>
-                                                    )
-                                                }
-
-                                                if (item2.inputType == "single-select") {
-
-                                                    return (
-                                                        <td className={item2.class}>
-
-                                                            <Controller
-                                                                name={("ContainerReleaseOrderHasContainer" + '[' + props.containerIndex + '][ContainerCode]' + "[" + index + "]" + "[" + item2.name + "]")}
-
-                                                                control={control}
-
-                                                                render={({ field: { onChange, value } }) => (
-                                                                    <Select
-                                                                        isClearable={true}
-                                                                        {...register("ContainerReleaseOrderHasContainer" + '[' + props.containerIndex + '][ContainerCode]' + "[" + index + "]" + "[" + item2.name + "]")}
-                                                                        value={value ? item2.options.find(c => c.value === value) : null}
-                                                                        onChange={val => { val == null ? onChange(null) : onChange(val.value); item2.onChange(val, index) }}
-                                                                        options={item2.options}
-                                                                        isOptionDisabled={(selectedValue) => selectedValue.selected == true}
-                                                                        menuPortalTarget={document.body}
-                                                                        className={`basic-single ${item2.fieldClass ? item2.fieldClass : ""}`}
-                                                                        classNamePrefix="select"
-                                                                        styles={globalContext.customStyles}
-
-                                                                    />
-                                                                )}
-                                                            />
-
-
-
-                                                        </td>
-                                                    )
-
-
-                                                }
-
-
-
-
-
-
-                                            })}
-                                        </tr>
-
-
-                                    )
-                                })}
-
-
-
-
-                            </tbody>
-
-
-
-                        </table>
-                    </div>
-                </div>
-
-
-            </div>
-        </div>
-    )
+													if (item2.inputType == "single-select") {
+														return (
+															<td className={item2.class}>
+																<Controller
+																	name={
+																		"ContainerReleaseOrderHasContainer" +
+																		"[" +
+																		props.containerIndex +
+																		"][ContainerCode]" +
+																		"[" +
+																		index +
+																		"]" +
+																		"[" +
+																		item2.name +
+																		"]"
+																	}
+																	control={control}
+																	render={({field: {onChange, value}}) => (
+																		<Select
+																			isClearable={true}
+																			{...register(
+																				"ContainerReleaseOrderHasContainer" +
+																					"[" +
+																					props.containerIndex +
+																					"][ContainerCode]" +
+																					"[" +
+																					index +
+																					"]" +
+																					"[" +
+																					item2.name +
+																					"]"
+																			)}
+																			value={
+																				value
+																					? item2.options.find(
+																							(c) => c.value === value
+																					  )
+																					: null
+																			}
+																			onChange={(val) => {
+																				val == null
+																					? onChange(null)
+																					: onChange(val.value);
+																				item2.onChange(val, index);
+																			}}
+																			options={item2.options}
+																			isOptionDisabled={(selectedValue) =>
+																				selectedValue.selected == true
+																			}
+																			menuPortalTarget={document.body}
+																			className={`basic-single ${
+																				item2.fieldClass ? item2.fieldClass : ""
+																			}`}
+																			classNamePrefix='select'
+																			styles={globalContext.customStyles}
+																		/>
+																	)}
+																/>
+															</td>
+														);
+													}
+												})}
+											</tr>
+										);
+									})}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
 }
 
 export default QuickFormInnerContainer

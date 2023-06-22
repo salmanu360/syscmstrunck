@@ -107,169 +107,234 @@ function BranchContact(props) {
     }
       
     return (
+			<div>
+				{fields.map((item, index) => {
+					return (
+						<div className='card' key={item.id}>
+							<div className='card-header'>
+								<h3 className='card-title'>Contact Details</h3>
+								<div className='card-tools'>
+									<button
+										type='button'
+										className='remove-contact btn btn-danger btn-xs'
+										onClick={() => remove(index)}>
+										<span
+											className='fa fa-times'
+											data-toggle='tooltip'
+											data-placement='top'
+											title='Remove'></span>
+									</button>
+									<button
+										type='button'
+										className='btn btn-tool'
+										data-card-widget='collapse'>
+										<i
+											className='fas fa-minus'
+											data-toggle='tooltip'
+											data-placement='top'
+											title='Collapse'></i>
+									</button>
+								</div>
+							</div>
+							<div className='card-body'>
+								<div className='row'>
+									<div className='col-xs-12 col-md-3'>
+										<div className='form-group'>
+											<label className='control-label'>First Name</label>
+											<input
+												defaultValue=''
+												{...register(
+													`CompanyContact[${props.BranchIndex}][${index}][CompanyContactUUID]`
+												)}
+												className={`form-control d-none`}
+											/>
+											<input
+												defaultValue=''
+												{...register(
+													`CompanyContact[${props.BranchIndex}][${index}][FirstName]`
+												)}
+												className={`form-control`}
+											/>
+										</div>
+									</div>
 
-        <div>
-            {fields.map((item, index) => {
+									<div className='col-xs-12 col-md-3'>
+										<div className='form-group'>
+											<label className='control-label'>Last Name</label>
 
-                return (
-                    <div className="card" key={item.id}>
-                        <div className="card-header">
-                            <h3 className="card-title">Contact  Details</h3>
-                            <div className="card-tools">
-                                <button type="button" className="remove-contact btn btn-danger btn-xs" onClick={() => remove(index)}><span
-                                    className="fa fa-times" data-toggle="tooltip" data-placement="top"
-                                    title="Remove"></span></button>
-                                <button type="button" className="btn btn-tool" data-card-widget="collapse">
-                                    <i className="fas fa-minus" data-toggle="tooltip" data-placement="top"
-                                        title="Collapse"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div className="card-body">
-                            <div className="row">
+											<input
+												defaultValue=''
+												{...register(
+													`CompanyContact[${props.BranchIndex}][${index}][LastName]`
+												)}
+												className={`form-control`}
+											/>
+										</div>
+									</div>
 
-                                <div className="col-xs-12 col-md-3">
-                                    <div className="form-group">
-                                        <label className="control-label">First Name</label>
-                                        <input defaultValue=''{...register(`CompanyContact[${props.BranchIndex}][${index}][CompanyContactUUID]`)} className={`form-control d-none`} />
-                                        <input defaultValue=''{...register(`CompanyContact[${props.BranchIndex}][${index}][FirstName]`)} className={`form-control`} />
-                                    </div>
-                                </div>
+									<div className='col-xs-12 col-md-1'>
+										<div className='form-group'>
+											<label className='control-label'>Title</label>
+											<Controller
+												name={`CompanyContact[${props.BranchIndex}][${index}][Title]`}
+												control={control}
+												render={({field: {onChange, value}}) => (
+													<Select
+														isClearable={true}
+														{...register(
+															`CompanyContact[${props.BranchIndex}][${index}][Title]`
+														)}
+														value={
+															value
+																? props.TitleOptions.find(
+																		(c) => c.value === value
+																  )
+																: null
+														}
+														onChange={(val) =>
+															val == null ? onChange(null) : onChange(val.value)
+														}
+														options={props.TitleOptions}
+														className='form-control title'
+														classNamePrefix='select'
+														styles={globalContext.customStyles}
+													/>
+												)}
+											/>
+										</div>
+									</div>
 
-                                <div className="col-xs-12 col-md-3">
-                                    <div className="form-group">
-                                        <label className="control-label">Last Name</label>
+									<div className='col-xs-12 col-md-1'>
+										<div className='form-group'>
+											<label className='control-label'>Gender</label>
+											<Controller
+												name={`CompanyContact[${props.BranchIndex}][${index}][Gender]`}
+												control={control}
+												render={({field: {onChange, value}}) => (
+													<Select
+														isClearable={true}
+														{...register(
+															`CompanyContact[${props.BranchIndex}][${index}][Gender]`
+														)}
+														value={
+															value
+																? props.GenderOptions.find(
+																		(c) => c.value === value
+																  )
+																: null
+														}
+														onChange={(val) =>
+															val == null ? onChange(null) : onChange(val.value)
+														}
+														options={props.GenderOptions}
+														className='form-control gender'
+														classNamePrefix='select'
+														styles={globalContext.customStyles}
+													/>
+												)}
+											/>
+										</div>
+									</div>
 
-                                        <input defaultValue=''{...register(`CompanyContact[${props.BranchIndex}][${index}][LastName]`)} className={`form-control`} />
-                                    </div>
-                                </div>
+									<div className='col-xs-12 col-md-2'>
+										<div className='form-group'>
+											<label className='control-label'>Department</label>
 
-                                <div className="col-xs-12 col-md-1">
-                                    <div className="form-group">
-                                        <label className="control-label" >Title
-                                        </label>
-                                        <Controller
-                                            name={`CompanyContact[${props.BranchIndex}][${index}][Title]`}
-                                            control={control}
-                                            render={({ field: { onChange, value } }) => (
-                                                <Select
-                                                    isClearable={true}
-                                                    {...register(`CompanyContact[${props.BranchIndex}][${index}][Title]`)}
-                                                    value={value ? props.TitleOptions.find(c => c.value === value) : null}
-                                                    onChange={val => val == null ? onChange(null) : onChange(val.value)}
-                                                    options={props.TitleOptions}
-                                                    className="form-control title"
-                                                    classNamePrefix="select"
-                                                    styles={globalContext.customStyles}
+											<input
+												defaultValue=''
+												{...register(
+													`CompanyContact[${props.BranchIndex}][${index}][Department]`
+												)}
+												className={`form-control`}
+											/>
+										</div>
+									</div>
 
-                                                />
-                                            )}
-                                        />
-                                    </div>
-                                </div>
+									<div className='col-xs-12 col-md-2'>
+										<div className='form-group'>
+											<label className='control-label'>Position</label>
 
-                                <div className="col-xs-12 col-md-1">
-                                    <div className="form-group">
-                                        <label className="control-label" >Gender
-                                        </label>
-                                        <Controller
-                                            name={`CompanyContact[${props.BranchIndex}][${index}][Gender]`}
-                                            control={control}
-                                            render={({ field: { onChange, value } }) => (
-                                                <Select
-                                                    isClearable={true}
-                                                    {...register(`CompanyContact[${props.BranchIndex}][${index}][Gender]`)}
-                                                    value={value ? props.GenderOptions.find(c => c.value === value) : null}
-                                                    onChange={val => val == null ? onChange(null) : onChange(val.value)}
-                                                    options={props.GenderOptions}
-                                                    className="form-control gender"
-                                                    classNamePrefix="select"
-                                                    styles={globalContext.customStyles}
+											<input
+												defaultValue=''
+												{...register(
+													`CompanyContact[${props.BranchIndex}][${index}][Position]`
+												)}
+												className={`form-control`}
+											/>
+										</div>
+									</div>
 
-                                                />
-                                            )}
-                                        />
-                                    </div>
-                                </div>
+									<div className='col-xs-12 col-md-2'>
+										<div className='form-group'>
+											<label className='control-label'>Tel</label>
 
-                                <div className="col-xs-12 col-md-2">
-                                    <div className="form-group">
-                                        <label className="control-label">Department</label>
+											<input
+												defaultValue=''
+												{...register(
+													`CompanyContact[${props.BranchIndex}][${index}][Tel]`
+												)}
+												className={`form-control`}
+											/>
+										</div>
+									</div>
 
-                                        <input defaultValue=''{...register(`CompanyContact[${props.BranchIndex}][${index}][Department]`)} className={`form-control`} />
-                                    </div>
-                                </div>
+									<div className='col-xs-12 col-md-2'>
+										<div className='form-group'>
+											<label className='control-label'>Fax</label>
 
-                                <div className="col-xs-12 col-md-2">
-                                    <div className="form-group">
-                                        <label className="control-label">Position</label>
+											<input
+												defaultValue=''
+												{...register(
+													`CompanyContact[${props.BranchIndex}][${index}][Fax]`
+												)}
+												className={`form-control`}
+											/>
+										</div>
+									</div>
 
-                                        <input defaultValue=''{...register(`CompanyContact[${props.BranchIndex}][${index}][Position]`)} className={`form-control`} />
-                                    </div>
-                                </div>
+									<div className='col-xs-12 col-md-2'>
+										<div className='form-group'>
+											<label className='control-label'>Email</label>
 
-                                <div className="col-xs-12 col-md-2">
-                                    <div className="form-group">
-                                        <label className="control-label">Tel</label>
+											<input
+												defaultValue=''
+												{...register(
+													`CompanyContact[${props.BranchIndex}][${index}][Email]`
+												)}
+												className={`form-control`}
+											/>
+										</div>
+									</div>
 
-                                        <input defaultValue=''{...register(`CompanyContact[${props.BranchIndex}][${index}][Tel]`)} className={`form-control`} />
-                                    </div>
-                                </div>
+									<div className='col-xs-12 col-md-6'>
+										<div className='form-group'>
+											<label className='control-label'>Remark</label>
 
-                                <div className="col-xs-12 col-md-2">
-                                    <div className="form-group">
-                                        <label className="control-label">Fax</label>
+											<input
+												defaultValue=''
+												{...register(
+													`CompanyContact[${props.BranchIndex}][${index}][Remark]`
+												)}
+												className={`form-control`}
+											/>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					);
+				})}
 
-                                        <input defaultValue=''{...register(`CompanyContact[${props.BranchIndex}][${index}][Fax]`)} className={`form-control`} />
-                                    </div>
-                                </div>
-
-                                <div className="col-xs-12 col-md-2">
-                                    <div className="form-group">
-                                        <label className="control-label">Email</label>
-
-                                        <input defaultValue=''{...register(`CompanyContact[${props.BranchIndex}][${index}][Email]`)} className={`form-control`} />
-                                    </div>
-                                </div>
-
-                                <div className="col-xs-12 col-md-6">
-                                    <div className="form-group">
-                                        <label className="control-label">Remark</label>
-
-                                        <input defaultValue=''{...register(`CompanyContact[${props.BranchIndex}][${index}][Remark]`)} className={`form-control`} />
-                                    </div>
-                                </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                )
-            })}
-
-
-
-
-            <button type="button" className="add-contact btn btn-success btn-xs mb-2 mt-2" onClick={() => { appendBranchContact() }} ><span class="fa fa-plus"></span>Add Branch Contact</button>
-
-
-        </div>
-
-    )
+				<button
+					type='button'
+					className='add-contact btn btn-success btn-xs mb-2 mt-2'
+					onClick={() => {
+						appendBranchContact();
+					}}>
+					<span className='fa fa-plus'></span>Add Branch Contact
+				</button>
+			</div>
+		);
 }
 
 export default BranchContact

@@ -240,221 +240,320 @@ function CompanyType(props) {
 
 
     return (
-        <div>
-            {fields.map((item, index2) => {
-                return (
-                    <div className="row CompanyTypeRow" key={item.id}>
-                        <div className="mt-4">
-                            <button type="button" className="remove-companytype btn btn-danger btn-xs" onClick={() => remove(index2)}><span className="fa fa-times"></span></button>
-                        </div>
-                        <div className="col-xs-12 col-md-2">
-                            <div className="form-group">
-                                <label className="control-label" >Company Type
-                                </label>
-                                <input defaultValue=''   {...register(`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][CompanyBranchHasCompanyTypeUUID]`)} className={`form-control d-none`} />
+			<div>
+				{fields.map((item, index2) => {
+					return (
+						<div className='row CompanyTypeRow' key={item.id}>
+							<div className='mt-4'>
+								<button
+									type='button'
+									className='remove-companytype btn btn-danger btn-xs'
+									onClick={() => remove(index2)}>
+									<span className='fa fa-times'></span>
+								</button>
+							</div>
+							<div className='col-xs-12 col-md-2'>
+								<div className='form-group'>
+									<label className='control-label'>Company Type</label>
+									<input
+										defaultValue=''
+										{...register(
+											`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][CompanyBranchHasCompanyTypeUUID]`
+										)}
+										className={`form-control d-none`}
+									/>
 
-                                <Controller
-                                    name={`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][CompanyType]`}
-                                    control={control}
-                                    defaultValue={defaultCompanyType}
-                                    render={({ field: { onChange, value } }) => (
-                                        <Select
-                                            isClearable={true}
-                                            {...register(`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][CompanyType]`)}
-                                            value={value ? props.CompanyTypeOptions.find(c => c.value === value) : null}
-                                            onMenuOpen={() => { handleOpenMenuCompanyType(props.CompanyTypeOptions, props.BranchIndex, index2) }}
-                                            isOptionDisabled={(selectedValue) => selectedValue.selected == true}
-                                            onChange={val => { val == null ? onChange(null) : onChange(val.value); handleChangeCompanyType(val, props.BranchIndex, index2) }}
-                                            options={props.CompanyTypeOptions}
-                                            className="form-control companyType"
-                                            classNamePrefix="select"
-                                            styles={globalContext.customStyles}
+									<Controller
+										name={`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][CompanyType]`}
+										control={control}
+										defaultValue={defaultCompanyType}
+										render={({field: {onChange, value}}) => (
+											<Select
+												isClearable={true}
+												{...register(
+													`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][CompanyType]`
+												)}
+												value={
+													value
+														? props.CompanyTypeOptions.find(
+																(c) => c.value === value
+														  )
+														: null
+												}
+												onMenuOpen={() => {
+													handleOpenMenuCompanyType(
+														props.CompanyTypeOptions,
+														props.BranchIndex,
+														index2
+													);
+												}}
+												isOptionDisabled={(selectedValue) =>
+													selectedValue.selected == true
+												}
+												onChange={(val) => {
+													val == null ? onChange(null) : onChange(val.value);
+													handleChangeCompanyType(
+														val,
+														props.BranchIndex,
+														index2
+													);
+												}}
+												options={props.CompanyTypeOptions}
+												className='form-control companyType'
+												classNamePrefix='select'
+												styles={globalContext.customStyles}
+											/>
+										)}
+									/>
+								</div>
+							</div>
 
-                                        />
-                                    )}
-                                />
-                            </div>
-                        </div>
+							<div className='col-xs-12 col-md-2'>
+								<div className='form-group'>
+									<label className='control-label'>Account Code</label>
 
-                        <div className="col-xs-12 col-md-2">
-                            <div className="form-group">
-                                <label className="control-label">Account Code</label>
+									<input
+										defaultValue=''
+										{...register(
+											`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][AccountCode]`
+										)}
+										className={`form-control`}
+									/>
+								</div>
+							</div>
 
-                                <input defaultValue=''   {...register(`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][AccountCode]`)} className={`form-control`} />
-                            </div>
-                        </div>
+							<div className='col-xs-12 col-md-2'>
+								<div className='form-group'>
+									<label className='control-label'>Business Nature</label>
+									<Controller
+										name={`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][BusinessNature][]`}
+										control={control}
+										render={({field: {onChange, value}}) => (
+											<Select
+												isClearable={true}
+												isMulti
+												name={`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][BusinessNature][]`}
+												value={
+													value
+														? Array.isArray(value)
+															? value.map((c) =>
+																	props.BusinessNatureOptions.find(
+																		(z) => z.value === c
+																	)
+															  )
+															: props.BusinessNatureOptions.find(
+																	(c) => c.value === value
+															  )
+														: null
+												}
+												onChange={(val) =>
+													val == null
+														? onChange(null)
+														: onChange(val.map((c) => c.value))
+												}
+												options={props.BusinessNatureOptions}
+												className='basic-multiple-select multipleBusinessNature'
+												classNamePrefix='select'
+												styles={globalContext.customStyles}
+											/>
+										)}
+									/>
+								</div>
+							</div>
 
+							<div
+								className={
+									getValues(
+										`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][CompanyType]`
+									) == "----customer"
+										? `col-xs-12 col-md-2 CompanyTypeCustomer Company-Type-Customer-${props.BranchIndex}-${index2}`
+										: `col-xs-12 col-md-2 CompanyTypeCustomer Company-Type-Customer-${props.BranchIndex}-${index2} d-none`
+								}>
+								<div className='form-group'>
+									<label className='control-label'>Customer Type</label>
+									<Controller
+										name={`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][CustomerType]`}
+										control={control}
+										render={({field: {onChange, value}}) => (
+											<Select
+												isClearable={true}
+												{...register(
+													`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][CustomerType]`
+												)}
+												value={
+													value
+														? props.CustomerTypeOptions.find(
+																(c) => c.value === value
+														  )
+														: null
+												}
+												onChange={(val) =>
+													val == null ? onChange(null) : onChange(val.value)
+												}
+												options={props.CustomerTypeOptions}
+												className='form-control customerType'
+												classNamePrefix='select'
+												styles={globalContext.customStyles}
+											/>
+										)}
+									/>
+								</div>
+							</div>
 
-                        <div className="col-xs-12 col-md-2">
-                            <div className="form-group">
-                                <label className="control-label">Business Nature</label>
-                                <Controller
-                                    name={`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][BusinessNature][]`}
-                                    control={control}
-                                    render={({ field: { onChange, value } }) => (
-                                        <Select
-                                            isClearable={true}
-                                            isMulti
-                                            name={`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][BusinessNature][]`}
-                                            value={
-                                                value
-                                                    ? Array.isArray(value)
-                                                        ? value.map((c) =>
-                                                            props.BusinessNatureOptions.find((z) => z.value === c)
-                                                        )
-                                                        : props.BusinessNatureOptions.find(
-                                                            (c) => c.value === value
-                                                        )
-                                                    : null
-                                            }
-                                            onChange={(val) =>
-                                                val == null
-                                                    ? onChange(null)
-                                                    : onChange(val.map((c) => c.value))
-                                            }
-                                            options={props.BusinessNatureOptions}
-                                            className="basic-multiple-select multipleBusinessNature"
-                                            classNamePrefix="select"
-                                            styles={globalContext.customStyles}
-                                        />
-                                    )}
-                                />
-                            </div>
-                        </div>
+							<div
+								className={
+									getValues(
+										`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][CompanyType]`
+									) == "----supplier"
+										? `col-xs-12 col-md-2 CompanyTypeSupplier Company-Type-Supplier-${props.BranchIndex}-${index2}`
+										: `col-xs-12 col-md-2 CompanyTypeSupplier Company-Type-Supplier-${props.BranchIndex}-${index2} d-none`
+								}>
+								<div className='form-group'>
+									<label className='control-label'>Supplier Type</label>
+									<Controller
+										name={`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][SupplierType]`}
+										control={control}
+										render={({field: {onChange, value}}) => (
+											<Select
+												isClearable={true}
+												{...register(
+													`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][SupplierType]`
+												)}
+												value={
+													value
+														? props.SupplierTypeOptions.find(
+																(c) => c.value === value
+														  )
+														: null
+												}
+												onChange={(val) =>
+													val == null ? onChange(null) : onChange(val.value)
+												}
+												options={props.SupplierTypeOptions}
+												className='form-control supplierType'
+												classNamePrefix='select'
+												styles={globalContext.customStyles}
+											/>
+										)}
+									/>
+								</div>
+							</div>
 
-                        <div className={getValues(`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][CompanyType]`) == "----customer" ?
-                            `col-xs-12 col-md-2 CompanyTypeCustomer Company-Type-Customer-${props.BranchIndex}-${index2}` :
-                            `col-xs-12 col-md-2 CompanyTypeCustomer Company-Type-Customer-${props.BranchIndex}-${index2} d-none`
-                        }>
-                            <div className="form-group">
-                                <label className="control-label" >Customer Type
-                                </label>
-                                <Controller
-                                    name={`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][CustomerType]`}
-                                    control={control}
-                                    render={({ field: { onChange, value } }) => (
-                                        <Select
-                                            isClearable={true}
-                                            {...register(`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][CustomerType]`)}
-                                            value={value ? props.CustomerTypeOptions.find(c => c.value === value) : null}
-                                            onChange={val => val == null ? onChange(null) : onChange(val.value)}
-                                            options={props.CustomerTypeOptions}
-                                            className="form-control customerType"
-                                            classNamePrefix="select"
-                                            styles={globalContext.customStyles}
+							<div
+								className={
+									getValues(
+										`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][CompanyType]`
+									) == "----boxoperator"
+										? `col-xs-12 col-md-2 CompanyTypeBoxOpCode Company-Type-BoxOpCode-${props.BranchIndex}-${index2}`
+										: `col-xs-12 col-md-2 CompanyTypeBoxOpCode Company-Type-BoxOpCode-${props.BranchIndex}-${index2} d-none`
+								}>
+								<div className='form-group'>
+									<label className='control-label'>Box Operator</label>
 
-                                        />
-                                    )}
-                                />
-                            </div>
-                        </div>
+									<input
+										defaultValue=''
+										{...register(
+											`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][BoxOpCode]`
+										)}
+										className={`form-control`}
+									/>
+								</div>
+							</div>
 
-                        <div className={getValues(`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][CompanyType]`) == "----supplier" ?
-                            `col-xs-12 col-md-2 CompanyTypeSupplier Company-Type-Supplier-${props.BranchIndex}-${index2}` :
-                            `col-xs-12 col-md-2 CompanyTypeSupplier Company-Type-Supplier-${props.BranchIndex}-${index2} d-none`
-                        }>
-                            <div className="form-group">
-                                <label className="control-label" >Supplier Type
-                                </label>
-                                <Controller
-                                    name={`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][SupplierType]`}
-                                    control={control}
-                                    render={({ field: { onChange, value } }) => (
-                                        <Select
-                                            isClearable={true}
-                                            {...register(`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][SupplierType]`)}
-                                            value={value ? props.SupplierTypeOptions.find(c => c.value === value) : null}
-                                            onChange={val => val == null ? onChange(null) : onChange(val.value)}
-                                            options={props.SupplierTypeOptions}
-                                            className="form-control supplierType"
-                                            classNamePrefix="select"
-                                            styles={globalContext.customStyles}
+							<div
+								className={
+									getValues(
+										`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][CompanyType]`
+									) == "----shipoperator"
+										? `col-xs-12 col-md-2 CompanyTypeShipOpCode Company-Type-ShipOpCode-${props.BranchIndex}-${index2}`
+										: `col-xs-12 col-md-2 CompanyTypeShipOpCode Company-Type-ShipOpCode-${props.BranchIndex}-${index2} d-none`
+								}>
+								<div className='form-group'>
+									<label className='control-label'>Ship Operator</label>
 
-                                        />
-                                    )}
-                                />
-                            </div>
-                        </div>
+									<input
+										defaultValue=''
+										{...register(
+											`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][ShipOpCode]`
+										)}
+										className={`form-control`}
+									/>
+								</div>
+							</div>
 
+							<div
+								className={
+									getValues(
+										`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][CompanyType]`
+									) == "----shipoperator" ||
+									getValues(
+										`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][CompanyType]`
+									) == "----boxoperator"
+										? `col-xs-12 col-md-2 CompanyTypePort Company-Type-Port-${props.BranchIndex}-${index2}`
+										: `col-xs-12 col-md-2 CompanyTypePort Company-Type-Port-${props.BranchIndex}-${index2} d-none`
+								}>
+								<div className='form-group'>
+									<label className='control-label'>Port</label>
+									<Controller
+										name={`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][Port][]`}
+										control={control}
+										render={({field: {onChange, value}}) => (
+											<Select
+												isClearable={true}
+												isMulti
+												onMenuOpen={() => {
+													handleOpenMenuPort(
+														props.PortCodeOptions,
+														props.BranchIndex,
+														index2,
+														value
+													);
+												}}
+												isOptionDisabled={(selectedValue) =>
+													selectedValue.selected == true
+												}
+												name={`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][Port][]`}
+												value={
+													value
+														? Array.isArray(value)
+															? value.map((c) =>
+																	props.PortCodeOptions.find(
+																		(z) => z.value === c
+																	)
+															  )
+															: props.PortCodeOptions.find(
+																	(c) => c.value === value
+															  )
+														: null
+												}
+												onChange={(val) =>
+													val == null
+														? onChange(null)
+														: onChange(val.map((c) => c.value))
+												}
+												options={props.PortCodeOptions}
+												className='basic-multiple-select companyHasPort'
+												classNamePrefix='select'
+												styles={globalContext.customStyles}
+											/>
+										)}
+									/>
+								</div>
+							</div>
+						</div>
+					);
+				})}
 
-                        <div className={getValues(`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][CompanyType]`) == "----boxoperator" ?
-                            `col-xs-12 col-md-2 CompanyTypeBoxOpCode Company-Type-BoxOpCode-${props.BranchIndex}-${index2}` :
-                            `col-xs-12 col-md-2 CompanyTypeBoxOpCode Company-Type-BoxOpCode-${props.BranchIndex}-${index2} d-none`
-                        }>
-                            <div className="form-group">
-                                <label className="control-label">Box Operator</label>
-
-                                <input defaultValue=''   {...register(`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][BoxOpCode]`)} className={`form-control`} />
-                            </div>
-                        </div>
-
-                        <div className={getValues(`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][CompanyType]`) == "----shipoperator" ?
-                            `col-xs-12 col-md-2 CompanyTypeShipOpCode Company-Type-ShipOpCode-${props.BranchIndex}-${index2}` :
-                            `col-xs-12 col-md-2 CompanyTypeShipOpCode Company-Type-ShipOpCode-${props.BranchIndex}-${index2} d-none`
-                        }>
-
-                            <div className="form-group">
-                                <label className="control-label">Ship Operator</label>
-
-                                <input defaultValue=''   {...register(`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][ShipOpCode]`)} className={`form-control`} />
-                            </div>
-                        </div>
-
-                        <div className={getValues(`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][CompanyType]`) == "----shipoperator" || getValues(`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][CompanyType]`) == "----boxoperator" ?
-                            `col-xs-12 col-md-2 CompanyTypePort Company-Type-Port-${props.BranchIndex}-${index2}` :
-                            `col-xs-12 col-md-2 CompanyTypePort Company-Type-Port-${props.BranchIndex}-${index2} d-none`
-                        }>
-                            <div className="form-group">
-                                <label className="control-label">Port</label>
-                                <Controller
-                                    name={`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][Port][]`}
-                                    control={control}
-                                    render={({ field: { onChange, value } }) => (
-                                        <Select
-                                            isClearable={true}
-                                            isMulti
-                                            onMenuOpen={() => { handleOpenMenuPort(props.PortCodeOptions, props.BranchIndex, index2, value) }}
-                                            isOptionDisabled={(selectedValue) => selectedValue.selected == true}
-                                            name={`CompanyBranchHasCompanyType[${props.BranchIndex}][${index2}][Port][]`}
-                                            value={
-                                                value
-                                                    ? Array.isArray(value)
-                                                        ? value.map((c) =>
-                                                            props.PortCodeOptions.find((z) => z.value === c)
-                                                        )
-                                                        : props.PortCodeOptions.find(
-                                                            (c) => c.value === value
-                                                        )
-                                                    : null
-                                            }
-                                            onChange={(val) =>
-                                                val == null
-                                                    ? onChange(null)
-                                                    : onChange(val.map((c) => c.value))
-                                            }
-                                            options={props.PortCodeOptions}
-                                            className="basic-multiple-select companyHasPort"
-                                            classNamePrefix="select"
-                                            styles={globalContext.customStyles}
-                                        />
-                                    )}
-                                />
-                            </div>
-                        </div>
-
-                    </div>
-
-                )
-            })}
-
-
-
-
-            <button type="button" className="add-company-type btn btn-success btn-xs mb-2 mt-2" onClick={() => { appendCompanyType() }} ><span class="fa fa-plus"></span>Add Company Type</button>
-
-
-        </div>
-    )
+				<button
+					type='button'
+					className='add-company-type btn btn-success btn-xs mb-2 mt-2'
+					onClick={() => {
+						appendCompanyType();
+					}}>
+					<span className='fa fa-plus'></span>Add Company Type
+				</button>
+			</div>
+		);
 }
 
 export default CompanyType

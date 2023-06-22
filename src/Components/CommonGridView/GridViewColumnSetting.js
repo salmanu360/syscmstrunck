@@ -41,86 +41,104 @@ const GridViewColumnSetting = (value) => {
     var NoInvoiceDue = true;
     var actionButtons = ""
     if (value == "delivery-order" || value == "delivery-order-barge") {
-      if (row.BLStatus == "Generated") {
-        actionButtons += '<a title="Generated"><i class="fa fa-external-link-square-alt" style="color:rgba(30,123,53)"></i></a> ';
-      }
-      else if (row.BLStatus == "Ready") {
-        actionButtons += '<a title="Ready"><i class="fa fa-check" style="color:rgba(30,123,53)"></i></a> ';
-      }
+			if (row.BLStatus == "Generated") {
+				actionButtons +=
+					'<a title="Generated"><i className="fa fa-external-link-square-alt" style="color:rgba(30,123,53)"></i></a> ';
+			} else if (row.BLStatus == "Ready") {
+				actionButtons +=
+					'<a title="Ready"><i className="fa fa-check" style="color:rgba(30,123,53)"></i></a> ';
+			}
 
-      if (row.SalesInvoiceDocNums !== null) {
-        actionButtons += '<a title="Invoice"><i class="fa fa-file-invoice-dollar"  style="color:rgba(30,123,53)"></i></a> ';
-      }
-      if (SalesinvoiceOwe != undefined) {
-        var arraySalesinvoiceOwe = SalesinvoiceOwe.split(",")
-        window.$.each(arraySalesinvoiceOwe, function (key, value) {
-          if (value > 0) {
-            if (ExistCreditLimit == 1) {
-              actionButtons += '<a title="Invoice Due & Reached Credit Limit"><i class="fas fa-exclamation" style="color:rgba(255,0,0)"></i></a> ';
-              NoInvoiceDue = false;
-              return false;
-            } else {
-              actionButtons += '<a title="Invoice Due"><i class="fas fa-exclamation" style="color:rgba(255,0,0)"></i></a> ';
-              NoInvoiceDue = false;
-              return false;
-            }
-          }
-        })
-      }
-      if (SalesinvoiceOwe == undefined || SalesinvoiceOwe == "0.0000" && NoInvoiceDue == true) {
-        if (ExistCreditLimit == 1) {
-          actionButtons += '<a title="Reached Credit Limit"><i class="fas fa-exclamation" style="color:rgba(255,0,0)"></i></a> ';
-        }
-      }
-    }
+			if (row.SalesInvoiceDocNums !== null) {
+				actionButtons +=
+					'<a title="Invoice"><i className="fa fa-file-invoice-dollar"  style="color:rgba(30,123,53)"></i></a> ';
+			}
+			if (SalesinvoiceOwe != undefined) {
+				var arraySalesinvoiceOwe = SalesinvoiceOwe.split(",");
+				window.$.each(arraySalesinvoiceOwe, function (key, value) {
+					if (value > 0) {
+						if (ExistCreditLimit == 1) {
+							actionButtons +=
+								'<a title="Invoice Due & Reached Credit Limit"><i className="fas fa-exclamation" style="color:rgba(255,0,0)"></i></a> ';
+							NoInvoiceDue = false;
+							return false;
+						} else {
+							actionButtons +=
+								'<a title="Invoice Due"><i className="fas fa-exclamation" style="color:rgba(255,0,0)"></i></a> ';
+							NoInvoiceDue = false;
+							return false;
+						}
+					}
+				});
+			}
+			if (
+				SalesinvoiceOwe == undefined ||
+				(SalesinvoiceOwe == "0.0000" && NoInvoiceDue == true)
+			) {
+				if (ExistCreditLimit == 1) {
+					actionButtons +=
+						'<a title="Reached Credit Limit"><i className="fas fa-exclamation" style="color:rgba(255,0,0)"></i></a> ';
+				}
+			}
+		}
 
+		if (value !== "delivery-order" && value !== "delivery-order-barge") {
+			if (row.VerificationStatus == "Approved") {
+				actionButtons +=
+					'<a title="Verify"><i className="fa fa-user-check" style="color:rgba(30,123,53)"></i></a> ';
+			} else if (row.VerificationStatus == "Rejected") {
+				actionButtons +=
+					'<a title="Rejected"><i className="fa fa-ban" style="color:red"></i></a> ';
+			}
+		}
 
-    if (value !== "delivery-order" && value !== "delivery-order-barge") {
-      if (row.VerificationStatus == "Approved") {
-        actionButtons += '<a title="Verify"><i class="fa fa-user-check" style="color:rgba(30,123,53)"></i></a> ';
-      }
-      else if (row.VerificationStatus == "Rejected") {
-        actionButtons += '<a title="Rejected"><i class="fa fa-ban" style="color:red"></i></a> ';
-      }
-    }
+		if (row.TelexRelease == "1") {
+			actionButtons +=
+				'<a title="Telex Release"><i className="fa fa-share-square" style="color:rgba(30,123,53)"></i></a> ';
+		}
+		if (value !== "delivery-order" && value !== "delivery-order-barge") {
+			if (
+				row.SalesInvoiceDocNums !== null &&
+				row.SalesInvoiceDocNums !== undefined
+			) {
+				actionButtons +=
+					'<a title="Invoice"><i className="fa fa-file-invoice-dollar"  style="color:rgba(30,123,53)"></i></a> ';
+			}
+		}
+		if (value !== "delivery-order" && value !== "delivery-order-barge") {
+			if (row.Nomination !== null && row.Nomination !== undefined) {
+				actionButtons +=
+					'<a title="Nomination"><i className="fa fa-user-friends" style="color:rgba(30,123,53)"></i></a> ';
+			}
 
-    if (row.TelexRelease == "1") {
-      actionButtons += '<a title="Telex Release"><i class="fa fa-share-square" style="color:rgba(30,123,53)"></i></a> ';
-    }
-    if (value !== "delivery-order" && value !== "delivery-order-barge") {
-      if (row.SalesInvoiceDocNums !== null && row.SalesInvoiceDocNums !== undefined) {
-        actionButtons += '<a title="Invoice"><i class="fa fa-file-invoice-dollar"  style="color:rgba(30,123,53)"></i></a> ';
-      }
-    }
-    if (value !== "delivery-order" && value !== "delivery-order-barge") {
-      if (row.Nomination !== null && row.Nomination !== undefined) {
-        actionButtons += '<a title="Nomination"><i class="fa fa-user-friends" style="color:rgba(30,123,53)"></i></a> ';
-      }
+			if (row.MergeParent !== null && row.MergeParent !== undefined) {
+				actionButtons +=
+					'<a title="Merge"><i className="far fa-object-group" style="color:rgba(30,123,53)"></i></a> ';
+			}
 
-      if (row.MergeParent !== null && row.MergeParent !== undefined) {
-        actionButtons += '<a title="Merge"><i class="far fa-object-group" style="color:rgba(30,123,53)"></i></a> ';
-      }
+			if (row.SplitParent !== null && row.SplitParent !== undefined) {
+				actionButtons +=
+					'<a title="Split"><i className="far fa-object-ungroup" style="color:rgba(30,123,53)"></i></a> ';
+			}
+		}
+		if (row.VoyageUpdatedAt !== undefined) {
+			// if (CheckThirdParty) {
+			//   if (row.VoyageUpdatedAt !== null && row.VoyageCheckAt == null) {
 
-      if (row.SplitParent !== null && row.SplitParent !== undefined) {
-        actionButtons += '<a title="Split"><i class="far fa-object-ungroup" style="color:rgba(30,123,53)"></i></a> ';
-      }
-    }
-    if (row.VoyageUpdatedAt !== undefined) {
-      // if (CheckThirdParty) {
-      //   if (row.VoyageUpdatedAt !== null && row.VoyageCheckAt == null) {
-
-      //     actionButtons += '<a title="Voyge Delay"><i class="fa fa-ship" style="color:orange"></i></a> ';
-      //   }
-      // }
-      // else {
-      if (value !== "delivery-order" && value !== "delivery-order-barge") {
-        if (row.VoyageUpdatedAt !== null && row.VoyageCheckAt == null) {
-          actionButtons += '<a href="./update/id=' + row.id + '&D=1"  "title="Voyage Delay"><i class="fa fa-ship" style="color:orange"></i></a> ';
-        }
-      }
-      // }
-
-    }
+			//     actionButtons += '<a title="Voyge Delay"><i className="fa fa-ship" style="color:orange"></i></a> ';
+			//   }
+			// }
+			// else {
+			if (value !== "delivery-order" && value !== "delivery-order-barge") {
+				if (row.VoyageUpdatedAt !== null && row.VoyageCheckAt == null) {
+					actionButtons +=
+						'<a href="./update/id=' +
+						row.id +
+						'&D=1"  "title="Voyage Delay"><i className="fa fa-ship" style="color:orange"></i></a> ';
+				}
+			}
+			// }
+		}
 
 
 

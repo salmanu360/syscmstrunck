@@ -1277,34 +1277,100 @@ function NestedTableNestedChargesINV(props) {
                                                         }
                                                         if(item2.inputType == "select-withCurrencyModal"){
                                                             return (
-                                                                <td className={item2.class}>
-                                                                    <div class="input-group">
-                                                                        <div className="row">
-                                                                            <Controller
-                                                                                name={(`${props.formName}HasContainerType`+'['+props.containerIndex+']'+`[${props.formName}HasCharges][${index}][${item2.name}]`)}
-
-                                                                                control={control}
-
-                                                                                render={({ field: { onChange, value } }) => (
-                                                                                    <Select
-                                                                                        isClearable={true}
-                                                                                        {...register(`${props.formName}HasContainerType`+'['+props.containerIndex+']'+`[${props.formName}HasCharges][${props.chargesIndex}][NestedCharges][${index}][${item2.name}]`)}
-                                                                                        value={value ? item2.options.find(c => c.value === value) : null}
-                                                                                        onChange={val => { val == null ? onChange(null) : onChange(val.value); item2.onChange(val,index)}}
-                                                                                        options={item2.options}
-                                                                                        menuPortalTarget={document.body}
-                                                                                        isOptionDisabled={(selectedValue) => selectedValue.selected == true}
-                                                                                        className={`basic-single ${item2.fieldClass ? item2.fieldClass : ""}`}
-                                                                                        classNamePrefix="select"
-                                                                                        onKeyDown={handleKeydown}
-                                                                                        styles={props.globalContext.customStyles}
-                                                                                    />
-                                                                                )}
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                            )
+																															<td
+																																className={
+																																	item2.class
+																																}>
+																																<div className='input-group'>
+																																	<div className='row'>
+																																		<Controller
+																																			name={
+																																				`${props.formName}HasContainerType` +
+																																				"[" +
+																																				props.containerIndex +
+																																				"]" +
+																																				`[${props.formName}HasCharges][${index}][${item2.name}]`
+																																			}
+																																			control={
+																																				control
+																																			}
+																																			render={({
+																																				field: {
+																																					onChange,
+																																					value,
+																																				},
+																																			}) => (
+																																				<Select
+																																					isClearable={
+																																						true
+																																					}
+																																					{...register(
+																																						`${props.formName}HasContainerType` +
+																																							"[" +
+																																							props.containerIndex +
+																																							"]" +
+																																							`[${props.formName}HasCharges][${props.chargesIndex}][NestedCharges][${index}][${item2.name}]`
+																																					)}
+																																					value={
+																																						value
+																																							? item2.options.find(
+																																									(
+																																										c
+																																									) =>
+																																										c.value ===
+																																										value
+																																							  )
+																																							: null
+																																					}
+																																					onChange={(
+																																						val
+																																					) => {
+																																						val ==
+																																						null
+																																							? onChange(
+																																									null
+																																							  )
+																																							: onChange(
+																																									val.value
+																																							  );
+																																						item2.onChange(
+																																							val,
+																																							index
+																																						);
+																																					}}
+																																					options={
+																																						item2.options
+																																					}
+																																					menuPortalTarget={
+																																						document.body
+																																					}
+																																					isOptionDisabled={(
+																																						selectedValue
+																																					) =>
+																																						selectedValue.selected ==
+																																						true
+																																					}
+																																					className={`basic-single ${
+																																						item2.fieldClass
+																																							? item2.fieldClass
+																																							: ""
+																																					}`}
+																																					classNamePrefix='select'
+																																					onKeyDown={
+																																						handleKeydown
+																																					}
+																																					styles={
+																																						props
+																																							.globalContext
+																																							.customStyles
+																																					}
+																																				/>
+																																			)}
+																																		/>
+																																	</div>
+																																</div>
+																															</td>
+																														);
                                                         }
 
                                                         if (item2.inputType == "input-Modal") {

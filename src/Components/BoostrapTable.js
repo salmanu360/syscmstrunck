@@ -1291,1885 +1291,2965 @@ function BoostrapTable(props) {
     window.$('#PreviewPdfORModal').modal("toggle")
   })
 
-  window.$("#split").off('click').on('click', function () {
-    var object = {}
-    object[props.selectedId] = selections
-    if (selections.length == 1) {
-      if (props.title == "booking-reservation") {
-        GetBookingReservationsContainers(props.host, props.tableId, selections[0]).then(res => {
-          window.$(".splitParentIdBR").val(res.data.SplitParent)
-          window.$(".containerList").empty();
-          var containerLength = 0
-          window.$.each(res.data.BookingReservationHasContainerTypes, function (key, value) {
-            if (value.BookingReservationHasContainers) {
-              containerLength += value.BookingReservationHasContainers.length
-            }
-            window.$.each(value.BookingReservationHasContainers, function (key2, value2) {
-              var Container_Code = value2.ContainerCode ? value2.ContainerCodeName : ""
-              var Container_Type = value.ContainerType ? value.ContainerTypeName : ""
-              var Container_CodeUUID = value2.ContainerCode ? value2.ContainerCode : ""
-              var Container_TypeUUID = value.ContainerType ? value.BookingReservationHasContainerTypeUUID : ""
-              window.$(".containerList").append(`<tr><td class='d-none containerUUID'>${Container_CodeUUID}</td><td class='checkbox' style="text-align:center;vertical-align: middle;"><input type='checkbox' class='checkboxSplit' name='Split'></td><td class='containerCodeSplit' style="text-align:center;vertical-align: middle;">${Container_Code}<input type='hidden' value ='${Container_CodeUUID}'/></td><td class='containerTypeSplit' style="text-align:center;vertical-align: middle;">${Container_Type}<input type='hidden' value ='${Container_TypeUUID}'/></td></tr>`);
-            })
-
-          })
-          if (containerLength <= 1) {
-            window.$("#confirmSplitBR").prop("disabled", true)
-          } else {
-            window.$("#confirmSplitBR").prop("disabled", false)
-          }
-        })
-        window.$('#SplitModalBR').modal("toggle")
-      } else {
-        GetBillOfLadingContainers(props.host, props.tableId, selections[0]).then(res => {
-          var containerLength = res.data.billOfLadingHasContainers.length
-          window.$(".splitParentId").val(res.data.SplitParent)
-          window.$(".containerList").empty();
-          window.$.each(res.data.billOfLadingHasContainers, function (key, value) {
-            var Container_Code = value.ContainerCode ? value.containerCode.ContainerCode : ""
-            var Container_Type = value.ContainerType ? value.containerType.ContainerType : ""
-            if (containerLength == 1) {
-              window.$(".containerList").append(`<tr><td class='d-none containerUUID'>${value.BillOfLadingHasContainerUUID}</td><td><input type='checkbox' disabled class='checkboxSplit' name='Split'></td><td><input type='checkbox' class='checkboxShare' name='Share'><td>${Container_Code}</td><td>${Container_Type}</td></tr>`);
-            } else {
-              window.$(".containerList").append(`<tr><td class='d-none containerUUID'>${value.BillOfLadingHasContainerUUID}</td><td><input type='checkbox' class='checkboxSplit' name='Split'></td><td><input type='checkbox' class='checkboxShare' name='Share'><td>${Container_Code}</td><td>${Container_Type}</td></tr>`);
-            }
-
-          })
-        })
-        window.$('#SplitModal').modal("toggle")
-      }
-    }
-
-  });
-
-  window.$("#merge").off('click').on('click', function () {
-    var object = {}
-    object[props.selectedId] = selections
-    if (selections.length == 1) {
-      if (props.title == "booking-reservation") {
-        GetMergeBRList(selectedRow[0].BookingReservationUUID, props.host, selectedRow[0].POLPortCode, selectedRow[0].PODPortCode, selectedRow[0].VoyageNum, selectedRow[0].Quotation).then(res => {
-          var htmlBLList = "<option value=''>Select...</option>";
-          window.$.each(res.data.data, function (key, value) {
-            htmlBLList += "<option value='" + key + "'>" + value + "</option>";
-
-          })
-          window.$(".MergeBR").html(htmlBLList)
-          window.$(".MergeBR").select2({ width: '100%' })
-
-        })
-        window.$('#MergeModalBR').modal("toggle")
-      }
-      else {
-        GetMergeBLList(selectedRow[0].BillOfLadingUUID, props.host, selectedRow[0].POLPortCode, selectedRow[0].PODPortCode, selectedRow[0].VoyageNum).then(res => {
-          var htmlBLList = "<option value=''>Select...</option>";
-          window.$.each(res.data.data, function (key, value) {
-            htmlBLList += "<option value='" + value.BillOfLadingUUID + "'>" + value.DocNum + "</option>";
-
-          })
-          window.$(".MergeBL").html(htmlBLList)
-          window.$(".MergeBL").select2({ width: '100%' })
-
-        })
-        window.$('#MergeModal').modal("toggle")
-      }
-    }
-  });
-
-  window.$("#revertSplit").off('click').on('click', function () {
-
-    window.$('#RevertSplitModal').modal("toggle")
-
-  });
-
-  window.$("#dndButton").off('click').on('click', function () {
-
-    window.$('#DNDModal').modal("toggle")
-
-  });
-
-  window.$(".SubmitDND").off('click').on('click', function () {
-    var applyDND = window.$(".DNDApplyCheckBox").prop("checked") ? "1" : "0"
-    var dndCombind = window.$(".DNDConbindorNot").prop("checked") ? "1" : "0"
-    var dndCombindDay = window.$(`#${props.title}-quickform-dndcombinedday`).val()
-    var detention = window.$(`#${props.title}-quickform-detention`).val()
-    var demurrage = window.$(`#${props.title}-quickform-demurrage`).val()
-
-
-    var dataList = {
-      ApplyDND: applyDND,
-      DNDCombined: dndCombind,
-      DNDCombinedDay: dndCombindDay,
-      Detention: detention,
-      Demurrage: demurrage,
-      Type: props.selectedId,
-      Selection: selections
-    }
-
-
-    GetUpdateDND(dataList, props.title, props.host).then(res => {
-      ToastNotify("success", "DND Update Successfully")
-      window.$("#" + props.tableSelector).bootstrapTable('refresh')
-      window.$("#" + props.tableSelector).bootstrapTable('uncheckAll')
-    })
-
-  });
-
-  window.$("#confirmSplitBL").off('click').on('click', function () {
-    if (filteredAp.includes(`create-${tempModel}`) && filteredAp.includes(`split-${tempModel}`)) {
-      var arraySplit = [];
-      var arrayShare = [];
-      var BillOfLadingUUID = selections[0];
-      window.$("#split-container-table").find(".checkboxSplit:checked").each(function () {
-        arraySplit.push(window.$(this).parent().parent().find(".containerUUID").text());
-      });
-      window.$("#split-container-table").find(".checkboxShare:checked").each(function () {
-        arrayShare.push(window.$(this).parent().parent().find(".containerUUID").text());
-      });
-      var SplitID = arraySplit.join(',');
-      var ShareID = arrayShare.join(',');
-      if (window.$(".splitParentId").val() == "") {
-        if (arraySplit.length !== 0 || arrayShare.length !== 0) {
-          props.navigate(props.routeName + '/split/splitid=' + SplitID + "&shareid=" + ShareID + "&id=" + BillOfLadingUUID, { state: { bLId: BillOfLadingUUID, shareID: ShareID, splitID: SplitID, formType: "SplitBL" } })
-          // window.location.href = "./create2?SplitID=" + SplitID + "&ShareID=" + ShareID + "&BillOfLadingID=" + BillOfLadingUUID + "";
-        }
-      }
-      else {
-        if (arrayShare.length !== 0) {
-          SplitID = ""
-          props.navigate(props.routeName + '/split/splitid=' + SplitID + "&shareid=" + ShareID + "&id=" + BillOfLadingUUID, { state: { bLId: BillOfLadingUUID, shareID: ShareID, splitID: SplitID, formType: "SplitBL" } })
-          // window.location.href = "./create2?SplitID=" + SplitID + "&ShareID=" + ShareID + "&BillOfLadingID=" + BillOfLadingUUID + "";
-        }
-        else {
-          alert("Split record cannot perform split action again.Please use revert feature")
-        }
-      }
-      window.$('#SplitModal').modal("toggle")
-
-    } else {
-      alert("You are not allowed to perform Split, Please check your Permission.")
-    }
-
-
-  })
-
-  window.$("#confirmSplitBR").off('click').on('click', function () {
-    if (filteredAp.includes(`create-${tempModel}`) && filteredAp.includes(`split-${tempModel}`)) {
-      var arraySplitContainer = [];
-      var arraySplitContainerType = [];
-      var BookingReservationUUID = selections[0]
-      window.$("#split-container-tableBR").find(".checkboxSplit:checked").each(function () {
-        arraySplitContainer.push(window.$(this).parent().parent().find(".containerUUID").text());
-        arraySplitContainerType.push(window.$(this).parent().parent().find(".containerTypeSplit").find(":hidden").val());
-      });
-      var SplitID = arraySplitContainer.join(',');
-      var ContainerTypeID = arraySplitContainerType.join(',');
-
-
-
-      if (window.$(".splitParentIdBR").val() == "") {
-        if (arraySplitContainer.length !== 0) {
-
-          var data = { id: BookingReservationUUID, containerTypeID: ContainerTypeID, splitID: SplitID }
-          getSplitDataBR(data, props.host).then(res => {
-            if (res.data.message) {
-              ToastNotify("error", res.data.message)
-            } else {
-              window.$('#SplitModalBR').modal("toggle")
-              props.navigate('/' + props.routeName + '/split/splitid=' + ContainerTypeID + "&id=" + BookingReservationUUID + "&containerid=" + SplitID, { state: { id: BookingReservationUUID, containerTypeID: ContainerTypeID, splitID: SplitID, formType: "SplitBR" } })
-            }
-
-          })
-
-        }
-      }
-    } else {
-      alert("You are not allowed to perform Split, Please check your Permission.")
-    }
-
-  })
-
-
-  window.$("#confirmMergeBL").off('click').on('click', function () {
-    if (filteredAp.includes(`update-${tempModel}`) && filteredAp.includes(`merge-${tempModel}`)) {
-      var MergedIDs = ""
-      if (window.$(".MergeBL").val().length > 0) {
-        MergedIDs = window.$(".MergeBL").val().join(',')
-      }
-      window.$('#MergeModal').modal("toggle")
-      props.navigate(props.routeName + '/merge/id=' + selectedRow[0].BillOfLadingUUID + '&mergeid=' + MergedIDs, { state: { bLId: selectedRow[0].BillOfLadingUUID, mergeIDs: MergedIDs, formType: "MergeBL" } })
-
-    } else {
-      alert("You are not allowed to perform Merge, Please check your Permission.")
-    }
-
-
-  })
-
-  window.$("#confirmMergeBR").off('click').on('click', function () {
-    if (filteredAp.includes(`update-${tempModel}`) && filteredAp.includes(`merge-${tempModel}`)) {
-      var MergedIDs = ""
-      if (window.$(".MergeBR").val().length > 0) {
-        MergedIDs = window.$(".MergeBR").val().join(',')
-      }
-      var data = { id: selectedRow[0].BookingReservationUUID, mergeIDs: MergedIDs }
-      GetMergeBR(data, props.host, MergedIDs).then(res => {
-        if (res.data.message) {
-          ToastNotify("error", res.data.message)
-        } else {
-          window.$('#MergeModalBR').modal("toggle")
-          props.navigate(props.routeName + '/merge/id=' + selectedRow[0].BookingReservationUUID + '&mergeid=' + MergedIDs, { state: { id: selectedRow[0].BookingReservationUUID, mergeIDs: MergedIDs, formType: "MergeBR" } })
-        }
-
-      })
-
-    } else {
-      alert("You are not allowed to perform Merge, Please check your Permission.")
-    }
-
-
-  })
-
-  window.$("#telexRelease").off('click').on('click', function () {
-    window.$('#ButtonTelexModal').modal("toggle")
-
-  });
-  window.$(".transferToBR").off('click').on('click', function () {
-    window.$('#TransferBRModal').modal("toggle")
-  });
-
-  window.$(".TransferBR").off('click').on('click', function () {
-    var tempVal;
-    tempModel == "quotation-barge" ? tempVal = "create-booking-reservation-barge" : tempVal = "create-booking-reservation"
-    if (filteredAp.includes(`transfer-${tempModel}`) && filteredAp.includes(tempVal)) {
-      window.$("#TransferBRModal").modal("toggle")
-      if (tempModel == "quotation-barge") {
-        getTransferFromQuotationData(selections[0], props.host).then(res => {
-          if (res.data.message == "Quotation already expired") {
-            alert("Quotation already expired")
-          } else {
-            props.navigate('/sales/standard/booking-reservation-barge/transfer-from-quotation/id=' + selections[0], { state: { id: selections[0], formType: "Transfer",transferFromModel:"quotation" } })
-          }
-        })
-
-      } else {
-        getTransferFromQuotationData(selections[0], props.host).then(res => {
-          if (res.data.message == "Quotation already expired") {
-            alert("Quotation already expired")
-          } else {
-            props.navigate('/sales/container/booking-reservation/transfer-from-quotation/id=' + selections[0], { state: { id: selections[0], formType: "Transfer",transferFromModel:"quotation" } })
-          }
-        })
-
-      }
-    } else {
-      alert("You are not allowed to transfer to Booking Reservation, Please check your Permission.")
-    }
-
-  });
-
-  window.$(".transferfromBR").off('click').on('click', function () {
-    window.$("#TransferBRModal").modal("toggle")
-  });
-
-  window.$(".transferfromBC").off('click').on('click', function () {
-    window.$("#TransferFromBCModal").modal("toggle")
-  });
-
-  window.$("#transfertocroinv").off('click').on('click', function () {
-    window.$("#BookingComfirmationUUID").val(selectedRow[0]["BookingConfirmationUUID"])
-    window.$("#TransferToCROINVModal").modal("toggle")
-  });
-
-  window.$("#transfertocndn").off('click').on('click', function () {
-    window.$("#TransferToCNDNModal").modal("toggle")
-  });
-
-  window.$(".TransferToCN").off('click').on('click', function () {
-    var temValue;
-    tempModel == "sales-invoice" ? temValue = "create-sales-credit-note" : temValue = "create-sales-credit-note-barge";
-
-    if (filteredAp.includes(`transferto-${tempModel}`) && filteredAp.includes(temValue)) {
-
-      window.$(".CheckingTransferToCNOrDN").val("CN")
-      window.$("#SalesInvoiceUUIDForPartial").val(selections[0])
-      window.$("#TransferToCNDNModal").modal("toggle")
-      window.$("#TransferPartialToCNDNModal").modal("toggle")
-    } else {
-      alert("You are not allowed to transfer to Credit Note, Please check your Permission.")
-    }
-
-  });
-
-  window.$(".TransferToDN").off('click').on('click', function () {
-    var temValue;
-    tempModel == "sales-invoice" ? temValue = "create-sales-debit-note" : temValue = "create-sales-debit-note-barge";
-
-    if (filteredAp.includes(`transferto-${tempModel}`) && filteredAp.includes(temValue)) {
-      window.$(".CheckingTransferToCNOrDN").val("DN")
-      window.$("#SalesInvoiceUUIDForPartial").val(selections[0])
-
-      window.$("#TransferToCNDNModal").modal("toggle")
-      window.$("#TransferPartialToCNDNModal").modal("toggle")
-    } else {
-      alert("You are not allowed to transfer to Debit Note, Please check your Permission.")
-    }
-
-  });
-
-  window.$("#TransferAllFromBC").off('click').on('click', function () {
-    var type;
-    props.title == "sales-invoice-barge" ? type = "barge" : type = "normal"
-
-    if (filteredAp.includes(`transferfrom-${tempModel}`) && filteredAp.includes(`create-${tempModel}`)) {
-      var BC = window.$("input[name=BC]").val()
-      if (BC) {
-        checkBCTransfer(BC, props.host, type).then(checking => {
-          if (checking == 1) {
-            getRemainingBCbyID(BC, props.host, type).then(res => {
-              if (res) {
-                getBookingConfirmationHasContainerType(BC, props.host, type).then(BCData => {
-                  var checkingCustomerList = []
-                  window.$.each(BCData.data, function (key, value) {
-                    window.$.each(value.bookingConfirmationCharges, function (key2, value2) {
-                      var data = {}
-                      if (value2.BillTo) {
-                        var temp = { value: value2.BillTo, label: value2.billTo.BranchCode + "(" + value2.billTo.portCode.PortCode + ")" }
-                      } else {
-                        var temp = {}
-                      }
-                      data["CustomerType"] = value2.CustomerType
-                      data["BillTo"] = temp
-                      if (temp) {
-                        checkingCustomerList.push(data)
-                      }
-                    })
-                  })
-
-                  const uniqueData = [];
-
-                  checkingCustomerList.forEach((obj, index) => {
-                    const isDuplicate = uniqueData.some((prevObj) => {
-                      return (
-                        prevObj.BillTo.value === obj.BillTo.value &&
-                        prevObj.CustomerType === obj.CustomerType
-                      );
-                    });
-                    if (!isDuplicate) {
-                      uniqueData.push(obj);
-                    }
-                  });
-                  window.$('.checkingBillToList').empty()
-                  const BCHidden = window.$('<input type="hidden" name="BCUUID" value="' + BC + '">');
-                  window.$('.checkingBillToList').append(BCHidden)
-                  window.$.each(uniqueData, function (key, value) {
-                    const customerType = window.$('<input type="hidden" name="customerType" value="' + value.CustomerType + '">');
-                    const radio = window.$(`<input type="radio" class="mr-2" id="radio-window.${key}" name="billTo" value="` + value.BillTo.value + '">');
-                    const label = window.$(`<label class="control-label" for="radio-window.${key}">` + value.CustomerType + " - " + value.BillTo.label + '</label>');
-                    window.$('.checkingBillToList').append(customerType).append(radio).append(label).append('<br>');
-                  })
-                  window.$("#TransferFromBCModal").modal("toggle")
-                  window.$("#CheckingBillToModal").modal("toggle")
-
-                  // window.$("#TransferToCROINVModal").modal("toggle")
-                  // props.navigate("/sales/container/sales-invoice/transfer-from-booking-reservation-data/id="+BC,{ state: { id:BC, formType: "TransferFromBooking" }})
-                })
-              } else {
-                alert("This booking has been fully transferred")
-              }
-            })
-          } else {
-            alert("Container is Empty.");
-          }
-        })
-      }
-
-    } else {
-      alert("You are not allowed to transfer from Booking Reservation, Please check your Permission.")
-    }
-
-
-    // window.$("#TransferFromBCModal").modal("toggle")
-    // navigate("/sales/container/sales-invoice/transfer-from-booking-reservation-data/id="+BC,{ state: { id:BC, formType: "TransferFromBooking" }})
-  });
-
-  window.$("#TransferAllTo").off('click').on('click', function () {
-    var TransferType = window.$("input[name='flexRadioDefault']:checked").val()
-    var val;
-    var type;
-    props.title == "booking-reservation-barge" ? val = "create-sales-invoice-barge" : val = "create-sales-invoice";
-    props.title == "booking-reservation-barge" ? type = "barge" : type = "normal";
-
-    // var BR = $("#TransferBR").val();
-    // var BC = $("#TransferBC").val();
-    if (TransferType == 'CRO') {
-      if (filteredAp.includes(`transferto-${tempModel}`) && filteredAp.includes(`create-container-release-order`)) {
-         window.$("#TransferToCROINVModal").modal("toggle")
-          ControlOverlay(true)
-          props.navigate("/operation/container/container-release-order/transfer-from-booking-reservation-data/id=" + selections[0], { state: { id: selections[0], formType: "TransferFromBooking",transferFromModel:"booking-reservation"} })
-        
-        // else {
-        //   alert("You are not allow to transfer to Container Release Order, Please Check Quotation Number for this Booking.")
-        // }
-      } else {
-        alert("You are not allowed to transfer to Container Realease Order, Please check your Permission.")
-      }
-
-    }
-    else {
-      if (filteredAp.includes(`transferto-${tempModel}`) && filteredAp.includes(val)) {
-        var BC = selectedRow[0]["BookingConfirmationUUID"]
-        if (BC == "" || BC == null) {
-          alert("Booking Reservation has not been confirmed")
-        }
-        else {
-          checkBCTransfer(BC, props.host, type).then(checking => {
-            if (checking == 1) {
-              getRemainingBCbyID(BC, props.host, type).then(res => {
-                if (res) {
-                  getBookingConfirmationHasContainerType(BC, props.host, type).then(BCData => {
-                    var checkingCustomerList = []
-                    window.$.each(BCData.data, function (key, value) {
-                      window.$.each(value.bookingConfirmationCharges, function (key2, value2) {
-                        var data = {}
-                        var temp = { value: value2.BillTo, label: value2.billTo.BranchCode + "(" + value2.billTo.portCode.PortCode + ")" }
-                        data["CustomerType"] = value2.CustomerType
-                        data["BillTo"] = temp
-                        checkingCustomerList.push(data)
-                      })
-                    })
-
-                    const uniqueData = [];
-
-                    checkingCustomerList.forEach((obj, index) => {
-                      const isDuplicate = uniqueData.some((prevObj) => {
-                        return (
-                          prevObj.BillTo.value === obj.BillTo.value &&
-                          prevObj.CustomerType === obj.CustomerType
-                        );
-                      });
-                      if (!isDuplicate) {
-                        uniqueData.push(obj);
-                      }
-                    });
-                    window.$('.checkingBillToList').empty()
-
-                    const BCHidden = window.$('<input type="hidden" name="BCUUID" value="' + BC + '">');
-                    window.$('.checkingBillToList').append(BCHidden)
-                    window.$.each(uniqueData, function (key, value) {
-                      const customerType = window.$('<input type="hidden" name="customerType" value="' + value.CustomerType + '">');
-                      const radio = window.$(`<input type="radio" class="mr-2" id="radio-window.${key}" name="billTo" value="` + value.BillTo.value + '">');
-                      const label = window.$(`<label class="control-label" for="radio-window.${key}">` + value.CustomerType + " - " + value.BillTo.label + '</label>');
-                      window.$('.checkingBillToList').append(customerType).append(radio).append(label).append('<br>');
-                    })
-                    window.$("#CheckingBillToModal").modal("toggle")
-
-                    // window.$("#TransferToCROINVModal").modal("toggle")
-                    // props.navigate("/sales/container/sales-invoice/transfer-from-booking-reservation-data/id="+BC,{ state: { id:BC, formType: "TransferFromBooking" }})
-                  })
-                } else {
-                  alert("This booking has been fully transferred")
-                }
-              })
-            } else {
-              alert("Container is Empty.");
-            }
-          })
-        }
-      } else {
-        alert("You are not allowed to transfer to Sales Invoice, Please check your Permission.")
-      }
-
-
-      //     } else {
-      //         alert("You are not allowed to transfer to Sales Invoice, Please check your Permission.")
-      //     }
-    }
-  });
-
-  window.$("#confirmRevertSplitBL").off('click').on('click', function () {
-    var BillOfLadingUUID = selections[0];
-    if (selections.length == 1) {
-      if (filteredAp.includes(`revert-${tempModel}`)) {
-        RevertSplitBL(props.host, props.tableId, BillOfLadingUUID).then(res => {
-          if (res) {
-            ToastNotify("success", "Bill Of Loading revert split successfully")
-            window.$('#RevertSplitModal').modal("toggle")
-            window.$("#" + props.tableSelector).bootstrapTable('refresh')
-            window.$("#" + props.tableSelector).bootstrapTable('uncheckAll')
-          }
-
-        })
-      } else {
-        alert("You are not allowed to perform Rervert Split, Please check your Permission.")
-      }
-
-    }
-
-  });
-
-  window.$("#ContainerReleaseOrderOri").off('click').on('click', function () {
-
-    var object = {}
-    object[props.selectedId] = selections
-    window.$('#PreviewPdfCROModal').modal("toggle")
-    window.$('#PreviewPdfModal').modal("toggle")
-    if (selections.length == 1) {
-      Preview(props.host, props.tableId, selections[0]).then(res => {
-        var file = new Blob([res.data], { type: 'application/pdf' });
-        let url = window.URL.createObjectURL(file);
-
-        window.$('#pdfFrameList').attr('src', url);
-      })
-    }
-  });
-
-
-
-  window.$("#ContainerReleaseOrderLetter").off('click').on('click', function () {
-
-    var object = {}
-    object[props.selectedId] = selections
-    window.$('#PreviewPdfCROModal').modal("toggle")
-    window.$('#PreviewPdfModal').modal("toggle")
-    if (selections.length == 1) {
-      PreviewLetter(props.host, props.tableId, selections[0]).then(res => {
-        var file = new Blob([res.data], { type: 'application/pdf' });
-        let url = window.URL.createObjectURL(file);
-
-
-        window.$('#pdfFrameList').attr('src', url);
-      })
-    }
-  });
-
-  window.$("#BillOfLadingOri").off('click').on('click', function () {
-
-    var object = {}
-    object[props.selectedId] = selections
-    window.$('#PreviewPdfBLModal').modal("toggle")
-    window.$('#PreviewPdfModal').modal("toggle")
-    if (selections.length == 1) {
-      PreviewBillOfLading(props.host, props.tableId, selections[0], "BillOfLading").then(res => {
-        var file = new Blob([res.data], { type: 'application/pdf' });
-        let url = window.URL.createObjectURL(file);
-
-
-        window.$('#pdfFrameList').attr('src', url);
-      })
-    }
-  });
-
-  window.$("#ShippingOrder").off('click').on('click', function () {
-
-    var object = {}
-    object[props.selectedId] = selections
-    window.$('#PreviewPdfBLModal').modal("toggle")
-    window.$('#PreviewPdfModal').modal("toggle")
-    if (selections.length == 1) {
-      PreviewBillOfLading(props.host, props.tableId, selections[0], "ShippingOrder").then(res => {
-        var file = new Blob([res.data], { type: 'application/pdf' });
-        let url = window.URL.createObjectURL(file);
-
-
-        window.$('#pdfFrameList').attr('src', url);
-      })
-    }
-  });
-
-  window.$("#ShippingAdviceNote").off('click').on('click', function () {
-
-    var object = {}
-    object[props.selectedId] = selections
-    window.$('#PreviewPdfBLModal').modal("toggle")
-    window.$('#PreviewPdfModal').modal("toggle")
-    if (selections.length == 1) {
-      PreviewBillOfLading(props.host, props.tableId, selections[0], "ShippingAdviceNote").then(res => {
-        var file = new Blob([res.data], { type: 'application/pdf' });
-        let url = window.URL.createObjectURL(file);
-
-
-        window.$('#pdfFrameList').attr('src', url);
-      })
-    }
-  });
-
-  window.$("#ShippingOrderDeclaration").off('click').on('click', function () {
-
-    var object = {}
-    object[props.selectedId] = selections
-    window.$('#PreviewPdfBLModal').modal("toggle")
-    window.$('#PreviewPdfModal').modal("toggle")
-    if (selections.length == 1) {
-      PreviewBillOfLading(props.host, props.tableId, selections[0], "ShippingOrderDeclaration").then(res => {
-        var file = new Blob([res.data], { type: 'application/pdf' });
-        let url = window.URL.createObjectURL(file);
-
-
-        window.$('#pdfFrameList').attr('src', url);
-      })
-    }
-  });
-
-  window.$("#bookingReservationPDF").off('click').on('click', function () {
-
-    var object = {}
-    object[props.selectedId] = selections
-    window.$('#PreviewPdfBRModal').modal("toggle")
-    window.$('#PreviewPdfModal').modal("toggle")
-
-    if (selections.length == 1) {
-
-      PreviewBR(props.host, props.tableId, selections[0]).then(res => {
-        var file = new Blob([res.data], { type: 'application/pdf' });
-        let url = window.URL.createObjectURL(file);
-        window.$('#pdfFrameList').attr('src', url);
-      })
-    }
-  });
-
-  window.$("#customerPaymentNormalPDF").off('click').on('click', function () {
-
-    var object = {}
-    object[props.selectedId] = selections
-    window.$('#PreviewPdfORModal').modal("toggle")
-    window.$('#PreviewPdfModal').modal("toggle")
-
-    if (selections.length == 1) {
-
-      PreviewOR(props.host, props.tableId, selections[0]).then(res => {
-        var file = new Blob([res.data], { type: 'application/pdf' });
-        let url = window.URL.createObjectURL(file);
-        window.$('#pdfFrameList').attr('src', url);
-      })
-    }
-  });
-
-  window.$("#customerPaymentDetailPDF").off('click').on('click', function () {
-
-    var object = {}
-    object[props.selectedId] = selections
-    window.$('#PreviewPdfORModal').modal("toggle")
-    window.$('#PreviewPdfModal').modal("toggle")
-
-    if (selections.length == 1) {
-
-      PreviewOR(props.host, props.tableId, selections[0], "detail").then(res => {
-        var file = new Blob([res.data], { type: 'application/pdf' });
-        let url = window.URL.createObjectURL(file);
-        window.$('#pdfFrameList').attr('src', url);
-      })
-    }
-  });
-
-  window.$("#bookingConfirmationPDF").off('click').on('click', function () {
-
-    var object = {}
-    object[props.selectedId] = selections
-    window.$('#PreviewPdfBRModal').modal("toggle")
-    window.$('#PreviewPdfModal').modal("toggle")
-
-    if (selections.length == 1) {
-      PreviewBC(props.host, props.tableId, selectedRow[0]["BookingConfirmationUUID"]).then(res => {
-        var file = new Blob([res.data], { type: 'application/pdf' });
-        let url = window.URL.createObjectURL(file);
-        window.$('#pdfFrameList').attr('src', url);
-      })
-    }
-  });
-
-  window.$("#Original").off('click').on('click', function () {
-    var object = {}
-    object[props.selectedId] = selections
-    window.$('#PreviewPdfCNDNModal').modal("toggle")
-    window.$('#PreviewPdfModal').modal("toggle")
-    if (selections.length == 1) {
-      PreviewINVCNDN(props.host, props.tableId, selections[0], `${props.title == "sales-invoice" || props.title == "sales-invoice-barge" ? "" : "Sales"}${props.selectedId.replace(/UUIDs/g, "")}Original`).then(res => {
-        var file = new Blob([res.data], { type: 'application/pdf' });
-        let url = window.URL.createObjectURL(file);
-        window.$('#pdfFrameList').attr('src', url);
-      })
-    }
-  });
-
-  window.$("#Account").off('click').on('click', function () {
-
-    var object = {}
-    object[props.selectedId] = selections
-    window.$('#PreviewPdfCNDNModal').modal("toggle")
-    window.$('#PreviewPdfModal').modal("toggle")
-    if (selections.length == 1) {
-      PreviewINVCNDN(props.host, props.tableId, selections[0], `${props.title == "sales-invoice" || props.title == "sales-invoice-barge" ? "" : "Sales"}${props.selectedId.replace(/UUIDs/g, "")}Account`).then(res => {
-        var file = new Blob([res.data], { type: 'application/pdf' });
-        let url = window.URL.createObjectURL(file);
-        window.$('#pdfFrameList').attr('src', url);
-      })
-    }
-  });
-
-  window.$("#ReprintOriginal").off('click').on('click', function () {
-
-    var object = {}
-    object[props.selectedId] = selections
-    window.$('#PreviewPdfCNDNModal').modal("toggle")
-    window.$('#PreviewPdfModal').modal("toggle")
-    if (selections.length == 1) {
-      PreviewINVCNDN(props.host, props.tableId, selections[0], `${props.title == "sales-invoice" || props.title == "sales-invoice-barge" ? "" : "Sales"}${props.selectedId.replace(/UUIDs/g, "")}ReprintOriginal`).then(res => {
-        var file = new Blob([res.data], { type: 'application/pdf' });
-        let url = window.URL.createObjectURL(file);
-        window.$('#pdfFrameList').attr('src', url);
-      })
-    }
-  });
-
-  window.$("#ReprintAccount").off('click').on('click', function () {
-
-    var object = {}
-    object[props.selectedId] = selections
-    window.$('#PreviewPdfCNDNModal').modal("toggle")
-    window.$('#PreviewPdfModal').modal("toggle")
-    if (selections.length == 1) {
-      PreviewINVCNDN(props.host, props.tableId, selections[0], `${props.title == "sales-invoice" || props.title == "sales-invoice-barge" ? "" : "Sales"}${props.selectedId.replace(/UUIDs/g, "")}ReprintAccount`).then(res => {
-        var file = new Blob([res.data], { type: 'application/pdf' });
-        let url = window.URL.createObjectURL(file);
-        window.$('#pdfFrameList').attr('src', url);
-      })
-    }
-  });
-
-  window.$("#telex").click(function () {
-    var object = {}
-    object[props.selectedId] = selections
-    if (selections.length > 0) {
-      if (filteredAp.includes(`telex-release-${tempModel}`)) {
-        TelexRelease(props.host, props.tableId, object).then(res => {
-          if (res.Success.length > 0) {
-            ToastNotify("success", "Telex Release Successfully")
-            window.$('#ButtonTelexModal').modal("toggle")
-            window.$("#" + props.tableSelector).bootstrapTable('refresh')
-            window.$("#" + props.tableSelector).bootstrapTable('uncheckAll')
-          }
-          if (res.Failed.length > 0) {
-
-            var failedDocNum = []
-            window.$.each(res.Failed, function (key, value) {
-              failedDocNum.push(value.DocNum)
-            })
-            window.$('#ButtonTelexModal').modal("toggle")
-            alert(failedDocNum.join(',') + " need to be verified")
-            window.$("#" + props.tableSelector).bootstrapTable('refresh')
-            window.$("#" + props.tableSelector).bootstrapTable('uncheckAll')
-          }
-        })
-
-      } else {
-        alert("You are not allowed to perform Telex Release, Please check your Permission.")
-      }
-
-    }
-
-  })
-
-  window.$("#generate").off('click').click(function () {
-    var object = {}
-
-    object["BLUUIDs"] = selections
-
-    if (selections.length > 0) {
-      if (filteredAp.includes(`create-${tempModel}`)) {
-        CheckDOStatus(props.host, props.tableId, object).then(res => {
-          var ArraySuccessDo = []
-          var ArraySuccessINV = []
-          var NoDueInvoice = true;
-          window.$.each(res.success, function (key1, value) {
-            if ((JSON.stringify(value)).includes("success create Delivery Order")) {
-              var split = (JSON.stringify(value)).split(":")
-              ArraySuccessDo.push((split[0]).replace(/\W/g, ""))
-            }
-
-            if ((JSON.stringify(value)).includes("success create Sales Invoice")) {
-              var split = (JSON.stringify(value)).split(":")
-              ArraySuccessINV.push((split[0]).replace(/\W/g, ""))
-            }
-          })
-          if (ArraySuccessINV.length > 0) {
-            var SuccessDO = ArraySuccessDo.join(",");
-            var SuccessINV = ArraySuccessINV.join(",");
-            alert(SuccessDO + " Delivery order successfully generated\n\n" + SuccessINV + " Sales invoice successfully generated.")
-          }
-          else if (ArraySuccessDo.length > 0) {
-            var SuccessDO = ArraySuccessDo.join(",");
-            alert(SuccessDO + " Delivery order successfully generated.")
-          }
-          else if (res["Due"] != undefined) {
-            if (res.CreditLimit == 1) {
-              var splitinvoice = res["Due"];
-              alert(splitinvoice + " already due. The company also reached the credit limit. Please proceed payment for DO realease.")
-              NoDueInvoice = false;
-            } else {
-              var splitinvoice = res["Due"];
-              alert(splitinvoice + " already due. Please proceed payment for DO realease.")
-              NoDueInvoice = false;
-            }
-          }
-          else {
-            if (NoDueInvoice == true) {
-              if (res.CreditLimit == 1) {
-                var splitinvoice = res["Due"];
-                alert("The company reached the credit limit. Please proceed payment for DO realease.")
-              }
-            }
-          }
-          window.$("#" + props.tableSelector).bootstrapTable('refresh')
-          window.$("#" + props.tableSelector).bootstrapTable('uncheckAll')
-
-        })
-
-      } else {
-        alert("You are not allowed to perform Generate Delivery Order, Please check your Permission.")
-      }
-
-    }
-  })
-
-  window.$(document).on("click", ".checkboxSplit", function () {
-    if (window.$(this).parent().next().find(".checkboxShare").prop("checked")) {
-      window.$(this).parent().next().find(".checkboxShare").prop("checked", false)
-    }
-
-  })
-
-  window.$(document).on("click", ".checkboxShare", function () {
-    if (window.$(this).parent().prev().find(".checkboxSplit").prop("checked")) {
-      window.$(this).parent().prev().find(".checkboxSplit").prop("checked", false)
-    }
-  })
-
-  window.$(document).on("click", ".DNDApplyCheckBox", function () {
-    if (window.$(this).prop("checked")) {
-      window.$(this).closest(".modal-body").find(".DNDApplyClass").removeClass("d-none")
-    } else {
-      window.$(this).closest(".modal-body").find(".DNDApplyClass").addClass("d-none")
-    }
-  })
-
-  window.$(document).on("click", ".DNDConbindorNot ", function () {
-    if (window.$(this).prop("checked")) {
-      window.$(".DNDCombineDay").removeClass('d-none')
-      window.$(".Detention").addClass('d-none')
-      window.$(".Demurrage").addClass('d-none')
-    } else {
-      window.$(".DNDCombineDay").addClass('d-none')
-      window.$(".Detention").removeClass('d-none')
-      window.$(".Demurrage").removeClass('d-none')
-    }
-  })
-
-  window.$(".CheckTransfer").off('click').on('click', function () {
-    var value = window.$(this).val();
-
-    if (value == "Invoice") {
-      if (window.$(`#BookingComfirmationUUID`).val() == "") {
-        window.$('#TransferToPartial').prop('disabled', true);
-      } else {
-        window.$('#TransferToPartial').prop('disabled', false);
-      }
-    }
-    if (value == "CRO") {
-      window.$('#TransferToPartial').prop('disabled', true);
-    }
-  })
-
-  window.$("#downloadSample").off('click').on('click', function () {
-    const object = document.createElement('a');
-    object.href = ContainerTemplate;
-    object.download = 'file.xls';
-    document.body.appendChild(object);
-    object.click();
-    document.body.removeChild(object);
-  });
-
-  window.$("#uploadContainer").off('click').on('click', function () {
-    window.$('#fileContainer').val("");
-    window.$('#fileContainer').click();
-  });
-
-  window.$("#fileContainer").off('change').on('change', function () {
-    var formData = new FormData();
-    formData.append('file', window.$('#fileContainer')[0].files[0]);
-
-    ImportContainer(props.host, formData).then(res => {
-      if (res.data.Success) {
-        if (res.data.Success.length > 0) {
-          ToastNotify("success", "Successfully Uploaded")
-          window.$("#" + props.tableSelector).bootstrapTable('refresh')
-          window.$("#" + props.tableSelector).bootstrapTable('uncheckAll')
-        }
-      }
-      var ListSameContainerCode = []
-      var ListErrorContainerType = []
-      var message = "";
-
-      if (res.data.Failed) {
-        if (res.data.Failed.length > 0) {
-
-          window.$.each(res.data.Failed, function (key, value) {
-            ListSameContainerCode.push('"' + value["Container Code"] + '"')
-          })
-          message = ListSameContainerCode.toString(",") + " Containers already Exist.\n\n"
-
-          if (res.data.ContainerTypeError) {
-            window.$.each(res.data.ContainerTypeError, function (key, value2) {
-              ListErrorContainerType.push('"' + value2["Container Code"] + '"')
-            })
-            message += ListErrorContainerType.toString(",") + " Container Types not Exist.\n\n"
-          }
-          message += "Failed to Upload."
-          // window.$(".FailedMessageField").html(message);
-          window.$(".FailedMessageField").html(message);
-          window.$("#FailedMessageModal").modal("toggle")
-
-          // FailedMessageField
-        }
-      } else {
-        if (res.data.ContainerTypeError) {
-          window.$.each(res.data.ContainerTypeError, function (key, value2) {
-            ListErrorContainerType.push('"' + value2["Container Code"] + '"')
-          })
-          message += ListErrorContainerType.toString(",") + " Container Types not Exist.\n\n"
-
-          message += "Failed to Upload."
-          // window.$(".FailedMessageField").html(message);
-          window.$(".FailedMessageField").html(message);
-          window.$("#FailedMessageModal").modal("toggle")
-        }
-      }
-    })
-  });
-
-  window.$(".confirmTransferFillterBillTo").off('click').on('click', function () {
-    var BC = window.$('input[name=BCUUID]').val()
-    var BranchCode = window.$('input[name=billTo]:checked').val();
-    var CustomerType = window.$('input[name=billTo]:checked').prev().val();
-
-    window.$("#CheckingBillToModal").modal("toggle")
-    window.$("#TransferToCROINVModal").modal("hide")
-    if (props.title == "sales-invoice-barge" || props.title == "booking-reservation-barge") {
-      props.navigate("/sales/standard/sales-invoice-barge/transfer-from-booking-reservation-data/id=" + BC, { state: { id: BC, formType: "TransferFromBooking", CustomerType: CustomerType, BranchCode: BranchCode } })
-    } else {
-      props.navigate("/sales/container/sales-invoice/transfer-from-booking-reservation-data/id=" + BC, { state: { id: BC, formType: "TransferFromBooking", CustomerType: CustomerType, BranchCode: BranchCode } })
-    }
-
-  })
-
-  var arraycheck = []
-  var arrayGenerateDO = []
-  //delivery order condition here
-  if (props.tableId == "delivery-order" || props.tableId == "delivery-order-barge") {
-
-    window.$("#" + props.tableSelector).on('check.bs.table', function (row, element, field) {
-      // $.each(ArrayPermission, function (key, value) {
-      //   $("#toolbar").find("button").each(function () {
-      //     var resultData = $(this).attr('class').split(" ").filter(function (oneArray) {
-      //         return oneArray== value;
-      //     })
-      //     if(resultData.length!=0){
-
-      //       if (resultData[0].includes("preview")){
-      //         $getPreviewPDFPermission = true;
-      //       }
-      //       else if (resultData[0].includes("create")){
-      //         $getGenerateDOPermission = true;
-      //       }
-      //       else{
-      //         $(this).prop('disabled', false)
-      //       }
-      //     }
-      //   })
-      // })
-      window.$("#trash").prop('disabled', false)
-      window.$("#removeModal").prop('disabled', false)
-      // $trash.prop('disabled', false);
-      // $removeModal.prop('disabled', false);
-
-      if (window.$('tbody .bs-checkbox input:checkbox:checked').length >= 2) {
-        window.$("#update").prop('disabled', true)
-        window.$("#preview").prop('disabled', true)
-        // $update.prop('disabled', true)
-        // $preview.prop('disabled', true)
-      }
-      else if (window.$('tbody .bs-checkbox input:checkbox:checked').length < 1) {
-        window.$("#update").prop('disabled', true)
-        window.$("#preview").prop('disabled', true)
-        //  $update.prop('disabled', true)
-        // $preview.prop('disabled', true)
-      }
-      else {
-        if (element.BLStatus == "Generated") {
-          window.$("#update").prop('disabled', false)
-        } else {
-          window.$("#update").prop('disabled', true)
-        }
-        // if ($getPreviewPDFPermission == true){
-        if (element.DeliveryOrderUUID != null) {
-          window.$("#preview").prop('disabled', false)
-        }
-        //}
-      }
-
-      var statusTemp = "";
-      if (element.BLStatus == "Generated") {
-        statusTemp = "Generated";
-        var generateList = {
-          uuid: element.BillOfLadingUUID,
-          status: statusTemp
-        }
-        arraycheck.push(generateList)
-        arrayGenerateDO.push(element.BillOfLadingUUID)
-
-      } else if (element.BLStatus == "Ready") {
-        statusTemp = "Ready";
-        var generateList = {
-          uuid: element.BillOfLadingUUID,
-          status: statusTemp
-        }
-        arraycheck.push(generateList)
-        arrayGenerateDO.push(element.BillOfLadingUUID)
-      } else {
-        statusTemp = "Pending";
-        var generateList = {
-          uuid: element.BillOfLadingUUID,
-          status: statusTemp
-        }
-        arraycheck.push(generateList)
-        arrayGenerateDO.push(element.BillOfLadingUUID)
-      }
-      window.$.each(arraycheck, function (key1, value1) {
-        // if($getGenerateDOPermission==true){
-        if (value1.status == "Pending" || value1.status == "Generated") {
-          window.$("#generate").prop('disabled', true)
-          return false;
-        } else {
-          window.$("#generate").prop('disabled', false)
-        }
-        //}
-      })
-
-
-    });
-
-    window.$("#" + props.tableSelector).on('uncheck.bs.table', function (row, element, field) {
-      window.$("#generate").prop('disabled', true)
-
-      if (window.$(selectedRow).length == 0) {
-        window.$("#update").prop('disabled', true)
-        window.$("#preview").prop('disabled', true)
-        window.$("#trash").prop('disabled', true)
-        window.$("#removeModal").prop('disabled', true)
-        // $update.prop('disabled', true)
-        // $preview.prop('disabled', true)
-        // $trash.prop('disabled', true);
-        // $removeModal.prop('disabled', true);
-      }
-
-      if (window.$(selectedRow).length == 1) {
-
-        if (selectedRow[0].BLStatus == "Generated") {
-          window.$("#update").prop('disabled', false)
-        }
-
-        // if ($getPreviewPDFPermission == true){
-        if (selectedRow[0].DeliveryOrderUUID != null) {
-          window.$("#preview").prop('disabled', false)
-        }
-        // }
-      }
-
-      if (props.tableId == "delivery-order" || props.tableId == "delivery-order-barge") {
-
-        window.$.each(arraycheck, function (key1, value1) {
-          if (value1.uuid == element.BillOfLadingUUID) {
-            arraycheck.splice(key1, 1);
-            arrayGenerateDO.splice(key1, 1);
-            return false;
-          }
-        })
-
-        window.$.each(arraycheck, function (key1, value1) {
-          // if($getGenerateDOPermission==true){
-
-          if (value1.status == "Pending" || value1.status == "Generated") {
-            window.$("#generate").prop('disabled', true)
-            return false;
-          }
-          else {
-            window.$("#generate").prop('disabled', false)
-          }
-          //}
-        })
-
-        var temp = (window.$("#" + props.tableSelector).bootstrapTable('getSelections'))
-        if (temp.length == "1") {
-          if (temp["0"]["deliveryOrder"] != null) {
-            window.$("#preview").prop('disabled', false)
-          }
-        }
-      }
-    });
-
-    // $CheckStatusDO.click(function () {
-    //   var BLUUIDs = []
-    //   BLUUIDs = arrayGenerateDO;
-
-    //   $.ajax({
-    //     type: "POST",
-    //     url: "./generate-d-o",
-    //     data: {
-    //       BLUUIDs : BLUUIDs,
-    //     },
-    //     dataType: "json",
-    //     success: function (data) {
-    //       var ArraySuccessDo=[]
-    //       var ArraySuccessINV=[]
-    //       var NoDueInvoice= true;
-    //       $.each(data.success, function (key1, value){
-    //         if((JSON.stringify(value)).includes("success create Delivery Order")){
-    //           var split=(JSON.stringify(value)).split(":")
-    //           ArraySuccessDo.push( (split[0]).replace(/\W/g, ""))
-    //         }
-
-    //         if((JSON.stringify(value)).includes("success create Sales Invoice")){
-    //           var split=(JSON.stringify(value)).split(":")
-    //           ArraySuccessINV.push( (split[0]).replace(/\W/g, ""))
-    //         }
-    //       })
-    //       if(ArraySuccessINV.length > 0) {
-    //         var SuccessDO=ArraySuccessDo.join(",");
-    //         var SuccessINV=ArraySuccessINV.join(",");
-    //          alert(SuccessDO+" Delivery order successfully generated\n\n"+SuccessINV+" Sales invoice successfully generated.")
-    //       }
-    //       else if (ArraySuccessDo.length >0){
-    //         var SuccessDO=ArraySuccessDo.join(",");
-    //         alert(SuccessDO+" Delivery order successfully generated.")
-    //       }
-    //       else if (data["Due"] != undefined){
-    //         if(data.CreditLimit == 1){
-    //           var splitinvoice = data["Due"];
-    //           alert(splitinvoice+" already due. The company also reached the credit limit. Please proceed payment for DO realease.")
-    //           NoDueInvoice = false;
-    //         }else{
-    //           var splitinvoice = data["Due"];
-    //           alert(splitinvoice+" already due. Please proceed payment for DO realease.")
-    //           NoDueInvoice = false;
-    //         }
-    //       }
-    //       else{
-    //         if(NoDueInvoice == true){
-    //           if(data.CreditLimit == 1){
-    //             var splitinvoice = data["Due"];
-    //             alert("The company reached the credit limit. Please proceed payment for DO realease.")
-    //           }
-    //         }
-    //       }
-    //       $table.bootstrapTable('refresh')
-    //     }
-    //   });
-    // })
-
-    //   $remove.click(function () {
-    //   var DOUUIDs = [];
-    //   var temp = [];
-    //   var valid = false;
-
-    //   temp = ($table.bootstrapTable('getSelections'))
-    //       $.each(temp, function (key, value) {
-    //         if (value.DeliveryOrderUUID != null){
-    //           DOUUIDs.push(value.DeliveryOrderUUID)
-    //         }
-    //         else{
-    //           DOUUIDs.push("null")
-    //         }
-    //       })
-    //       $.each(DOUUIDs, function (key1, value1) {
-    //           if (value1 == "null"){
-    //               alert("Delivery Order does not exist")
-    //               valid = false;
-    //               return false;
-    //           }else {
-    //               valid = true;
-    //           }
-    //       })
-    //       if (valid == true){
-    //           $.ajax({
-    //               type: "POST",
-    //               url: "./remove2",
-    //               data: {
-    //                   DOUUIDs : DOUUIDs,
-    //               },
-    //               dataType: "json",
-    //               success: function (data) {
-    //               }
-    //           });
-    //       }
-    //   })
-
-    //   $trash.click(function () {
-    //     var DOUUIDs = [];
-    //     var temp = [];
-    //     var valid = false;
-
-    //     temp = ($table.bootstrapTable('getSelections'))
-    //       $.each(temp, function (key, value) {
-    //         if (value.DeliveryOrderUUID != null){
-    //           DOUUIDs.push(value.DeliveryOrderUUID)
-    //         }
-    //         else{
-    //           DOUUIDs.push("null")
-    //         }
-    //       })
-    //       $.each(DOUUIDs, function (key1, value1) {
-    //         if (value1 == "null"){
-    //             alert("Delivery Order does not exist")
-    //             valid = false;  
-    //             return false;
-    //         }else {
-
-    //           valid = true;
-    //         }
-    //     })
-    //     if (valid == true){
-    //       $.ajax({
-    //           type: "POST",
-    //           url: "./throw2",
-    //           data: {
-    //               DOUUIDs : DOUUIDs,
-    //           },
-    //           dataType: "json",
-    //           success: function (data) {
-    //           }
-    //       });
-    //     }
-    //   });
-
-    // $table.on('dbl-click-row.bs.table', function (row, element, field) {
-
-    //   if (element.DeliveryOrderUUID != null){
-    //     id = element.DeliveryOrderUUID;
-
-    //     window.location.href = 'update2?id=' + id + '';
-    //   }else{
-    //     alert ("Delivery Order haven't been Generated");
-    //   }
-
-  }
-
-
-
-  return (
-
-    <div>
-      <table id={props.tableId} className="bootstrap_table">
-
-      </table>
-
-      <div className="modal fade" id="ButtonSuspendModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Suspend</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <h5>Are you sure you want to suspend these records?</h5>
-              <h6 className="suspendbody"></h6>
-
-            </div>
-            <div className="modal-footer">
-              <button id="RealSuspend" type="button" className="btn btn-success AvoidUnbindClass">Suspend</button>
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="modal fade" id="ButtonApprovedModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Suspend</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <h5>Are you sure you want to approved these records?</h5>
-              <h6 className="approvedbody"></h6>
-
-            </div>
-            <div className="modal-footer">
-              <button id="RealApproved" type="button" className="btn btn-success AvoidUnbindClass">Approved</button>
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      <div className="modal fade" id="ButtonResetModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Reset</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <h5>Are you sure you want to reset records?</h5>
-              <h6 className="resetbody"></h6>
-
-            </div>
-            <div className="modal-footer">
-              <button id="RealReset" type="button" className="btn btn-success AvoidUnbindClass">Reset</button>
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      <div className="modal fade" id="ButtonRemoveModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Remove</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <h5>Are you sure you want to remove these records?</h5>
-            </div>
-            <div className="modal-footer">
-              <button id="Realremove" type="button" className="btn btn-success AvoidUnbindClass">Remove</button>
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="modal fade" id="ButtonVerifyModalForm" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Verify</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <button id="verifyFirst" type="button" className="btn btn-success mr-2">Approve</button>
-              <button id="rejectStatusFirst" type="button" className="btn btn-danger mr-2">Reject</button>
-              <button id="cancelApproveRejectFirst" type="button" className="btn btn-secondary">Cancel Approved/Reject</button>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="modal fade" id="ButtonVerifyConfirmModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Confirmation</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <h5 className="message">?</h5>
-              <div className="rejectMessageRow">
-                <h5 className="">Please fill in reject message.</h5>
-                <div className="form-group">
-                  <input type="text" className="form-control rejectMessage"></input>
-                </div>
-              </div>
-            </div>
-            <div className="modal-footer">
-              <button type="button" id="verify" className="btn btn-success d-none mt-2" data-dismiss="modal">Approve</button>
-              <button type="button" id="rejectStatus" className="btn btn-danger d-none" data-dismiss="modal">Reject</button>
-              <button type="button" id="cancelApprovedReject" className="btn btn-secondary d-none" data-dismiss="modal">Cancel Approved/Reject</button>
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="modal fade" id="PreviewPdfModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog modal-xl" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <iframe id="pdfFrameList" src="" width="100%" height="700"></iframe>
-
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="modal" id="PreviewPdfCROModal" tabIndex="-1" role="dialog">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Preview</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <button type="button" className="btn btn-primary mr-1" id="ContainerReleaseOrderOri" >
-                Container Release Order
-              </button>
-              <button type="button" className="btn btn-primary" id="ContainerReleaseOrderLetter">
-                Container Release Letter
-              </button>
-            </div>
-            <div className="modal-footer">
-
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="modal" id="PreviewPdfBLModal" tabIndex="-1" role="dialog">
-        <div className="modal-dialog modal-lg" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Preview</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <button type="button" className="btn btn-primary mr-1" id="BillOfLadingOri"  >
-                Bill Of Lading
-              </button>
-              <button type="button" className="btn btn-primary mr-1" id="ShippingOrder" >
-                Shipping Order
-              </button>
-              <button type="button" className="btn btn-primary mr-1" id="ShippingAdviceNote" >
-                Shipping Advice Note
-              </button>
-              <button type="button" className="btn btn-primary" id="ShippingOrderDeclaration" >
-                Shipping Order Declaration
-              </button>
-            </div>
-            <div className="modal-footer">
-
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="modal" id="PreviewPdfCNDNModal" tabIndex="-1" role="dialog">
-        <div className="modal-dialog modal-lg" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Preview</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <button type="button" className="btn btn-primary mr-1" id="Original"  >
-                Original
-              </button>
-              <button type="button" className="btn btn-primary mr-1" id="Account" >
-                Account
-              </button>
-              <button type="button" className="btn btn-primary mr-1" id="ReprintOriginal" >
-                Reprint Original
-              </button>
-              <button type="button" className="btn btn-primary" id="ReprintAccount" >
-                Reprint Account
-              </button>
-            </div>
-            <div className="modal-footer">
-
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* <!-- Modal button verification status choose--> */}
-      <div className="modal fade" id="ButtonTelexModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Are you sure to Telex Release?</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <button id="telex" type="button" className="btn btn-success">Confirm</button>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* <!-- Split modal */}
-      <div className="modal fade" id="SplitModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Split Bill Of Lading-Container</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <input type="text" className="splitParentId d-none"></input>
-              <table className="table table-bordered" id="split-container-table">
-                <thead>
-                  <tr>
-                    <th className="d-none">ID</th>
-                    <th>Split</th>
-                    <th>Share</th>
-                    <th>Container Code</th>
-                    <th>Container Type</th>
-                  </tr>
-                </thead>
-                <tbody className="containerList">
-                </tbody>
-
-              </table>
-
-
-            </div>
-            <div className="modal-footer">
-              <button id="confirmSplitBL" type="button" className="btn btn-primary">Confirm</button>
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="modal fade" id="SplitModalBR" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog modal-lg" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Split Booking Reservation-Container</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <input type="text" className="splitParentIdBR d-none"></input>
-              <table className="table table-bordered" id="split-container-tableBR">
-                <thead>
-                  <tr>
-                    <th className="d-none">ID</th>
-                    <th style={{ textAlign: "center", verticalAlign: "middle" }}>Split</th>
-                    <th style={{ textAlign: "center", verticalAlign: "middle" }}>Container Code</th>
-                    <th style={{ textAlign: "center", verticalAlign: "middle" }}>Container Type</th>
-                  </tr>
-                </thead>
-                <tbody className="containerList">
-                </tbody>
-
-              </table>
-
-
-            </div>
-            <div className="modal-footer">
-              <button id="confirmSplitBR" type="button" className="btn btn-primary">Confirm</button>
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* <!-- Merge Modal--> */}
-      <div className="modal fade" id="MergeModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Merge Bill Of Lading</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <label>BL No.</label>
-              <select className='select2js MergeBL form-control' name='MergeBL' id="mergeBL" multiple="multiple">
-                <option value=''>
-                  Select...
-                </option>
-              </select>
-            </div>
-            <div className="modal-footer">
-              <button id="confirmMergeBL" type="button" class="btn btn-primary">Confirm</button>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* <!-- Merge Modal--> */}
-      <div className="modal fade" id="MergeModalBR" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Merge Booking Reservation</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <label>BR No.</label>
-              <select className='select2js MergeBR form-control' name='MergeBR' id="mergeBR" multiple="multiple">
-                <option value=''>
-                  Select...
-                </option>
-              </select>
-            </div>
-            <div className="modal-footer">
-              <button id="confirmMergeBR" type="button" class="btn btn-primary">Confirm</button>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      <div className="modal fade" id="RevertSplitModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Revert Split</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <h5>Are you sure to Revert Split Bill of Lading?</h5>
-            </div>
-            <div className="modal-footer">
-              <button id="confirmRevertSplitBL" type="button" className="btn btn-primary">Confirm</button>
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Modal Transfer To BR */}
-      <div className="modal fade" id="TransferBRModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Transfer To</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <div className="mb-2">
-                <a className="btn btn-success mr-2 TransferBR">Booking Reservation</a>
-              </div>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Booking Reservation Transfer Modal */}
-      <div className="modal fade" id="TransferToCROINVModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Transfer To</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <div className="mb-2">
-                <input type="hidden" id="BookingComfirmationUUID" />
-                <div className="form-check">
-                  <input className="form-check-input CheckTransfer" type="radio" value="Invoice" name="flexRadioDefault" id="flexRadioDefault1" defaultChecked={true} />
-                  <label className="form-check-label" style={{ position: "relative", left: "15px" }} htmlFor="flexRadioDefault1">Invoice</label>
-                </div>
-                {props.title == "booking-reservation-barge" ? "" :
-                  <div className="form-check">
-                    <input className="form-check-input CheckTransfer" type="radio" value="CRO" name="flexRadioDefault" id="flexRadioDefault2" />
-                    <label className="form-check-label" style={{ position: "relative", left: "15px" }} htmlFor="flexRadioDefault2">Container Release Order</label>
-                  </div>
-                }
-
-              </div>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-primary FormAllTransferTo" id="TransferAllTo">Transfer All</button>
-              <button type="button" className="btn btn-primary FormTransferPartialToInvoice" id="TransferToPartial" disabled="">Transfer Partial</button>
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Sales Invoice Transfer Modal */}
-      <div className="modal fade" id="CheckingBillToModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Choose One Branch for Transfer Sales Invoice</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <div className="checkingBillToList">
-              </div>
-            </div>
-            <div className="modal-footer">
-              <button id="TranferToCN" type="button" className="btn btn-primary confirmTransferFillterBillTo mr-2">Confirm</button>
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="modal" id="PreviewPdfBRModal" tabIndex="-1" role="dialog">
-        <div className="modal-dialog modal-md" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Preview</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <button type="button" className="btn btn-primary mr-1" id={"bookingReservationPDF"}>
-                Booking Reservation
-              </button>
-              <button type="button" className="btn btn-primary" id={`bookingConfirmationPDF`}>
-                Booking Confirmation
-              </button>
-            </div>
-            <div className="modal-footer">
-
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="modal" id="PreviewPdfORModal" tabIndex="-1" role="dialog">
-        <div className="modal-dialog modal-md" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Preview</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <button type="button" className="btn btn-primary mr-1" id={"customerPaymentNormalPDF"}>
-                Normal
-              </button>
-              <button type="button" className="btn btn-primary" id={`customerPaymentDetailPDF`}>
-                Detail
-              </button>
-            </div>
-            <div className="modal-footer">
-
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Sales Invoice Transfer Modal */}
-      <div className="modal fade" id="TransferToCNDNModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Transfer To</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <input type="hidden" id="TransferID" />
-              <button id="TranferToCN" type="button" className="btn btn-primary TransferToCN mr-2" >Credit Note</button>
-              <button id="TranferToDN" type="button" className="btn btn-primary TransferToDN" >Debit Note</button>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* Sales Invoice generated message Modal */}
-      <div className="modal fade" id="SalesInvoiceMessageModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog  modal-lg" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-
-            </div>
-            <div className="modal-body">
-              <h5 className="InvMessage"></h5>
-              <h5 className="InvMessage2"></h5>
-              <h5 className="InvMessage3"></h5>
-            </div>
-
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <div className="modal fade" id="FailedMessageModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog  modal-lg" role="document">
-          <div className="modal-content">
-            <div className="modal-body">
-              <h5 className="FailedMessageField"></h5>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      <TransferFromBC barge={props.title == "sales-invoice-barge" ? true : false} />
-      {props.title == "booking-reservation" || props.title == "booking-reservation-barge" || props.title == "sales-invoice" || props.title == "sales-invoice-barge" ? <TransferPartialBCModal barge={props.title == "sales-invoice-barge" || props.title == "booking-reservation-barge" ? true : false} /> : ""}
-      {props.title == "sales-invoice" || props.title == "sales-invoice-barge" ? <TransferPartialCNDNModal barge={props.title.includes("barge") ? true : false} /> : ""}
-      <DNDModal title={props.title} />
-    </div >
-  )
+  window
+		.$("#split")
+		.off("click")
+		.on("click", function () {
+			var object = {};
+			object[props.selectedId] = selections;
+			if (selections.length == 1) {
+				if (props.title == "booking-reservation") {
+					GetBookingReservationsContainers(
+						props.host,
+						props.tableId,
+						selections[0]
+					).then((res) => {
+						window.$(".splitParentIdBR").val(res.data.SplitParent);
+						window.$(".containerList").empty();
+						var containerLength = 0;
+						window.$.each(
+							res.data.BookingReservationHasContainerTypes,
+							function (key, value) {
+								if (value.BookingReservationHasContainers) {
+									containerLength +=
+										value.BookingReservationHasContainers.length;
+								}
+								window.$.each(
+									value.BookingReservationHasContainers,
+									function (key2, value2) {
+										var Container_Code = value2.ContainerCode
+											? value2.ContainerCodeName
+											: "";
+										var Container_Type = value.ContainerType
+											? value.ContainerTypeName
+											: "";
+										var Container_CodeUUID = value2.ContainerCode
+											? value2.ContainerCode
+											: "";
+										var Container_TypeUUID = value.ContainerType
+											? value.BookingReservationHasContainerTypeUUID
+											: "";
+										window
+											.$(".containerList")
+											.append(
+												`<tr><td className='d-none containerUUID'>${Container_CodeUUID}</td><td className='checkbox' style="text-align:center;vertical-align: middle;"><input type='checkbox' className='checkboxSplit' name='Split'></td><td className='containerCodeSplit' style="text-align:center;vertical-align: middle;">${Container_Code}<input type='hidden' value ='${Container_CodeUUID}'/></td><td className='containerTypeSplit' style="text-align:center;vertical-align: middle;">${Container_Type}<input type='hidden' value ='${Container_TypeUUID}'/></td></tr>`
+											);
+									}
+								);
+							}
+						);
+						if (containerLength <= 1) {
+							window.$("#confirmSplitBR").prop("disabled", true);
+						} else {
+							window.$("#confirmSplitBR").prop("disabled", false);
+						}
+					});
+					window.$("#SplitModalBR").modal("toggle");
+				} else {
+					GetBillOfLadingContainers(
+						props.host,
+						props.tableId,
+						selections[0]
+					).then((res) => {
+						var containerLength = res.data.billOfLadingHasContainers.length;
+						window.$(".splitParentId").val(res.data.SplitParent);
+						window.$(".containerList").empty();
+						window.$.each(
+							res.data.billOfLadingHasContainers,
+							function (key, value) {
+								var Container_Code = value.ContainerCode
+									? value.containerCode.ContainerCode
+									: "";
+								var Container_Type = value.ContainerType
+									? value.containerType.ContainerType
+									: "";
+								if (containerLength == 1) {
+									window
+										.$(".containerList")
+										.append(
+											`<tr><td className='d-none containerUUID'>${value.BillOfLadingHasContainerUUID}</td><td><input type='checkbox' disabled className='checkboxSplit' name='Split'></td><td><input type='checkbox' className='checkboxShare' name='Share'><td>${Container_Code}</td><td>${Container_Type}</td></tr>`
+										);
+								} else {
+									window
+										.$(".containerList")
+										.append(
+											`<tr><td className='d-none containerUUID'>${value.BillOfLadingHasContainerUUID}</td><td><input type='checkbox' className='checkboxSplit' name='Split'></td><td><input type='checkbox' className='checkboxShare' name='Share'><td>${Container_Code}</td><td>${Container_Type}</td></tr>`
+										);
+								}
+							}
+						);
+					});
+					window.$("#SplitModal").modal("toggle");
+				}
+			}
+		});
+
+	window
+		.$("#merge")
+		.off("click")
+		.on("click", function () {
+			var object = {};
+			object[props.selectedId] = selections;
+			if (selections.length == 1) {
+				if (props.title == "booking-reservation") {
+					GetMergeBRList(
+						selectedRow[0].BookingReservationUUID,
+						props.host,
+						selectedRow[0].POLPortCode,
+						selectedRow[0].PODPortCode,
+						selectedRow[0].VoyageNum,
+						selectedRow[0].Quotation
+					).then((res) => {
+						var htmlBLList = "<option value=''>Select...</option>";
+						window.$.each(res.data.data, function (key, value) {
+							htmlBLList +=
+								"<option value='" + key + "'>" + value + "</option>";
+						});
+						window.$(".MergeBR").html(htmlBLList);
+						window.$(".MergeBR").select2({width: "100%"});
+					});
+					window.$("#MergeModalBR").modal("toggle");
+				} else {
+					GetMergeBLList(
+						selectedRow[0].BillOfLadingUUID,
+						props.host,
+						selectedRow[0].POLPortCode,
+						selectedRow[0].PODPortCode,
+						selectedRow[0].VoyageNum
+					).then((res) => {
+						var htmlBLList = "<option value=''>Select...</option>";
+						window.$.each(res.data.data, function (key, value) {
+							htmlBLList +=
+								"<option value='" +
+								value.BillOfLadingUUID +
+								"'>" +
+								value.DocNum +
+								"</option>";
+						});
+						window.$(".MergeBL").html(htmlBLList);
+						window.$(".MergeBL").select2({width: "100%"});
+					});
+					window.$("#MergeModal").modal("toggle");
+				}
+			}
+		});
+
+	window
+		.$("#revertSplit")
+		.off("click")
+		.on("click", function () {
+			window.$("#RevertSplitModal").modal("toggle");
+		});
+
+	window
+		.$("#dndButton")
+		.off("click")
+		.on("click", function () {
+			window.$("#DNDModal").modal("toggle");
+		});
+
+	window
+		.$(".SubmitDND")
+		.off("click")
+		.on("click", function () {
+			var applyDND = window.$(".DNDApplyCheckBox").prop("checked") ? "1" : "0";
+			var dndCombind = window.$(".DNDConbindorNot").prop("checked") ? "1" : "0";
+			var dndCombindDay = window
+				.$(`#${props.title}-quickform-dndcombinedday`)
+				.val();
+			var detention = window.$(`#${props.title}-quickform-detention`).val();
+			var demurrage = window.$(`#${props.title}-quickform-demurrage`).val();
+
+			var dataList = {
+				ApplyDND: applyDND,
+				DNDCombined: dndCombind,
+				DNDCombinedDay: dndCombindDay,
+				Detention: detention,
+				Demurrage: demurrage,
+				Type: props.selectedId,
+				Selection: selections,
+			};
+
+			GetUpdateDND(dataList, props.title, props.host).then((res) => {
+				ToastNotify("success", "DND Update Successfully");
+				window.$("#" + props.tableSelector).bootstrapTable("refresh");
+				window.$("#" + props.tableSelector).bootstrapTable("uncheckAll");
+			});
+		});
+
+	window
+		.$("#confirmSplitBL")
+		.off("click")
+		.on("click", function () {
+			if (
+				filteredAp.includes(`create-${tempModel}`) &&
+				filteredAp.includes(`split-${tempModel}`)
+			) {
+				var arraySplit = [];
+				var arrayShare = [];
+				var BillOfLadingUUID = selections[0];
+				window
+					.$("#split-container-table")
+					.find(".checkboxSplit:checked")
+					.each(function () {
+						arraySplit.push(
+							window.$(this).parent().parent().find(".containerUUID").text()
+						);
+					});
+				window
+					.$("#split-container-table")
+					.find(".checkboxShare:checked")
+					.each(function () {
+						arrayShare.push(
+							window.$(this).parent().parent().find(".containerUUID").text()
+						);
+					});
+				var SplitID = arraySplit.join(",");
+				var ShareID = arrayShare.join(",");
+				if (window.$(".splitParentId").val() == "") {
+					if (arraySplit.length !== 0 || arrayShare.length !== 0) {
+						props.navigate(
+							props.routeName +
+								"/split/splitid=" +
+								SplitID +
+								"&shareid=" +
+								ShareID +
+								"&id=" +
+								BillOfLadingUUID,
+							{
+								state: {
+									bLId: BillOfLadingUUID,
+									shareID: ShareID,
+									splitID: SplitID,
+									formType: "SplitBL",
+								},
+							}
+						);
+						// window.location.href = "./create2?SplitID=" + SplitID + "&ShareID=" + ShareID + "&BillOfLadingID=" + BillOfLadingUUID + "";
+					}
+				} else {
+					if (arrayShare.length !== 0) {
+						SplitID = "";
+						props.navigate(
+							props.routeName +
+								"/split/splitid=" +
+								SplitID +
+								"&shareid=" +
+								ShareID +
+								"&id=" +
+								BillOfLadingUUID,
+							{
+								state: {
+									bLId: BillOfLadingUUID,
+									shareID: ShareID,
+									splitID: SplitID,
+									formType: "SplitBL",
+								},
+							}
+						);
+						// window.location.href = "./create2?SplitID=" + SplitID + "&ShareID=" + ShareID + "&BillOfLadingID=" + BillOfLadingUUID + "";
+					} else {
+						alert(
+							"Split record cannot perform split action again.Please use revert feature"
+						);
+					}
+				}
+				window.$("#SplitModal").modal("toggle");
+			} else {
+				alert(
+					"You are not allowed to perform Split, Please check your Permission."
+				);
+			}
+		});
+
+	window
+		.$("#confirmSplitBR")
+		.off("click")
+		.on("click", function () {
+			if (
+				filteredAp.includes(`create-${tempModel}`) &&
+				filteredAp.includes(`split-${tempModel}`)
+			) {
+				var arraySplitContainer = [];
+				var arraySplitContainerType = [];
+				var BookingReservationUUID = selections[0];
+				window
+					.$("#split-container-tableBR")
+					.find(".checkboxSplit:checked")
+					.each(function () {
+						arraySplitContainer.push(
+							window.$(this).parent().parent().find(".containerUUID").text()
+						);
+						arraySplitContainerType.push(
+							window
+								.$(this)
+								.parent()
+								.parent()
+								.find(".containerTypeSplit")
+								.find(":hidden")
+								.val()
+						);
+					});
+				var SplitID = arraySplitContainer.join(",");
+				var ContainerTypeID = arraySplitContainerType.join(",");
+
+				if (window.$(".splitParentIdBR").val() == "") {
+					if (arraySplitContainer.length !== 0) {
+						var data = {
+							id: BookingReservationUUID,
+							containerTypeID: ContainerTypeID,
+							splitID: SplitID,
+						};
+						getSplitDataBR(data, props.host).then((res) => {
+							if (res.data.message) {
+								ToastNotify("error", res.data.message);
+							} else {
+								window.$("#SplitModalBR").modal("toggle");
+								props.navigate(
+									"/" +
+										props.routeName +
+										"/split/splitid=" +
+										ContainerTypeID +
+										"&id=" +
+										BookingReservationUUID +
+										"&containerid=" +
+										SplitID,
+									{
+										state: {
+											id: BookingReservationUUID,
+											containerTypeID: ContainerTypeID,
+											splitID: SplitID,
+											formType: "SplitBR",
+										},
+									}
+								);
+							}
+						});
+					}
+				}
+			} else {
+				alert(
+					"You are not allowed to perform Split, Please check your Permission."
+				);
+			}
+		});
+
+	window
+		.$("#confirmMergeBL")
+		.off("click")
+		.on("click", function () {
+			if (
+				filteredAp.includes(`update-${tempModel}`) &&
+				filteredAp.includes(`merge-${tempModel}`)
+			) {
+				var MergedIDs = "";
+				if (window.$(".MergeBL").val().length > 0) {
+					MergedIDs = window.$(".MergeBL").val().join(",");
+				}
+				window.$("#MergeModal").modal("toggle");
+				props.navigate(
+					props.routeName +
+						"/merge/id=" +
+						selectedRow[0].BillOfLadingUUID +
+						"&mergeid=" +
+						MergedIDs,
+					{
+						state: {
+							bLId: selectedRow[0].BillOfLadingUUID,
+							mergeIDs: MergedIDs,
+							formType: "MergeBL",
+						},
+					}
+				);
+			} else {
+				alert(
+					"You are not allowed to perform Merge, Please check your Permission."
+				);
+			}
+		});
+
+	window
+		.$("#confirmMergeBR")
+		.off("click")
+		.on("click", function () {
+			if (
+				filteredAp.includes(`update-${tempModel}`) &&
+				filteredAp.includes(`merge-${tempModel}`)
+			) {
+				var MergedIDs = "";
+				if (window.$(".MergeBR").val().length > 0) {
+					MergedIDs = window.$(".MergeBR").val().join(",");
+				}
+				var data = {
+					id: selectedRow[0].BookingReservationUUID,
+					mergeIDs: MergedIDs,
+				};
+				GetMergeBR(data, props.host, MergedIDs).then((res) => {
+					if (res.data.message) {
+						ToastNotify("error", res.data.message);
+					} else {
+						window.$("#MergeModalBR").modal("toggle");
+						props.navigate(
+							props.routeName +
+								"/merge/id=" +
+								selectedRow[0].BookingReservationUUID +
+								"&mergeid=" +
+								MergedIDs,
+							{
+								state: {
+									id: selectedRow[0].BookingReservationUUID,
+									mergeIDs: MergedIDs,
+									formType: "MergeBR",
+								},
+							}
+						);
+					}
+				});
+			} else {
+				alert(
+					"You are not allowed to perform Merge, Please check your Permission."
+				);
+			}
+		});
+
+	window
+		.$("#telexRelease")
+		.off("click")
+		.on("click", function () {
+			window.$("#ButtonTelexModal").modal("toggle");
+		});
+	window
+		.$(".transferToBR")
+		.off("click")
+		.on("click", function () {
+			window.$("#TransferBRModal").modal("toggle");
+		});
+
+	window
+		.$(".TransferBR")
+		.off("click")
+		.on("click", function () {
+			var tempVal;
+			tempModel == "quotation-barge"
+				? (tempVal = "create-booking-reservation-barge")
+				: (tempVal = "create-booking-reservation");
+			if (
+				filteredAp.includes(`transfer-${tempModel}`) &&
+				filteredAp.includes(tempVal)
+			) {
+				window.$("#TransferBRModal").modal("toggle");
+				if (tempModel == "quotation-barge") {
+					getTransferFromQuotationData(selections[0], props.host).then(
+						(res) => {
+							if (res.data.message == "Quotation already expired") {
+								alert("Quotation already expired");
+							} else {
+								props.navigate(
+									"/sales/standard/booking-reservation-barge/transfer-from-quotation/id=" +
+										selections[0],
+									{
+										state: {
+											id: selections[0],
+											formType: "Transfer",
+											transferFromModel: "quotation",
+										},
+									}
+								);
+							}
+						}
+					);
+				} else {
+					getTransferFromQuotationData(selections[0], props.host).then(
+						(res) => {
+							if (res.data.message == "Quotation already expired") {
+								alert("Quotation already expired");
+							} else {
+								props.navigate(
+									"/sales/container/booking-reservation/transfer-from-quotation/id=" +
+										selections[0],
+									{
+										state: {
+											id: selections[0],
+											formType: "Transfer",
+											transferFromModel: "quotation",
+										},
+									}
+								);
+							}
+						}
+					);
+				}
+			} else {
+				alert(
+					"You are not allowed to transfer to Booking Reservation, Please check your Permission."
+				);
+			}
+		});
+
+	window
+		.$(".transferfromBR")
+		.off("click")
+		.on("click", function () {
+			window.$("#TransferBRModal").modal("toggle");
+		});
+
+	window
+		.$(".transferfromBC")
+		.off("click")
+		.on("click", function () {
+			window.$("#TransferFromBCModal").modal("toggle");
+		});
+
+	window
+		.$("#transfertocroinv")
+		.off("click")
+		.on("click", function () {
+			window
+				.$("#BookingComfirmationUUID")
+				.val(selectedRow[0]["BookingConfirmationUUID"]);
+			window.$("#TransferToCROINVModal").modal("toggle");
+		});
+
+	window
+		.$("#transfertocndn")
+		.off("click")
+		.on("click", function () {
+			window.$("#TransferToCNDNModal").modal("toggle");
+		});
+
+	window
+		.$(".TransferToCN")
+		.off("click")
+		.on("click", function () {
+			var temValue;
+			tempModel == "sales-invoice"
+				? (temValue = "create-sales-credit-note")
+				: (temValue = "create-sales-credit-note-barge");
+
+			if (
+				filteredAp.includes(`transferto-${tempModel}`) &&
+				filteredAp.includes(temValue)
+			) {
+				window.$(".CheckingTransferToCNOrDN").val("CN");
+				window.$("#SalesInvoiceUUIDForPartial").val(selections[0]);
+				window.$("#TransferToCNDNModal").modal("toggle");
+				window.$("#TransferPartialToCNDNModal").modal("toggle");
+			} else {
+				alert(
+					"You are not allowed to transfer to Credit Note, Please check your Permission."
+				);
+			}
+		});
+
+	window
+		.$(".TransferToDN")
+		.off("click")
+		.on("click", function () {
+			var temValue;
+			tempModel == "sales-invoice"
+				? (temValue = "create-sales-debit-note")
+				: (temValue = "create-sales-debit-note-barge");
+
+			if (
+				filteredAp.includes(`transferto-${tempModel}`) &&
+				filteredAp.includes(temValue)
+			) {
+				window.$(".CheckingTransferToCNOrDN").val("DN");
+				window.$("#SalesInvoiceUUIDForPartial").val(selections[0]);
+
+				window.$("#TransferToCNDNModal").modal("toggle");
+				window.$("#TransferPartialToCNDNModal").modal("toggle");
+			} else {
+				alert(
+					"You are not allowed to transfer to Debit Note, Please check your Permission."
+				);
+			}
+		});
+
+	window
+		.$("#TransferAllFromBC")
+		.off("click")
+		.on("click", function () {
+			var type;
+			props.title == "sales-invoice-barge"
+				? (type = "barge")
+				: (type = "normal");
+
+			if (
+				filteredAp.includes(`transferfrom-${tempModel}`) &&
+				filteredAp.includes(`create-${tempModel}`)
+			) {
+				var BC = window.$("input[name=BC]").val();
+				if (BC) {
+					checkBCTransfer(BC, props.host, type).then((checking) => {
+						if (checking == 1) {
+							getRemainingBCbyID(BC, props.host, type).then((res) => {
+								if (res) {
+									getBookingConfirmationHasContainerType(
+										BC,
+										props.host,
+										type
+									).then((BCData) => {
+										var checkingCustomerList = [];
+										window.$.each(BCData.data, function (key, value) {
+											window.$.each(
+												value.bookingConfirmationCharges,
+												function (key2, value2) {
+													var data = {};
+													if (value2.BillTo) {
+														var temp = {
+															value: value2.BillTo,
+															label:
+																value2.billTo.BranchCode +
+																"(" +
+																value2.billTo.portCode.PortCode +
+																")",
+														};
+													} else {
+														var temp = {};
+													}
+													data["CustomerType"] = value2.CustomerType;
+													data["BillTo"] = temp;
+													if (temp) {
+														checkingCustomerList.push(data);
+													}
+												}
+											);
+										});
+
+										const uniqueData = [];
+
+										checkingCustomerList.forEach((obj, index) => {
+											const isDuplicate = uniqueData.some((prevObj) => {
+												return (
+													prevObj.BillTo.value === obj.BillTo.value &&
+													prevObj.CustomerType === obj.CustomerType
+												);
+											});
+											if (!isDuplicate) {
+												uniqueData.push(obj);
+											}
+										});
+										window.$(".checkingBillToList").empty();
+										const BCHidden = window.$(
+											'<input type="hidden" name="BCUUID" value="' + BC + '">'
+										);
+										window.$(".checkingBillToList").append(BCHidden);
+										window.$.each(uniqueData, function (key, value) {
+											const customerType = window.$(
+												'<input type="hidden" name="customerType" value="' +
+													value.CustomerType +
+													'">'
+											);
+											const radio = window.$(
+												`<input type="radio" className="mr-2" id="radio-window.${key}" name="billTo" value="` +
+													value.BillTo.value +
+													'">'
+											);
+											const label = window.$(
+												`<label className="control-label" for="radio-window.${key}">` +
+													value.CustomerType +
+													" - " +
+													value.BillTo.label +
+													"</label>"
+											);
+											window
+												.$(".checkingBillToList")
+												.append(customerType)
+												.append(radio)
+												.append(label)
+												.append("<br>");
+										});
+										window.$("#TransferFromBCModal").modal("toggle");
+										window.$("#CheckingBillToModal").modal("toggle");
+
+										// window.$("#TransferToCROINVModal").modal("toggle")
+										// props.navigate("/sales/container/sales-invoice/transfer-from-booking-reservation-data/id="+BC,{ state: { id:BC, formType: "TransferFromBooking" }})
+									});
+								} else {
+									alert("This booking has been fully transferred");
+								}
+							});
+						} else {
+							alert("Container is Empty.");
+						}
+					});
+				}
+			} else {
+				alert(
+					"You are not allowed to transfer from Booking Reservation, Please check your Permission."
+				);
+			}
+
+			// window.$("#TransferFromBCModal").modal("toggle")
+			// navigate("/sales/container/sales-invoice/transfer-from-booking-reservation-data/id="+BC,{ state: { id:BC, formType: "TransferFromBooking" }})
+		});
+
+	window
+		.$("#TransferAllTo")
+		.off("click")
+		.on("click", function () {
+			var TransferType = window
+				.$("input[name='flexRadioDefault']:checked")
+				.val();
+			var val;
+			var type;
+			props.title == "booking-reservation-barge"
+				? (val = "create-sales-invoice-barge")
+				: (val = "create-sales-invoice");
+			props.title == "booking-reservation-barge"
+				? (type = "barge")
+				: (type = "normal");
+
+			// var BR = $("#TransferBR").val();
+			// var BC = $("#TransferBC").val();
+			if (TransferType == "CRO") {
+				if (
+					filteredAp.includes(`transferto-${tempModel}`) &&
+					filteredAp.includes(`create-container-release-order`)
+				) {
+					window.$("#TransferToCROINVModal").modal("toggle");
+					ControlOverlay(true);
+					props.navigate(
+						"/operation/container/container-release-order/transfer-from-booking-reservation-data/id=" +
+							selections[0],
+						{
+							state: {
+								id: selections[0],
+								formType: "TransferFromBooking",
+								transferFromModel: "booking-reservation",
+							},
+						}
+					);
+
+					// else {
+					//   alert("You are not allow to transfer to Container Release Order, Please Check Quotation Number for this Booking.")
+					// }
+				} else {
+					alert(
+						"You are not allowed to transfer to Container Realease Order, Please check your Permission."
+					);
+				}
+			} else {
+				if (
+					filteredAp.includes(`transferto-${tempModel}`) &&
+					filteredAp.includes(val)
+				) {
+					var BC = selectedRow[0]["BookingConfirmationUUID"];
+					if (BC == "" || BC == null) {
+						alert("Booking Reservation has not been confirmed");
+					} else {
+						checkBCTransfer(BC, props.host, type).then((checking) => {
+							if (checking == 1) {
+								getRemainingBCbyID(BC, props.host, type).then((res) => {
+									if (res) {
+										getBookingConfirmationHasContainerType(
+											BC,
+											props.host,
+											type
+										).then((BCData) => {
+											var checkingCustomerList = [];
+											window.$.each(BCData.data, function (key, value) {
+												window.$.each(
+													value.bookingConfirmationCharges,
+													function (key2, value2) {
+														var data = {};
+														var temp = {
+															value: value2.BillTo,
+															label:
+																value2.billTo.BranchCode +
+																"(" +
+																value2.billTo.portCode.PortCode +
+																")",
+														};
+														data["CustomerType"] = value2.CustomerType;
+														data["BillTo"] = temp;
+														checkingCustomerList.push(data);
+													}
+												);
+											});
+
+											const uniqueData = [];
+
+											checkingCustomerList.forEach((obj, index) => {
+												const isDuplicate = uniqueData.some((prevObj) => {
+													return (
+														prevObj.BillTo.value === obj.BillTo.value &&
+														prevObj.CustomerType === obj.CustomerType
+													);
+												});
+												if (!isDuplicate) {
+													uniqueData.push(obj);
+												}
+											});
+											window.$(".checkingBillToList").empty();
+
+											const BCHidden = window.$(
+												'<input type="hidden" name="BCUUID" value="' + BC + '">'
+											);
+											window.$(".checkingBillToList").append(BCHidden);
+											window.$.each(uniqueData, function (key, value) {
+												const customerType = window.$(
+													'<input type="hidden" name="customerType" value="' +
+														value.CustomerType +
+														'">'
+												);
+												const radio = window.$(
+													`<input type="radio" className="mr-2" id="radio-window.${key}" name="billTo" value="` +
+														value.BillTo.value +
+														'">'
+												);
+												const label = window.$(
+													`<label className="control-label" for="radio-window.${key}">` +
+														value.CustomerType +
+														" - " +
+														value.BillTo.label +
+														"</label>"
+												);
+												window
+													.$(".checkingBillToList")
+													.append(customerType)
+													.append(radio)
+													.append(label)
+													.append("<br>");
+											});
+											window.$("#CheckingBillToModal").modal("toggle");
+
+											// window.$("#TransferToCROINVModal").modal("toggle")
+											// props.navigate("/sales/container/sales-invoice/transfer-from-booking-reservation-data/id="+BC,{ state: { id:BC, formType: "TransferFromBooking" }})
+										});
+									} else {
+										alert("This booking has been fully transferred");
+									}
+								});
+							} else {
+								alert("Container is Empty.");
+							}
+						});
+					}
+				} else {
+					alert(
+						"You are not allowed to transfer to Sales Invoice, Please check your Permission."
+					);
+				}
+
+				//     } else {
+				//         alert("You are not allowed to transfer to Sales Invoice, Please check your Permission.")
+				//     }
+			}
+		});
+
+	window
+		.$("#confirmRevertSplitBL")
+		.off("click")
+		.on("click", function () {
+			var BillOfLadingUUID = selections[0];
+			if (selections.length == 1) {
+				if (filteredAp.includes(`revert-${tempModel}`)) {
+					RevertSplitBL(props.host, props.tableId, BillOfLadingUUID).then(
+						(res) => {
+							if (res) {
+								ToastNotify(
+									"success",
+									"Bill Of Loading revert split successfully"
+								);
+								window.$("#RevertSplitModal").modal("toggle");
+								window.$("#" + props.tableSelector).bootstrapTable("refresh");
+								window
+									.$("#" + props.tableSelector)
+									.bootstrapTable("uncheckAll");
+							}
+						}
+					);
+				} else {
+					alert(
+						"You are not allowed to perform Rervert Split, Please check your Permission."
+					);
+				}
+			}
+		});
+
+	window
+		.$("#ContainerReleaseOrderOri")
+		.off("click")
+		.on("click", function () {
+			var object = {};
+			object[props.selectedId] = selections;
+			window.$("#PreviewPdfCROModal").modal("toggle");
+			window.$("#PreviewPdfModal").modal("toggle");
+			if (selections.length == 1) {
+				Preview(props.host, props.tableId, selections[0]).then((res) => {
+					var file = new Blob([res.data], {type: "application/pdf"});
+					let url = window.URL.createObjectURL(file);
+
+					window.$("#pdfFrameList").attr("src", url);
+				});
+			}
+		});
+
+	window
+		.$("#ContainerReleaseOrderLetter")
+		.off("click")
+		.on("click", function () {
+			var object = {};
+			object[props.selectedId] = selections;
+			window.$("#PreviewPdfCROModal").modal("toggle");
+			window.$("#PreviewPdfModal").modal("toggle");
+			if (selections.length == 1) {
+				PreviewLetter(props.host, props.tableId, selections[0]).then((res) => {
+					var file = new Blob([res.data], {type: "application/pdf"});
+					let url = window.URL.createObjectURL(file);
+
+					window.$("#pdfFrameList").attr("src", url);
+				});
+			}
+		});
+
+	window
+		.$("#BillOfLadingOri")
+		.off("click")
+		.on("click", function () {
+			var object = {};
+			object[props.selectedId] = selections;
+			window.$("#PreviewPdfBLModal").modal("toggle");
+			window.$("#PreviewPdfModal").modal("toggle");
+			if (selections.length == 1) {
+				PreviewBillOfLading(
+					props.host,
+					props.tableId,
+					selections[0],
+					"BillOfLading"
+				).then((res) => {
+					var file = new Blob([res.data], {type: "application/pdf"});
+					let url = window.URL.createObjectURL(file);
+
+					window.$("#pdfFrameList").attr("src", url);
+				});
+			}
+		});
+
+	window
+		.$("#ShippingOrder")
+		.off("click")
+		.on("click", function () {
+			var object = {};
+			object[props.selectedId] = selections;
+			window.$("#PreviewPdfBLModal").modal("toggle");
+			window.$("#PreviewPdfModal").modal("toggle");
+			if (selections.length == 1) {
+				PreviewBillOfLading(
+					props.host,
+					props.tableId,
+					selections[0],
+					"ShippingOrder"
+				).then((res) => {
+					var file = new Blob([res.data], {type: "application/pdf"});
+					let url = window.URL.createObjectURL(file);
+
+					window.$("#pdfFrameList").attr("src", url);
+				});
+			}
+		});
+
+	window
+		.$("#ShippingAdviceNote")
+		.off("click")
+		.on("click", function () {
+			var object = {};
+			object[props.selectedId] = selections;
+			window.$("#PreviewPdfBLModal").modal("toggle");
+			window.$("#PreviewPdfModal").modal("toggle");
+			if (selections.length == 1) {
+				PreviewBillOfLading(
+					props.host,
+					props.tableId,
+					selections[0],
+					"ShippingAdviceNote"
+				).then((res) => {
+					var file = new Blob([res.data], {type: "application/pdf"});
+					let url = window.URL.createObjectURL(file);
+
+					window.$("#pdfFrameList").attr("src", url);
+				});
+			}
+		});
+
+	window
+		.$("#ShippingOrderDeclaration")
+		.off("click")
+		.on("click", function () {
+			var object = {};
+			object[props.selectedId] = selections;
+			window.$("#PreviewPdfBLModal").modal("toggle");
+			window.$("#PreviewPdfModal").modal("toggle");
+			if (selections.length == 1) {
+				PreviewBillOfLading(
+					props.host,
+					props.tableId,
+					selections[0],
+					"ShippingOrderDeclaration"
+				).then((res) => {
+					var file = new Blob([res.data], {type: "application/pdf"});
+					let url = window.URL.createObjectURL(file);
+
+					window.$("#pdfFrameList").attr("src", url);
+				});
+			}
+		});
+
+	window
+		.$("#bookingReservationPDF")
+		.off("click")
+		.on("click", function () {
+			var object = {};
+			object[props.selectedId] = selections;
+			window.$("#PreviewPdfBRModal").modal("toggle");
+			window.$("#PreviewPdfModal").modal("toggle");
+
+			if (selections.length == 1) {
+				PreviewBR(props.host, props.tableId, selections[0]).then((res) => {
+					var file = new Blob([res.data], {type: "application/pdf"});
+					let url = window.URL.createObjectURL(file);
+					window.$("#pdfFrameList").attr("src", url);
+				});
+			}
+		});
+
+	window
+		.$("#customerPaymentNormalPDF")
+		.off("click")
+		.on("click", function () {
+			var object = {};
+			object[props.selectedId] = selections;
+			window.$("#PreviewPdfORModal").modal("toggle");
+			window.$("#PreviewPdfModal").modal("toggle");
+
+			if (selections.length == 1) {
+				PreviewOR(props.host, props.tableId, selections[0]).then((res) => {
+					var file = new Blob([res.data], {type: "application/pdf"});
+					let url = window.URL.createObjectURL(file);
+					window.$("#pdfFrameList").attr("src", url);
+				});
+			}
+		});
+
+	window
+		.$("#customerPaymentDetailPDF")
+		.off("click")
+		.on("click", function () {
+			var object = {};
+			object[props.selectedId] = selections;
+			window.$("#PreviewPdfORModal").modal("toggle");
+			window.$("#PreviewPdfModal").modal("toggle");
+
+			if (selections.length == 1) {
+				PreviewOR(props.host, props.tableId, selections[0], "detail").then(
+					(res) => {
+						var file = new Blob([res.data], {type: "application/pdf"});
+						let url = window.URL.createObjectURL(file);
+						window.$("#pdfFrameList").attr("src", url);
+					}
+				);
+			}
+		});
+
+	window
+		.$("#bookingConfirmationPDF")
+		.off("click")
+		.on("click", function () {
+			var object = {};
+			object[props.selectedId] = selections;
+			window.$("#PreviewPdfBRModal").modal("toggle");
+			window.$("#PreviewPdfModal").modal("toggle");
+
+			if (selections.length == 1) {
+				PreviewBC(
+					props.host,
+					props.tableId,
+					selectedRow[0]["BookingConfirmationUUID"]
+				).then((res) => {
+					var file = new Blob([res.data], {type: "application/pdf"});
+					let url = window.URL.createObjectURL(file);
+					window.$("#pdfFrameList").attr("src", url);
+				});
+			}
+		});
+
+	window
+		.$("#Original")
+		.off("click")
+		.on("click", function () {
+			var object = {};
+			object[props.selectedId] = selections;
+			window.$("#PreviewPdfCNDNModal").modal("toggle");
+			window.$("#PreviewPdfModal").modal("toggle");
+			if (selections.length == 1) {
+				PreviewINVCNDN(
+					props.host,
+					props.tableId,
+					selections[0],
+					`${
+						props.title == "sales-invoice" ||
+						props.title == "sales-invoice-barge"
+							? ""
+							: "Sales"
+					}${props.selectedId.replace(/UUIDs/g, "")}Original`
+				).then((res) => {
+					var file = new Blob([res.data], {type: "application/pdf"});
+					let url = window.URL.createObjectURL(file);
+					window.$("#pdfFrameList").attr("src", url);
+				});
+			}
+		});
+
+	window
+		.$("#Account")
+		.off("click")
+		.on("click", function () {
+			var object = {};
+			object[props.selectedId] = selections;
+			window.$("#PreviewPdfCNDNModal").modal("toggle");
+			window.$("#PreviewPdfModal").modal("toggle");
+			if (selections.length == 1) {
+				PreviewINVCNDN(
+					props.host,
+					props.tableId,
+					selections[0],
+					`${
+						props.title == "sales-invoice" ||
+						props.title == "sales-invoice-barge"
+							? ""
+							: "Sales"
+					}${props.selectedId.replace(/UUIDs/g, "")}Account`
+				).then((res) => {
+					var file = new Blob([res.data], {type: "application/pdf"});
+					let url = window.URL.createObjectURL(file);
+					window.$("#pdfFrameList").attr("src", url);
+				});
+			}
+		});
+
+	window
+		.$("#ReprintOriginal")
+		.off("click")
+		.on("click", function () {
+			var object = {};
+			object[props.selectedId] = selections;
+			window.$("#PreviewPdfCNDNModal").modal("toggle");
+			window.$("#PreviewPdfModal").modal("toggle");
+			if (selections.length == 1) {
+				PreviewINVCNDN(
+					props.host,
+					props.tableId,
+					selections[0],
+					`${
+						props.title == "sales-invoice" ||
+						props.title == "sales-invoice-barge"
+							? ""
+							: "Sales"
+					}${props.selectedId.replace(/UUIDs/g, "")}ReprintOriginal`
+				).then((res) => {
+					var file = new Blob([res.data], {type: "application/pdf"});
+					let url = window.URL.createObjectURL(file);
+					window.$("#pdfFrameList").attr("src", url);
+				});
+			}
+		});
+
+	window
+		.$("#ReprintAccount")
+		.off("click")
+		.on("click", function () {
+			var object = {};
+			object[props.selectedId] = selections;
+			window.$("#PreviewPdfCNDNModal").modal("toggle");
+			window.$("#PreviewPdfModal").modal("toggle");
+			if (selections.length == 1) {
+				PreviewINVCNDN(
+					props.host,
+					props.tableId,
+					selections[0],
+					`${
+						props.title == "sales-invoice" ||
+						props.title == "sales-invoice-barge"
+							? ""
+							: "Sales"
+					}${props.selectedId.replace(/UUIDs/g, "")}ReprintAccount`
+				).then((res) => {
+					var file = new Blob([res.data], {type: "application/pdf"});
+					let url = window.URL.createObjectURL(file);
+					window.$("#pdfFrameList").attr("src", url);
+				});
+			}
+		});
+
+	window.$("#telex").click(function () {
+		var object = {};
+		object[props.selectedId] = selections;
+		if (selections.length > 0) {
+			if (filteredAp.includes(`telex-release-${tempModel}`)) {
+				TelexRelease(props.host, props.tableId, object).then((res) => {
+					if (res.Success.length > 0) {
+						ToastNotify("success", "Telex Release Successfully");
+						window.$("#ButtonTelexModal").modal("toggle");
+						window.$("#" + props.tableSelector).bootstrapTable("refresh");
+						window.$("#" + props.tableSelector).bootstrapTable("uncheckAll");
+					}
+					if (res.Failed.length > 0) {
+						var failedDocNum = [];
+						window.$.each(res.Failed, function (key, value) {
+							failedDocNum.push(value.DocNum);
+						});
+						window.$("#ButtonTelexModal").modal("toggle");
+						alert(failedDocNum.join(",") + " need to be verified");
+						window.$("#" + props.tableSelector).bootstrapTable("refresh");
+						window.$("#" + props.tableSelector).bootstrapTable("uncheckAll");
+					}
+				});
+			} else {
+				alert(
+					"You are not allowed to perform Telex Release, Please check your Permission."
+				);
+			}
+		}
+	});
+
+	window
+		.$("#generate")
+		.off("click")
+		.click(function () {
+			var object = {};
+
+			object["BLUUIDs"] = selections;
+
+			if (selections.length > 0) {
+				if (filteredAp.includes(`create-${tempModel}`)) {
+					CheckDOStatus(props.host, props.tableId, object).then((res) => {
+						var ArraySuccessDo = [];
+						var ArraySuccessINV = [];
+						var NoDueInvoice = true;
+						window.$.each(res.success, function (key1, value) {
+							if (
+								JSON.stringify(value).includes("success create Delivery Order")
+							) {
+								var split = JSON.stringify(value).split(":");
+								ArraySuccessDo.push(split[0].replace(/\W/g, ""));
+							}
+
+							if (
+								JSON.stringify(value).includes("success create Sales Invoice")
+							) {
+								var split = JSON.stringify(value).split(":");
+								ArraySuccessINV.push(split[0].replace(/\W/g, ""));
+							}
+						});
+						if (ArraySuccessINV.length > 0) {
+							var SuccessDO = ArraySuccessDo.join(",");
+							var SuccessINV = ArraySuccessINV.join(",");
+							alert(
+								SuccessDO +
+									" Delivery order successfully generated\n\n" +
+									SuccessINV +
+									" Sales invoice successfully generated."
+							);
+						} else if (ArraySuccessDo.length > 0) {
+							var SuccessDO = ArraySuccessDo.join(",");
+							alert(SuccessDO + " Delivery order successfully generated.");
+						} else if (res["Due"] != undefined) {
+							if (res.CreditLimit == 1) {
+								var splitinvoice = res["Due"];
+								alert(
+									splitinvoice +
+										" already due. The company also reached the credit limit. Please proceed payment for DO realease."
+								);
+								NoDueInvoice = false;
+							} else {
+								var splitinvoice = res["Due"];
+								alert(
+									splitinvoice +
+										" already due. Please proceed payment for DO realease."
+								);
+								NoDueInvoice = false;
+							}
+						} else {
+							if (NoDueInvoice == true) {
+								if (res.CreditLimit == 1) {
+									var splitinvoice = res["Due"];
+									alert(
+										"The company reached the credit limit. Please proceed payment for DO realease."
+									);
+								}
+							}
+						}
+						window.$("#" + props.tableSelector).bootstrapTable("refresh");
+						window.$("#" + props.tableSelector).bootstrapTable("uncheckAll");
+					});
+				} else {
+					alert(
+						"You are not allowed to perform Generate Delivery Order, Please check your Permission."
+					);
+				}
+			}
+		});
+
+	window.$(document).on("click", ".checkboxSplit", function () {
+		if (window.$(this).parent().next().find(".checkboxShare").prop("checked")) {
+			window
+				.$(this)
+				.parent()
+				.next()
+				.find(".checkboxShare")
+				.prop("checked", false);
+		}
+	});
+
+	window.$(document).on("click", ".checkboxShare", function () {
+		if (window.$(this).parent().prev().find(".checkboxSplit").prop("checked")) {
+			window
+				.$(this)
+				.parent()
+				.prev()
+				.find(".checkboxSplit")
+				.prop("checked", false);
+		}
+	});
+
+	window.$(document).on("click", ".DNDApplyCheckBox", function () {
+		if (window.$(this).prop("checked")) {
+			window
+				.$(this)
+				.closest(".modal-body")
+				.find(".DNDApplyClass")
+				.removeClass("d-none");
+		} else {
+			window
+				.$(this)
+				.closest(".modal-body")
+				.find(".DNDApplyClass")
+				.addClass("d-none");
+		}
+	});
+
+	window.$(document).on("click", ".DNDConbindorNot ", function () {
+		if (window.$(this).prop("checked")) {
+			window.$(".DNDCombineDay").removeClass("d-none");
+			window.$(".Detention").addClass("d-none");
+			window.$(".Demurrage").addClass("d-none");
+		} else {
+			window.$(".DNDCombineDay").addClass("d-none");
+			window.$(".Detention").removeClass("d-none");
+			window.$(".Demurrage").removeClass("d-none");
+		}
+	});
+
+	window
+		.$(".CheckTransfer")
+		.off("click")
+		.on("click", function () {
+			var value = window.$(this).val();
+
+			if (value == "Invoice") {
+				if (window.$(`#BookingComfirmationUUID`).val() == "") {
+					window.$("#TransferToPartial").prop("disabled", true);
+				} else {
+					window.$("#TransferToPartial").prop("disabled", false);
+				}
+			}
+			if (value == "CRO") {
+				window.$("#TransferToPartial").prop("disabled", true);
+			}
+		});
+
+	window
+		.$("#downloadSample")
+		.off("click")
+		.on("click", function () {
+			const object = document.createElement("a");
+			object.href = ContainerTemplate;
+			object.download = "file.xls";
+			document.body.appendChild(object);
+			object.click();
+			document.body.removeChild(object);
+		});
+
+	window
+		.$("#uploadContainer")
+		.off("click")
+		.on("click", function () {
+			window.$("#fileContainer").val("");
+			window.$("#fileContainer").click();
+		});
+
+	window
+		.$("#fileContainer")
+		.off("change")
+		.on("change", function () {
+			var formData = new FormData();
+			formData.append("file", window.$("#fileContainer")[0].files[0]);
+
+			ImportContainer(props.host, formData).then((res) => {
+				if (res.data.Success) {
+					if (res.data.Success.length > 0) {
+						ToastNotify("success", "Successfully Uploaded");
+						window.$("#" + props.tableSelector).bootstrapTable("refresh");
+						window.$("#" + props.tableSelector).bootstrapTable("uncheckAll");
+					}
+				}
+				var ListSameContainerCode = [];
+				var ListErrorContainerType = [];
+				var message = "";
+
+				if (res.data.Failed) {
+					if (res.data.Failed.length > 0) {
+						window.$.each(res.data.Failed, function (key, value) {
+							ListSameContainerCode.push('"' + value["Container Code"] + '"');
+						});
+						message =
+							ListSameContainerCode.toString(",") +
+							" Containers already Exist.\n\n";
+
+						if (res.data.ContainerTypeError) {
+							window.$.each(
+								res.data.ContainerTypeError,
+								function (key, value2) {
+									ListErrorContainerType.push(
+										'"' + value2["Container Code"] + '"'
+									);
+								}
+							);
+							message +=
+								ListErrorContainerType.toString(",") +
+								" Container Types not Exist.\n\n";
+						}
+						message += "Failed to Upload.";
+						// window.$(".FailedMessageField").html(message);
+						window.$(".FailedMessageField").html(message);
+						window.$("#FailedMessageModal").modal("toggle");
+
+						// FailedMessageField
+					}
+				} else {
+					if (res.data.ContainerTypeError) {
+						window.$.each(res.data.ContainerTypeError, function (key, value2) {
+							ListErrorContainerType.push('"' + value2["Container Code"] + '"');
+						});
+						message +=
+							ListErrorContainerType.toString(",") +
+							" Container Types not Exist.\n\n";
+
+						message += "Failed to Upload.";
+						// window.$(".FailedMessageField").html(message);
+						window.$(".FailedMessageField").html(message);
+						window.$("#FailedMessageModal").modal("toggle");
+					}
+				}
+			});
+		});
+
+	window
+		.$(".confirmTransferFillterBillTo")
+		.off("click")
+		.on("click", function () {
+			var BC = window.$("input[name=BCUUID]").val();
+			var BranchCode = window.$("input[name=billTo]:checked").val();
+			var CustomerType = window.$("input[name=billTo]:checked").prev().val();
+
+			window.$("#CheckingBillToModal").modal("toggle");
+			window.$("#TransferToCROINVModal").modal("hide");
+			if (
+				props.title == "sales-invoice-barge" ||
+				props.title == "booking-reservation-barge"
+			) {
+				props.navigate(
+					"/sales/standard/sales-invoice-barge/transfer-from-booking-reservation-data/id=" +
+						BC,
+					{
+						state: {
+							id: BC,
+							formType: "TransferFromBooking",
+							CustomerType: CustomerType,
+							BranchCode: BranchCode,
+						},
+					}
+				);
+			} else {
+				props.navigate(
+					"/sales/container/sales-invoice/transfer-from-booking-reservation-data/id=" +
+						BC,
+					{
+						state: {
+							id: BC,
+							formType: "TransferFromBooking",
+							CustomerType: CustomerType,
+							BranchCode: BranchCode,
+						},
+					}
+				);
+			}
+		});
+
+	var arraycheck = [];
+	var arrayGenerateDO = [];
+	//delivery order condition here
+	if (
+		props.tableId == "delivery-order" ||
+		props.tableId == "delivery-order-barge"
+	) {
+		window
+			.$("#" + props.tableSelector)
+			.on("check.bs.table", function (row, element, field) {
+				// $.each(ArrayPermission, function (key, value) {
+				//   $("#toolbar").find("button").each(function () {
+				//     var resultData = $(this).attr('class').split(" ").filter(function (oneArray) {
+				//         return oneArray== value;
+				//     })
+				//     if(resultData.length!=0){
+
+				//       if (resultData[0].includes("preview")){
+				//         $getPreviewPDFPermission = true;
+				//       }
+				//       else if (resultData[0].includes("create")){
+				//         $getGenerateDOPermission = true;
+				//       }
+				//       else{
+				//         $(this).prop('disabled', false)
+				//       }
+				//     }
+				//   })
+				// })
+				window.$("#trash").prop("disabled", false);
+				window.$("#removeModal").prop("disabled", false);
+				// $trash.prop('disabled', false);
+				// $removeModal.prop('disabled', false);
+
+				if (window.$("tbody .bs-checkbox input:checkbox:checked").length >= 2) {
+					window.$("#update").prop("disabled", true);
+					window.$("#preview").prop("disabled", true);
+					// $update.prop('disabled', true)
+					// $preview.prop('disabled', true)
+				} else if (
+					window.$("tbody .bs-checkbox input:checkbox:checked").length < 1
+				) {
+					window.$("#update").prop("disabled", true);
+					window.$("#preview").prop("disabled", true);
+					//  $update.prop('disabled', true)
+					// $preview.prop('disabled', true)
+				} else {
+					if (element.BLStatus == "Generated") {
+						window.$("#update").prop("disabled", false);
+					} else {
+						window.$("#update").prop("disabled", true);
+					}
+					// if ($getPreviewPDFPermission == true){
+					if (element.DeliveryOrderUUID != null) {
+						window.$("#preview").prop("disabled", false);
+					}
+					//}
+				}
+
+				var statusTemp = "";
+				if (element.BLStatus == "Generated") {
+					statusTemp = "Generated";
+					var generateList = {
+						uuid: element.BillOfLadingUUID,
+						status: statusTemp,
+					};
+					arraycheck.push(generateList);
+					arrayGenerateDO.push(element.BillOfLadingUUID);
+				} else if (element.BLStatus == "Ready") {
+					statusTemp = "Ready";
+					var generateList = {
+						uuid: element.BillOfLadingUUID,
+						status: statusTemp,
+					};
+					arraycheck.push(generateList);
+					arrayGenerateDO.push(element.BillOfLadingUUID);
+				} else {
+					statusTemp = "Pending";
+					var generateList = {
+						uuid: element.BillOfLadingUUID,
+						status: statusTemp,
+					};
+					arraycheck.push(generateList);
+					arrayGenerateDO.push(element.BillOfLadingUUID);
+				}
+				window.$.each(arraycheck, function (key1, value1) {
+					// if($getGenerateDOPermission==true){
+					if (value1.status == "Pending" || value1.status == "Generated") {
+						window.$("#generate").prop("disabled", true);
+						return false;
+					} else {
+						window.$("#generate").prop("disabled", false);
+					}
+					//}
+				});
+			});
+
+		window
+			.$("#" + props.tableSelector)
+			.on("uncheck.bs.table", function (row, element, field) {
+				window.$("#generate").prop("disabled", true);
+
+				if (window.$(selectedRow).length == 0) {
+					window.$("#update").prop("disabled", true);
+					window.$("#preview").prop("disabled", true);
+					window.$("#trash").prop("disabled", true);
+					window.$("#removeModal").prop("disabled", true);
+					// $update.prop('disabled', true)
+					// $preview.prop('disabled', true)
+					// $trash.prop('disabled', true);
+					// $removeModal.prop('disabled', true);
+				}
+
+				if (window.$(selectedRow).length == 1) {
+					if (selectedRow[0].BLStatus == "Generated") {
+						window.$("#update").prop("disabled", false);
+					}
+
+					// if ($getPreviewPDFPermission == true){
+					if (selectedRow[0].DeliveryOrderUUID != null) {
+						window.$("#preview").prop("disabled", false);
+					}
+					// }
+				}
+
+				if (
+					props.tableId == "delivery-order" ||
+					props.tableId == "delivery-order-barge"
+				) {
+					window.$.each(arraycheck, function (key1, value1) {
+						if (value1.uuid == element.BillOfLadingUUID) {
+							arraycheck.splice(key1, 1);
+							arrayGenerateDO.splice(key1, 1);
+							return false;
+						}
+					});
+
+					window.$.each(arraycheck, function (key1, value1) {
+						// if($getGenerateDOPermission==true){
+
+						if (value1.status == "Pending" || value1.status == "Generated") {
+							window.$("#generate").prop("disabled", true);
+							return false;
+						} else {
+							window.$("#generate").prop("disabled", false);
+						}
+						//}
+					});
+
+					var temp = window
+						.$("#" + props.tableSelector)
+						.bootstrapTable("getSelections");
+					if (temp.length == "1") {
+						if (temp["0"]["deliveryOrder"] != null) {
+							window.$("#preview").prop("disabled", false);
+						}
+					}
+				}
+			});
+
+		// $CheckStatusDO.click(function () {
+		//   var BLUUIDs = []
+		//   BLUUIDs = arrayGenerateDO;
+
+		//   $.ajax({
+		//     type: "POST",
+		//     url: "./generate-d-o",
+		//     data: {
+		//       BLUUIDs : BLUUIDs,
+		//     },
+		//     dataType: "json",
+		//     success: function (data) {
+		//       var ArraySuccessDo=[]
+		//       var ArraySuccessINV=[]
+		//       var NoDueInvoice= true;
+		//       $.each(data.success, function (key1, value){
+		//         if((JSON.stringify(value)).includes("success create Delivery Order")){
+		//           var split=(JSON.stringify(value)).split(":")
+		//           ArraySuccessDo.push( (split[0]).replace(/\W/g, ""))
+		//         }
+
+		//         if((JSON.stringify(value)).includes("success create Sales Invoice")){
+		//           var split=(JSON.stringify(value)).split(":")
+		//           ArraySuccessINV.push( (split[0]).replace(/\W/g, ""))
+		//         }
+		//       })
+		//       if(ArraySuccessINV.length > 0) {
+		//         var SuccessDO=ArraySuccessDo.join(",");
+		//         var SuccessINV=ArraySuccessINV.join(",");
+		//          alert(SuccessDO+" Delivery order successfully generated\n\n"+SuccessINV+" Sales invoice successfully generated.")
+		//       }
+		//       else if (ArraySuccessDo.length >0){
+		//         var SuccessDO=ArraySuccessDo.join(",");
+		//         alert(SuccessDO+" Delivery order successfully generated.")
+		//       }
+		//       else if (data["Due"] != undefined){
+		//         if(data.CreditLimit == 1){
+		//           var splitinvoice = data["Due"];
+		//           alert(splitinvoice+" already due. The company also reached the credit limit. Please proceed payment for DO realease.")
+		//           NoDueInvoice = false;
+		//         }else{
+		//           var splitinvoice = data["Due"];
+		//           alert(splitinvoice+" already due. Please proceed payment for DO realease.")
+		//           NoDueInvoice = false;
+		//         }
+		//       }
+		//       else{
+		//         if(NoDueInvoice == true){
+		//           if(data.CreditLimit == 1){
+		//             var splitinvoice = data["Due"];
+		//             alert("The company reached the credit limit. Please proceed payment for DO realease.")
+		//           }
+		//         }
+		//       }
+		//       $table.bootstrapTable('refresh')
+		//     }
+		//   });
+		// })
+
+		//   $remove.click(function () {
+		//   var DOUUIDs = [];
+		//   var temp = [];
+		//   var valid = false;
+
+		//   temp = ($table.bootstrapTable('getSelections'))
+		//       $.each(temp, function (key, value) {
+		//         if (value.DeliveryOrderUUID != null){
+		//           DOUUIDs.push(value.DeliveryOrderUUID)
+		//         }
+		//         else{
+		//           DOUUIDs.push("null")
+		//         }
+		//       })
+		//       $.each(DOUUIDs, function (key1, value1) {
+		//           if (value1 == "null"){
+		//               alert("Delivery Order does not exist")
+		//               valid = false;
+		//               return false;
+		//           }else {
+		//               valid = true;
+		//           }
+		//       })
+		//       if (valid == true){
+		//           $.ajax({
+		//               type: "POST",
+		//               url: "./remove2",
+		//               data: {
+		//                   DOUUIDs : DOUUIDs,
+		//               },
+		//               dataType: "json",
+		//               success: function (data) {
+		//               }
+		//           });
+		//       }
+		//   })
+
+		//   $trash.click(function () {
+		//     var DOUUIDs = [];
+		//     var temp = [];
+		//     var valid = false;
+
+		//     temp = ($table.bootstrapTable('getSelections'))
+		//       $.each(temp, function (key, value) {
+		//         if (value.DeliveryOrderUUID != null){
+		//           DOUUIDs.push(value.DeliveryOrderUUID)
+		//         }
+		//         else{
+		//           DOUUIDs.push("null")
+		//         }
+		//       })
+		//       $.each(DOUUIDs, function (key1, value1) {
+		//         if (value1 == "null"){
+		//             alert("Delivery Order does not exist")
+		//             valid = false;
+		//             return false;
+		//         }else {
+
+		//           valid = true;
+		//         }
+		//     })
+		//     if (valid == true){
+		//       $.ajax({
+		//           type: "POST",
+		//           url: "./throw2",
+		//           data: {
+		//               DOUUIDs : DOUUIDs,
+		//           },
+		//           dataType: "json",
+		//           success: function (data) {
+		//           }
+		//       });
+		//     }
+		//   });
+
+		// $table.on('dbl-click-row.bs.table', function (row, element, field) {
+
+		//   if (element.DeliveryOrderUUID != null){
+		//     id = element.DeliveryOrderUUID;
+
+		//     window.location.href = 'update2?id=' + id + '';
+		//   }else{
+		//     alert ("Delivery Order haven't been Generated");
+		//   }
+	}
+
+	return (
+		<div>
+			<table id={props.tableId} className='bootstrap_table'></table>
+
+			<div
+				className='modal fade'
+				id='ButtonSuspendModal'
+				tabIndex='-1'
+				role='dialog'
+				aria-labelledby='exampleModalLabel'
+				aria-hidden='true'>
+				<div className='modal-dialog' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'>
+							<h5 className='modal-title' id='exampleModalLabel'>
+								Suspend
+							</h5>
+							<button
+								type='button'
+								className='close'
+								data-dismiss='modal'
+								aria-label='Close'>
+								<span aria-hidden='true'>&times;</span>
+							</button>
+						</div>
+						<div className='modal-body'>
+							<h5>Are you sure you want to suspend these records?</h5>
+							<h6 className='suspendbody'></h6>
+						</div>
+						<div className='modal-footer'>
+							<button
+								id='RealSuspend'
+								type='button'
+								className='btn btn-success AvoidUnbindClass'>
+								Suspend
+							</button>
+							<button
+								type='button'
+								className='btn btn-secondary'
+								data-dismiss='modal'>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div
+				className='modal fade'
+				id='ButtonApprovedModal'
+				tabIndex='-1'
+				role='dialog'
+				aria-labelledby='exampleModalLabel'
+				aria-hidden='true'>
+				<div className='modal-dialog' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'>
+							<h5 className='modal-title' id='exampleModalLabel'>
+								Suspend
+							</h5>
+							<button
+								type='button'
+								className='close'
+								data-dismiss='modal'
+								aria-label='Close'>
+								<span aria-hidden='true'>&times;</span>
+							</button>
+						</div>
+						<div className='modal-body'>
+							<h5>Are you sure you want to approved these records?</h5>
+							<h6 className='approvedbody'></h6>
+						</div>
+						<div className='modal-footer'>
+							<button
+								id='RealApproved'
+								type='button'
+								className='btn btn-success AvoidUnbindClass'>
+								Approved
+							</button>
+							<button
+								type='button'
+								className='btn btn-secondary'
+								data-dismiss='modal'>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div
+				className='modal fade'
+				id='ButtonResetModal'
+				tabIndex='-1'
+				role='dialog'
+				aria-labelledby='exampleModalLabel'
+				aria-hidden='true'>
+				<div className='modal-dialog' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'>
+							<h5 className='modal-title' id='exampleModalLabel'>
+								Reset
+							</h5>
+							<button
+								type='button'
+								className='close'
+								data-dismiss='modal'
+								aria-label='Close'>
+								<span aria-hidden='true'>&times;</span>
+							</button>
+						</div>
+						<div className='modal-body'>
+							<h5>Are you sure you want to reset records?</h5>
+							<h6 className='resetbody'></h6>
+						</div>
+						<div className='modal-footer'>
+							<button
+								id='RealReset'
+								type='button'
+								className='btn btn-success AvoidUnbindClass'>
+								Reset
+							</button>
+							<button
+								type='button'
+								className='btn btn-secondary'
+								data-dismiss='modal'>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div
+				className='modal fade'
+				id='ButtonRemoveModal'
+				tabIndex='-1'
+				role='dialog'
+				aria-labelledby='exampleModalLabel'
+				aria-hidden='true'>
+				<div className='modal-dialog' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'>
+							<h5 className='modal-title' id='exampleModalLabel'>
+								Remove
+							</h5>
+							<button
+								type='button'
+								className='close'
+								data-dismiss='modal'
+								aria-label='Close'>
+								<span aria-hidden='true'>&times;</span>
+							</button>
+						</div>
+						<div className='modal-body'>
+							<h5>Are you sure you want to remove these records?</h5>
+						</div>
+						<div className='modal-footer'>
+							<button
+								id='Realremove'
+								type='button'
+								className='btn btn-success AvoidUnbindClass'>
+								Remove
+							</button>
+							<button
+								type='button'
+								className='btn btn-secondary'
+								data-dismiss='modal'>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div
+				className='modal fade'
+				id='ButtonVerifyModalForm'
+				tabIndex='-1'
+				role='dialog'
+				aria-labelledby='exampleModalLabel'
+				aria-hidden='true'>
+				<div className='modal-dialog' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'>
+							<h5 className='modal-title' id='exampleModalLabel'>
+								Verify
+							</h5>
+							<button
+								type='button'
+								className='close'
+								data-dismiss='modal'
+								aria-label='Close'>
+								<span aria-hidden='true'>&times;</span>
+							</button>
+						</div>
+						<div className='modal-body'>
+							<button
+								id='verifyFirst'
+								type='button'
+								className='btn btn-success mr-2'>
+								Approve
+							</button>
+							<button
+								id='rejectStatusFirst'
+								type='button'
+								className='btn btn-danger mr-2'>
+								Reject
+							</button>
+							<button
+								id='cancelApproveRejectFirst'
+								type='button'
+								className='btn btn-secondary'>
+								Cancel Approved/Reject
+							</button>
+						</div>
+						<div className='modal-footer'>
+							<button
+								type='button'
+								className='btn btn-secondary'
+								data-dismiss='modal'>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div
+				className='modal fade'
+				id='ButtonVerifyConfirmModal'
+				tabIndex='-1'
+				role='dialog'
+				aria-labelledby='exampleModalLabel'
+				aria-hidden='true'>
+				<div className='modal-dialog' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'>
+							<h5 className='modal-title' id='exampleModalLabel'>
+								Confirmation
+							</h5>
+							<button
+								type='button'
+								className='close'
+								data-dismiss='modal'
+								aria-label='Close'>
+								<span aria-hidden='true'>&times;</span>
+							</button>
+						</div>
+						<div className='modal-body'>
+							<h5 className='message'>?</h5>
+							<div className='rejectMessageRow'>
+								<h5 className=''>Please fill in reject message.</h5>
+								<div className='form-group'>
+									<input
+										type='text'
+										className='form-control rejectMessage'></input>
+								</div>
+							</div>
+						</div>
+						<div className='modal-footer'>
+							<button
+								type='button'
+								id='verify'
+								className='btn btn-success d-none mt-2'
+								data-dismiss='modal'>
+								Approve
+							</button>
+							<button
+								type='button'
+								id='rejectStatus'
+								className='btn btn-danger d-none'
+								data-dismiss='modal'>
+								Reject
+							</button>
+							<button
+								type='button'
+								id='cancelApprovedReject'
+								className='btn btn-secondary d-none'
+								data-dismiss='modal'>
+								Cancel Approved/Reject
+							</button>
+							<button
+								type='button'
+								className='btn btn-secondary'
+								data-dismiss='modal'>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div
+				className='modal fade'
+				id='PreviewPdfModal'
+				tabIndex='-1'
+				role='dialog'
+				aria-labelledby='exampleModalLabel'
+				aria-hidden='true'>
+				<div className='modal-dialog modal-xl' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'>
+							<button
+								type='button'
+								className='close'
+								data-dismiss='modal'
+								aria-label='Close'>
+								<span aria-hidden='true'>&times;</span>
+							</button>
+						</div>
+						<div className='modal-body'>
+							<iframe
+								id='pdfFrameList'
+								src=''
+								width='100%'
+								height='700'></iframe>
+						</div>
+						<div className='modal-footer'>
+							<button
+								type='button'
+								className='btn btn-secondary'
+								data-dismiss='modal'>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div
+				className='modal'
+				id='PreviewPdfCROModal'
+				tabIndex='-1'
+				role='dialog'>
+				<div className='modal-dialog' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'>
+							<h5 className='modal-title'>Preview</h5>
+							<button
+								type='button'
+								className='close'
+								data-dismiss='modal'
+								aria-label='Close'>
+								<span aria-hidden='true'>&times;</span>
+							</button>
+						</div>
+						<div className='modal-body'>
+							<button
+								type='button'
+								className='btn btn-primary mr-1'
+								id='ContainerReleaseOrderOri'>
+								Container Release Order
+							</button>
+							<button
+								type='button'
+								className='btn btn-primary'
+								id='ContainerReleaseOrderLetter'>
+								Container Release Letter
+							</button>
+						</div>
+						<div className='modal-footer'>
+							<button
+								type='button'
+								className='btn btn-secondary'
+								data-dismiss='modal'>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div className='modal' id='PreviewPdfBLModal' tabIndex='-1' role='dialog'>
+				<div className='modal-dialog modal-lg' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'>
+							<h5 className='modal-title'>Preview</h5>
+							<button
+								type='button'
+								className='close'
+								data-dismiss='modal'
+								aria-label='Close'>
+								<span aria-hidden='true'>&times;</span>
+							</button>
+						</div>
+						<div className='modal-body'>
+							<button
+								type='button'
+								className='btn btn-primary mr-1'
+								id='BillOfLadingOri'>
+								Bill Of Lading
+							</button>
+							<button
+								type='button'
+								className='btn btn-primary mr-1'
+								id='ShippingOrder'>
+								Shipping Order
+							</button>
+							<button
+								type='button'
+								className='btn btn-primary mr-1'
+								id='ShippingAdviceNote'>
+								Shipping Advice Note
+							</button>
+							<button
+								type='button'
+								className='btn btn-primary'
+								id='ShippingOrderDeclaration'>
+								Shipping Order Declaration
+							</button>
+						</div>
+						<div className='modal-footer'>
+							<button
+								type='button'
+								className='btn btn-secondary'
+								data-dismiss='modal'>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div
+				className='modal'
+				id='PreviewPdfCNDNModal'
+				tabIndex='-1'
+				role='dialog'>
+				<div className='modal-dialog modal-lg' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'>
+							<h5 className='modal-title'>Preview</h5>
+							<button
+								type='button'
+								className='close'
+								data-dismiss='modal'
+								aria-label='Close'>
+								<span aria-hidden='true'>&times;</span>
+							</button>
+						</div>
+						<div className='modal-body'>
+							<button
+								type='button'
+								className='btn btn-primary mr-1'
+								id='Original'>
+								Original
+							</button>
+							<button
+								type='button'
+								className='btn btn-primary mr-1'
+								id='Account'>
+								Account
+							</button>
+							<button
+								type='button'
+								className='btn btn-primary mr-1'
+								id='ReprintOriginal'>
+								Reprint Original
+							</button>
+							<button
+								type='button'
+								className='btn btn-primary'
+								id='ReprintAccount'>
+								Reprint Account
+							</button>
+						</div>
+						<div className='modal-footer'>
+							<button
+								type='button'
+								className='btn btn-secondary'
+								data-dismiss='modal'>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{/* <!-- Modal button verification status choose--> */}
+			<div
+				className='modal fade'
+				id='ButtonTelexModal'
+				tabIndex='-1'
+				role='dialog'
+				aria-labelledby='exampleModalLabel'
+				aria-hidden='true'>
+				<div className='modal-dialog' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'>
+							<h5 className='modal-title' id='exampleModalLabel'>
+								Are you sure to Telex Release?
+							</h5>
+							<button
+								type='button'
+								className='close'
+								data-dismiss='modal'
+								aria-label='Close'>
+								<span aria-hidden='true'>&times;</span>
+							</button>
+						</div>
+						<div className='modal-body'>
+							<button id='telex' type='button' className='btn btn-success'>
+								Confirm
+							</button>
+						</div>
+						<div className='modal-footer'>
+							<button
+								type='button'
+								className='btn btn-secondary'
+								data-dismiss='modal'>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{/* <!-- Split modal */}
+			<div
+				className='modal fade'
+				id='SplitModal'
+				tabIndex='-1'
+				role='dialog'
+				aria-labelledby='exampleModalLabel'
+				aria-hidden='true'>
+				<div className='modal-dialog' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'>
+							<h5 className='modal-title' id='exampleModalLabel'>
+								Split Bill Of Lading-Container
+							</h5>
+							<button
+								type='button'
+								className='close'
+								data-dismiss='modal'
+								aria-label='Close'>
+								<span aria-hidden='true'>&times;</span>
+							</button>
+						</div>
+						<div className='modal-body'>
+							<input type='text' className='splitParentId d-none'></input>
+							<table
+								className='table table-bordered'
+								id='split-container-table'>
+								<thead>
+									<tr>
+										<th className='d-none'>ID</th>
+										<th>Split</th>
+										<th>Share</th>
+										<th>Container Code</th>
+										<th>Container Type</th>
+									</tr>
+								</thead>
+								<tbody className='containerList'></tbody>
+							</table>
+						</div>
+						<div className='modal-footer'>
+							<button
+								id='confirmSplitBL'
+								type='button'
+								className='btn btn-primary'>
+								Confirm
+							</button>
+							<button
+								type='button'
+								className='btn btn-secondary'
+								data-dismiss='modal'>
+								Cancel
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div
+				className='modal fade'
+				id='SplitModalBR'
+				tabIndex='-1'
+				role='dialog'
+				aria-labelledby='exampleModalLabel'
+				aria-hidden='true'>
+				<div className='modal-dialog modal-lg' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'>
+							<h5 className='modal-title' id='exampleModalLabel'>
+								Split Booking Reservation-Container
+							</h5>
+							<button
+								type='button'
+								className='close'
+								data-dismiss='modal'
+								aria-label='Close'>
+								<span aria-hidden='true'>&times;</span>
+							</button>
+						</div>
+						<div className='modal-body'>
+							<input type='text' className='splitParentIdBR d-none'></input>
+							<table
+								className='table table-bordered'
+								id='split-container-tableBR'>
+								<thead>
+									<tr>
+										<th className='d-none'>ID</th>
+										<th style={{textAlign: "center", verticalAlign: "middle"}}>
+											Split
+										</th>
+										<th style={{textAlign: "center", verticalAlign: "middle"}}>
+											Container Code
+										</th>
+										<th style={{textAlign: "center", verticalAlign: "middle"}}>
+											Container Type
+										</th>
+									</tr>
+								</thead>
+								<tbody className='containerList'></tbody>
+							</table>
+						</div>
+						<div className='modal-footer'>
+							<button
+								id='confirmSplitBR'
+								type='button'
+								className='btn btn-primary'>
+								Confirm
+							</button>
+							<button
+								type='button'
+								className='btn btn-secondary'
+								data-dismiss='modal'>
+								Cancel
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{/* <!-- Merge Modal--> */}
+			<div
+				className='modal fade'
+				id='MergeModal'
+				tabIndex='-1'
+				role='dialog'
+				aria-labelledby='exampleModalLabel'
+				aria-hidden='true'>
+				<div className='modal-dialog' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'>
+							<h5 className='modal-title' id='exampleModalLabel'>
+								Merge Bill Of Lading
+							</h5>
+							<button
+								type='button'
+								className='close'
+								data-dismiss='modal'
+								aria-label='Close'>
+								<span aria-hidden='true'>&times;</span>
+							</button>
+						</div>
+						<div className='modal-body'>
+							<label>BL No.</label>
+							<select
+								className='select2js MergeBL form-control'
+								name='MergeBL'
+								id='mergeBL'
+								multiple='multiple'>
+								<option value=''>Select...</option>
+							</select>
+						</div>
+						<div className='modal-footer'>
+							<button
+								id='confirmMergeBL'
+								type='button'
+								className='btn btn-primary'>
+								Confirm
+							</button>
+							<button
+								type='button'
+								className='btn btn-secondary'
+								data-dismiss='modal'>
+								Cancel
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{/* <!-- Merge Modal--> */}
+			<div
+				className='modal fade'
+				id='MergeModalBR'
+				tabIndex='-1'
+				role='dialog'
+				aria-labelledby='exampleModalLabel'
+				aria-hidden='true'>
+				<div className='modal-dialog' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'>
+							<h5 className='modal-title' id='exampleModalLabel'>
+								Merge Booking Reservation
+							</h5>
+							<button
+								type='button'
+								className='close'
+								data-dismiss='modal'
+								aria-label='Close'>
+								<span aria-hidden='true'>&times;</span>
+							</button>
+						</div>
+						<div className='modal-body'>
+							<label>BR No.</label>
+							<select
+								className='select2js MergeBR form-control'
+								name='MergeBR'
+								id='mergeBR'
+								multiple='multiple'>
+								<option value=''>Select...</option>
+							</select>
+						</div>
+						<div className='modal-footer'>
+							<button
+								id='confirmMergeBR'
+								type='button'
+								className='btn btn-primary'>
+								Confirm
+							</button>
+							<button
+								type='button'
+								className='btn btn-secondary'
+								data-dismiss='modal'>
+								Cancel
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div
+				className='modal fade'
+				id='RevertSplitModal'
+				tabIndex='-1'
+				role='dialog'
+				aria-labelledby='exampleModalLabel'
+				aria-hidden='true'>
+				<div className='modal-dialog' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'>
+							<h5 className='modal-title' id='exampleModalLabel'>
+								Revert Split
+							</h5>
+							<button
+								type='button'
+								className='close'
+								data-dismiss='modal'
+								aria-label='Close'>
+								<span aria-hidden='true'>&times;</span>
+							</button>
+						</div>
+						<div className='modal-body'>
+							<h5>Are you sure to Revert Split Bill of Lading?</h5>
+						</div>
+						<div className='modal-footer'>
+							<button
+								id='confirmRevertSplitBL'
+								type='button'
+								className='btn btn-primary'>
+								Confirm
+							</button>
+							<button
+								type='button'
+								className='btn btn-secondary'
+								data-dismiss='modal'>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{/* Modal Transfer To BR */}
+			<div
+				className='modal fade'
+				id='TransferBRModal'
+				tabIndex='-1'
+				role='dialog'
+				aria-labelledby='exampleModalLabel'
+				aria-hidden='true'>
+				<div className='modal-dialog' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'>
+							<h5 className='modal-title' id='exampleModalLabel'>
+								Transfer To
+							</h5>
+							<button
+								type='button'
+								className='close'
+								data-dismiss='modal'
+								aria-label='Close'>
+								<span aria-hidden='true'>&times;</span>
+							</button>
+						</div>
+						<div className='modal-body'>
+							<div className='mb-2'>
+								<a className='btn btn-success mr-2 TransferBR'>
+									Booking Reservation
+								</a>
+							</div>
+						</div>
+						<div className='modal-footer'>
+							<button
+								type='button'
+								className='btn btn-secondary'
+								data-dismiss='modal'>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{/* Booking Reservation Transfer Modal */}
+			<div
+				className='modal fade'
+				id='TransferToCROINVModal'
+				tabIndex='-1'
+				role='dialog'
+				aria-labelledby='exampleModalLabel'
+				aria-hidden='true'>
+				<div className='modal-dialog' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'>
+							<h5 className='modal-title' id='exampleModalLabel'>
+								Transfer To
+							</h5>
+							<button
+								type='button'
+								className='close'
+								data-dismiss='modal'
+								aria-label='Close'>
+								<span aria-hidden='true'>&times;</span>
+							</button>
+						</div>
+						<div className='modal-body'>
+							<div className='mb-2'>
+								<input type='hidden' id='BookingComfirmationUUID' />
+								<div className='form-check'>
+									<input
+										className='form-check-input CheckTransfer'
+										type='radio'
+										value='Invoice'
+										name='flexRadioDefault'
+										id='flexRadioDefault1'
+										defaultChecked={true}
+									/>
+									<label
+										className='form-check-label'
+										style={{position: "relative", left: "15px"}}
+										htmlFor='flexRadioDefault1'>
+										Invoice
+									</label>
+								</div>
+								{props.title == "booking-reservation-barge" ? (
+									""
+								) : (
+									<div className='form-check'>
+										<input
+											className='form-check-input CheckTransfer'
+											type='radio'
+											value='CRO'
+											name='flexRadioDefault'
+											id='flexRadioDefault2'
+										/>
+										<label
+											className='form-check-label'
+											style={{position: "relative", left: "15px"}}
+											htmlFor='flexRadioDefault2'>
+											Container Release Order
+										</label>
+									</div>
+								)}
+							</div>
+						</div>
+						<div className='modal-footer'>
+							<button
+								type='button'
+								className='btn btn-primary FormAllTransferTo'
+								id='TransferAllTo'>
+								Transfer All
+							</button>
+							<button
+								type='button'
+								className='btn btn-primary FormTransferPartialToInvoice'
+								id='TransferToPartial'
+								disabled=''>
+								Transfer Partial
+							</button>
+							<button
+								type='button'
+								className='btn btn-secondary'
+								data-dismiss='modal'>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{/* Sales Invoice Transfer Modal */}
+			<div
+				className='modal fade'
+				id='CheckingBillToModal'
+				tabIndex='-1'
+				role='dialog'
+				aria-labelledby='exampleModalLabel'
+				aria-hidden='true'>
+				<div className='modal-dialog' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'>
+							<h5 className='modal-title' id='exampleModalLabel'>
+								Choose One Branch for Transfer Sales Invoice
+							</h5>
+							<button
+								type='button'
+								className='close'
+								data-dismiss='modal'
+								aria-label='Close'>
+								<span aria-hidden='true'>&times;</span>
+							</button>
+						</div>
+						<div className='modal-body'>
+							<div className='checkingBillToList'></div>
+						</div>
+						<div className='modal-footer'>
+							<button
+								id='TranferToCN'
+								type='button'
+								className='btn btn-primary confirmTransferFillterBillTo mr-2'>
+								Confirm
+							</button>
+							<button
+								type='button'
+								className='btn btn-secondary'
+								data-dismiss='modal'>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div className='modal' id='PreviewPdfBRModal' tabIndex='-1' role='dialog'>
+				<div className='modal-dialog modal-md' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'>
+							<h5 className='modal-title'>Preview</h5>
+							<button
+								type='button'
+								className='close'
+								data-dismiss='modal'
+								aria-label='Close'>
+								<span aria-hidden='true'>&times;</span>
+							</button>
+						</div>
+						<div className='modal-body'>
+							<button
+								type='button'
+								className='btn btn-primary mr-1'
+								id={"bookingReservationPDF"}>
+								Booking Reservation
+							</button>
+							<button
+								type='button'
+								className='btn btn-primary'
+								id={`bookingConfirmationPDF`}>
+								Booking Confirmation
+							</button>
+						</div>
+						<div className='modal-footer'>
+							<button
+								type='button'
+								className='btn btn-secondary'
+								data-dismiss='modal'>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div className='modal' id='PreviewPdfORModal' tabIndex='-1' role='dialog'>
+				<div className='modal-dialog modal-md' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'>
+							<h5 className='modal-title'>Preview</h5>
+							<button
+								type='button'
+								className='close'
+								data-dismiss='modal'
+								aria-label='Close'>
+								<span aria-hidden='true'>&times;</span>
+							</button>
+						</div>
+						<div className='modal-body'>
+							<button
+								type='button'
+								className='btn btn-primary mr-1'
+								id={"customerPaymentNormalPDF"}>
+								Normal
+							</button>
+							<button
+								type='button'
+								className='btn btn-primary'
+								id={`customerPaymentDetailPDF`}>
+								Detail
+							</button>
+						</div>
+						<div className='modal-footer'>
+							<button
+								type='button'
+								className='btn btn-secondary'
+								data-dismiss='modal'>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{/* Sales Invoice Transfer Modal */}
+			<div
+				className='modal fade'
+				id='TransferToCNDNModal'
+				tabIndex='-1'
+				role='dialog'
+				aria-labelledby='exampleModalLabel'
+				aria-hidden='true'>
+				<div className='modal-dialog' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'>
+							<h5 className='modal-title' id='exampleModalLabel'>
+								Transfer To
+							</h5>
+							<button
+								type='button'
+								className='close'
+								data-dismiss='modal'
+								aria-label='Close'>
+								<span aria-hidden='true'>&times;</span>
+							</button>
+						</div>
+						<div className='modal-body'>
+							<input type='hidden' id='TransferID' />
+							<button
+								id='TranferToCN'
+								type='button'
+								className='btn btn-primary TransferToCN mr-2'>
+								Credit Note
+							</button>
+							<button
+								id='TranferToDN'
+								type='button'
+								className='btn btn-primary TransferToDN'>
+								Debit Note
+							</button>
+						</div>
+						<div className='modal-footer'>
+							<button
+								type='button'
+								className='btn btn-secondary'
+								data-dismiss='modal'>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			{/* Sales Invoice generated message Modal */}
+			<div
+				className='modal fade'
+				id='SalesInvoiceMessageModal'
+				tabIndex='-1'
+				role='dialog'
+				aria-labelledby='exampleModalLabel'
+				aria-hidden='true'>
+				<div className='modal-dialog  modal-lg' role='document'>
+					<div className='modal-content'>
+						<div className='modal-header'></div>
+						<div className='modal-body'>
+							<h5 className='InvMessage'></h5>
+							<h5 className='InvMessage2'></h5>
+							<h5 className='InvMessage3'></h5>
+						</div>
+
+						<div className='modal-footer'>
+							<button
+								type='button'
+								className='btn btn-secondary btn-sm'
+								data-dismiss='modal'>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div
+				className='modal fade'
+				id='FailedMessageModal'
+				tabIndex='-1'
+				role='dialog'
+				aria-labelledby='exampleModalLabel'
+				aria-hidden='true'>
+				<div className='modal-dialog  modal-lg' role='document'>
+					<div className='modal-content'>
+						<div className='modal-body'>
+							<h5 className='FailedMessageField'></h5>
+						</div>
+						<div className='modal-footer'>
+							<button
+								type='button'
+								className='btn btn-secondary btn-sm'
+								data-dismiss='modal'>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<TransferFromBC
+				barge={props.title == "sales-invoice-barge" ? true : false}
+			/>
+			{props.title == "booking-reservation" ||
+			props.title == "booking-reservation-barge" ||
+			props.title == "sales-invoice" ||
+			props.title == "sales-invoice-barge" ? (
+				<TransferPartialBCModal
+					barge={
+						props.title == "sales-invoice-barge" ||
+						props.title == "booking-reservation-barge"
+							? true
+							: false
+					}
+				/>
+			) : (
+				""
+			)}
+			{props.title == "sales-invoice" ||
+			props.title == "sales-invoice-barge" ? (
+				<TransferPartialCNDNModal
+					barge={props.title.includes("barge") ? true : false}
+				/>
+			) : (
+				""
+			)}
+			<DNDModal title={props.title} />
+		</div>
+	);
 }
 
 export default BoostrapTable

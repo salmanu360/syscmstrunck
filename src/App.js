@@ -90,117 +90,162 @@ function App() {
   const asyncSelectPlaceHolder="Type to search"
   const [userRule, setUserRule] = useState("")
   const [userPort, setUserPort] = useState("")
-  const [userId, setUserId] = useState("")
- 
-  //listen to localstorage change, log in /out all tab
-  window.addEventListener('storage', (event) => {
-    if (event.key == "authorizeInfos") {
-      if (event.newValue == null) {
-      
-        setToken(null)
-        navigate('/Login')
-      } else {
-       var parseInfo=JSON.parse(event.newValue)
-     
-        setToken(parseInfo)
-        navigate('/')
+  const [userId, setUserId] = useState("");
+	const [podPortCodes, setPodPortCodes] = useState([]);
 
+	useEffect(() => {
+		console.log("POD PORT Numbers", podPortCodes);
+	}, [podPortCodes]);
 
-      }
-    }
-  });
+	//listen to localstorage change, log in /out all tab
+	window.addEventListener("storage", (event) => {
+		if (event.key == "authorizeInfos") {
+			if (event.newValue == null) {
+				setToken(null);
+				navigate("/Login");
+			} else {
+				var parseInfo = JSON.parse(event.newValue);
 
-  useEffect(() => {
-   $('body').addClass("hold-transition  layout-navbar-fixed  layout-top-nav  text-sm")
- 
-   return () => {
-     
-   }
- }, [])
+				setToken(parseInfo);
+				navigate("/");
+			}
+		}
+	});
 
- 
-  const authInfo = JSON.parse(localStorage.getItem('authorizeInfos'));
+	useEffect(() => {
+		$("body").addClass(
+			"hold-transition  layout-navbar-fixed  layout-top-nav  text-sm"
+		);
 
-  useEffect(() => {
-    if(authInfo){
-       $.ajax
-       ({
-          type: "POST",
-          url:globalHost+globalPathLink + "site/check-access-token",
-          dataType: 'json',
-          headers: {
-             "Authorization": "Basic " + btoa(authInfo.username + ":" + authInfo.access_token)
-          },
-          success: function (data ){
-            setProfileImage(data.data.image)
-            setUserId(data.data.id)
-        
-            GetUser(data.data.id,{ globalHost,authInfo,customStyles,customStylesReadonly,profileImage,globalPathLink}).then(res=>{
-              
-              setUserPort(res[0]["Branch"]["PortCode"])
-            })
-            getUserRules(data.data.id,{ globalHost,authInfo,customStyles,customStylesReadonly,profileImage,globalPathLink}).then(res => {
-              setUserRule(JSON.stringify(res.data))
-              })
-           
-          
-          },
-          error: function(XMLHttpRequest, textStatus, errorThrown) {
-             setToken(null)
-             localStorage.removeItem('authorizeInfos')
-             navigate('/Login')
-          }
-       });
-    }
-    
-   return () => {
-   
-   }
- }, [authInfo])
+		return () => {};
+	}, []);
 
-//  useEffect(() => {
-//   console.log(userId)
-//   if(userId){
-//     getUserRules(userId,{ globalHost,authInfo,customStyles,customStylesReadonly,profileImage,globalPathLink}).then(res => {
-//       setUserRule(JSON.stringify(res.data))
-//       })
-   
-//   }
+	const authInfo = JSON.parse(localStorage.getItem("authorizeInfos"));
 
-//    return () => {
-     
-//    }
-//  }, [userId])
- 
+	useEffect(() => {
+		if (authInfo) {
+			$.ajax({
+				type: "POST",
+				url: globalHost + globalPathLink + "site/check-access-token",
+				dataType: "json",
+				headers: {
+					Authorization:
+						"Basic " + btoa(authInfo.username + ":" + authInfo.access_token),
+				},
+				success: function (data) {
+					setProfileImage(data.data.image);
+					setUserId(data.data.id);
 
+					GetUser(data.data.id, {
+						globalHost,
+						authInfo,
+						customStyles,
+						customStylesReadonly,
+						profileImage,
+						globalPathLink,
+					}).then((res) => {
+						setUserPort(res[0]["Branch"]["PortCode"]);
+					});
+					getUserRules(data.data.id, {
+						globalHost,
+						authInfo,
+						customStyles,
+						customStylesReadonly,
+						profileImage,
+						globalPathLink,
+					}).then((res) => {
+						setUserRule(JSON.stringify(res.data));
+					});
+				},
+				error: function (XMLHttpRequest, textStatus, errorThrown) {
+					setToken(null);
+					localStorage.removeItem("authorizeInfos");
+					navigate("/Login");
+				},
+			});
+		}
 
+		return () => {};
+	}, [authInfo]);
 
+	//  useEffect(() => {
+	//   console.log(userId)
+	//   if(userId){
+	//     getUserRules(userId,{ globalHost,authInfo,customStyles,customStylesReadonly,profileImage,globalPathLink}).then(res => {
+	//       setUserRule(JSON.stringify(res.data))
+	//       })
 
-  useEffect(() => {
-    $('body').addClass("hold-transition  layout-navbar-fixed  layout-top-nav  text-sm")
- 
-    return () => {
-      
-    }
-  }, [])
+	//   }
 
-  if (token == null) {
-    return( <GlobalContext.Provider value={{ globalHost,authInfo,customStyles,customStylesReadonly,userPort,profileImage,userRule,globalPathLink,asyncSelectPlaceHolder}}><Login setToken={setToken} /></GlobalContext.Provider>)
-  }
-  else {
-    return (
-      <GlobalContext.Provider value={{ globalHost,authInfo,customStyles,customStylesReadonly,userPort,profileImage,userRule,globalPathLink,asyncSelectPlaceHolder,setToken}}>
-      <div className="wrapper">
-      <div class="PageOverlay d-none"> <div class="PageSpinner"><i class="fas fa-3x fa fa-spinner fa-spin"></i><p class="loadingText"><b>Loading</b></p></div></div>
-        <NavBar token={token} setToken={setToken} />
+	//    return () => {
 
-        <Footer />
-        <ToastContainer />
-      </div>
-      </GlobalContext.Provider>
+	//    }
+	//  }, [userId])
 
-    )
-  }
+	useEffect(() => {
+		$("body").addClass(
+			"hold-transition  layout-navbar-fixed  layout-top-nav  text-sm"
+		);
+
+		return () => {};
+	}, []);
+
+	if (token == null) {
+		return (
+			<GlobalContext.Provider
+				value={{
+					globalHost,
+					authInfo,
+					customStyles,
+					customStylesReadonly,
+					userPort,
+					profileImage,
+					userRule,
+					globalPathLink,
+					asyncSelectPlaceHolder,
+					// NEW CODE FOR POD PORT SEARCH
+					podPortCodes,
+					setPodPortCodes,
+				}}>
+				<Login setToken={setToken} />
+			</GlobalContext.Provider>
+		);
+	} else {
+		return (
+			<GlobalContext.Provider
+				value={{
+					globalHost,
+					authInfo,
+					customStyles,
+					customStylesReadonly,
+					userPort,
+					profileImage,
+					userRule,
+					globalPathLink,
+					asyncSelectPlaceHolder,
+					setToken,
+					// NEW CODE FOR POD PORT SEARCH
+					podPortCodes,
+					setPodPortCodes,
+				}}>
+				<div className='wrapper'>
+					<div className='PageOverlay d-none'>
+						{" "}
+						<div className='PageSpinner'>
+							<i className='fas fa-3x fa fa-spinner fa-spin'></i>
+							<p className='loadingText'>
+								<b>Loading</b>
+							</p>
+						</div>
+					</div>
+					<NavBar token={token} setToken={setToken} />
+
+					<Footer />
+					<ToastContainer />
+				</div>
+			</GlobalContext.Provider>
+		);
+	}
 
 
 }

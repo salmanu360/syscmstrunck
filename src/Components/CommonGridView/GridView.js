@@ -285,7 +285,15 @@ function GridView(props) {
           window.$(".ruleSetEffectedUsersTbody").empty();
 
           window.$.each(res.data, function (key, value) {
-            window.$(".ruleSetEffectedUsersTbody").append('<tr class ="RuleSetTR"><td style="width:232px; text-align:center;vertical-align: middle;">' + value.username + '</td><td style="width:232px; text-align:center;vertical-align: middle;"><input type="checkbox" class="checkboxUser" value = ' + value.id + '></td></tr>')
+            window
+							.$(".ruleSetEffectedUsersTbody")
+							.append(
+								'<tr class ="RuleSetTR"><td style="width:232px; text-align:center;vertical-align: middle;">' +
+									value.username +
+									'</td><td style="width:232px; text-align:center;vertical-align: middle;"><input type="checkbox" className="checkboxUser" value = ' +
+									value.id +
+									"></td></tr>"
+							);
             if (value.similar == true) {
               window.$(".RuleSetTR").eq(key).find(".checkboxUser").prop("checked", true)
             } else {

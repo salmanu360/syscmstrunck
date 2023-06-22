@@ -1120,159 +1120,257 @@ function TransferVoyageModal(props) {
             <div className="row">
                 {formContext.fields.map((item, index) => {
                     return (
-                        <div key={item.id} className="col-md-12 transhipmentTransferVoyage">
-                            <div className='col-12 transhipment'>
-                                <div className='row'>
-                                    {/* <div className='align-self-center'>
+											<div
+												key={item.id}
+												className='col-md-12 transhipmentTransferVoyage'>
+												<div className='col-12 transhipment'>
+													<div className='row'>
+														{/* <div className='align-self-center'>
                                         <button type='button' className='remove-quickformtranshipment btn btn-danger btn-xs' onClick={() => formContext.FieldArrayHandle("remove", index)}><span className='fa fa-times'></span></button>
                                     </div> */}
-                                    <div className='col-md-2'>
-                                        <label style={{ fontSize: "12px" }}>POT Port Code</label>
-                                        <div className='form-group input-group mb-3'>
-                                            <Controller
-                                                name={`TransferVoyageTranshipment[${index}][TransferVoyagePortCode]`}
-                                                id={`${formNameLowerCase}hastranshipment-${index}-transfervoyageportcode`}
-                                                control={props.control}
-                                                render={({ field: { onChange, value } }) => (
-                                                    <Select
-                                                        {...props.register(`TransferVoyageTranshipment[${index}][TransferVoyagePortCode]`)}
-                                                        isClearable={true}
-                                                        id={`${formNameLowerCase}hastranshipment-${index}-transfervoyageportcode`}
-                                                        value={
-                                                            value
-                                                                ? props.port.find((c) => c.value === value)
-                                                                : null
-                                                        }
-                                                        onChange={(val) => {
-                                                            val == null ? onChange(null) : onChange(val.value);
-                                                            onChangePOTPortCode(val, `${formNameLowerCase}hastranshipment-${index}-portcode`, index)
-                                                        }}
-                                                        options={props.port}
-                                                        className={`transhipmentQuickform QuickFormPortCode form-control AllocatePortCode liveData Live_Area`}
-                                                        classNamePrefix="select"
-                                                        styles={{
-                                                            ...globalContext.customStyles,
-                                                            menuPortal: (base) => ({ ...base, zIndex: 9999 })
-                                                        }}                                                />
-                                                )}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className='col-md-2'>
-                                        <div className="form-group">
-                                            <label className="control-label">Previous Voyage Num</label>
-                                            <input className="form-control previousVoyageNumPOT" {...props.register(`TransferVoyageTranshipment[${index}][PreviousVoyage]`)} readOnly/>
-                                            <input type="hidden" className='form-control oripotvoyage' {...props.register(`TransferVoyageTranshipment[${index}][PreviousVoyageUUID]`)}/>
-                                        </div>
-                                    </div>
+														<div className='col-md-2'>
+															<label style={{fontSize: "12px"}}>
+																POT Port Code
+															</label>
+															<div className='form-group input-group mb-3'>
+																<Controller
+																	name={`TransferVoyageTranshipment[${index}][TransferVoyagePortCode]`}
+																	id={`${formNameLowerCase}hastranshipment-${index}-transfervoyageportcode`}
+																	control={props.control}
+																	render={({field: {onChange, value}}) => (
+																		<Select
+																			{...props.register(
+																				`TransferVoyageTranshipment[${index}][TransferVoyagePortCode]`
+																			)}
+																			isClearable={true}
+																			id={`${formNameLowerCase}hastranshipment-${index}-transfervoyageportcode`}
+																			value={
+																				value
+																					? props.port.find(
+																							(c) => c.value === value
+																					  )
+																					: null
+																			}
+																			onChange={(val) => {
+																				val == null
+																					? onChange(null)
+																					: onChange(val.value);
+																				onChangePOTPortCode(
+																					val,
+																					`${formNameLowerCase}hastranshipment-${index}-portcode`,
+																					index
+																				);
+																			}}
+																			options={props.port}
+																			className={`transhipmentQuickform QuickFormPortCode form-control AllocatePortCode liveData Live_Area`}
+																			classNamePrefix='select'
+																			styles={{
+																				...globalContext.customStyles,
+																				menuPortal: (base) => ({
+																					...base,
+																					zIndex: 9999,
+																				}),
+																			}}
+																		/>
+																	)}
+																/>
+															</div>
+														</div>
+														<div className='col-md-2'>
+															<div className='form-group'>
+																<label className='control-label'>
+																	Previous Voyage Num
+																</label>
+																<input
+																	className='form-control previousVoyageNumPOT'
+																	{...props.register(
+																		`TransferVoyageTranshipment[${index}][PreviousVoyage]`
+																	)}
+																	readOnly
+																/>
+																<input
+																	type='hidden'
+																	className='form-control oripotvoyage'
+																	{...props.register(
+																		`TransferVoyageTranshipment[${index}][PreviousVoyageUUID]`
+																	)}
+																/>
+															</div>
+														</div>
 
-                                    <div className={`col-md-3 mr-4 transhipmentVoyagedisplay`}>
-                                        <label style={{ fontSize: "12px" }}>Voyage Num</label>
-                                        <div className='form-group input-group mb-3'>
-                                            <Controller
-                                                name={`TransferVoyageTranshipment[${index}][TransferVoyagePOTVoyage]`}
-                                                id={`${formNameLowerCase}hastranshipment-${index}-transfervoyagepotvoyage`}
-                                                control={props.control}
-                                                render={({ field: { onChange, value } }) => (
-                                                    <Select
-                                                        {...props.register(`TransferVoyageTranshipment[${index}][TransferVoyagePOTVoyage]`)}
-                                                        isClearable={true}
-                                                        id={`${formNameLowerCase}hastranshipment-${index}-transfervoyagepotvoyage`}
-                                                        value={
-                                                            value
-                                                                ? item.optionFromVoyage?item.optionFromVoyage.find((c) => c.value === value)
-                                                                : null
-                                                                : null
-                                                        }
-                                                        onChange={(val) => {
-                                                            val == null ? onChange(null) : onChange(val.value);
-                                                            FindVoyageFromTranshipmentDetails(val, `${formNameLowerCase}hastranshipment-${index}-transfervoyagepotvoyage`, index);
-                                                            onChangePOTVoyageNum(val, `${formNameLowerCase}hastranshipment-${index}-transfervoyagepotvoyage`, index)
-                                                        }}
-                                                        options={item.optionFromVoyage}
-                                                        className={`transhipmentQuickform TransferVoyageVoyageNum AllocateVoyage form-control`}
-                                                        classNamePrefix="select"
-                                                        onMenuOpen={() => { FindPOTVoyage(index) }}
-                                                        styles={{
-                                                            ...globalContext.customStyles,
-                                                            menuPortal: (base) => ({ ...base, zIndex: 9999 })
-                                                        }}                                                
-                                                    />
-                                                )}
-                                            />
+														<div
+															className={`col-md-3 mr-4 transhipmentVoyagedisplay`}>
+															<label style={{fontSize: "12px"}}>
+																Voyage Num
+															</label>
+															<div className='form-group input-group mb-3'>
+																<Controller
+																	name={`TransferVoyageTranshipment[${index}][TransferVoyagePOTVoyage]`}
+																	id={`${formNameLowerCase}hastranshipment-${index}-transfervoyagepotvoyage`}
+																	control={props.control}
+																	render={({field: {onChange, value}}) => (
+																		<Select
+																			{...props.register(
+																				`TransferVoyageTranshipment[${index}][TransferVoyagePOTVoyage]`
+																			)}
+																			isClearable={true}
+																			id={`${formNameLowerCase}hastranshipment-${index}-transfervoyagepotvoyage`}
+																			value={
+																				value
+																					? item.optionFromVoyage
+																						? item.optionFromVoyage.find(
+																								(c) => c.value === value
+																						  )
+																						: null
+																					: null
+																			}
+																			onChange={(val) => {
+																				val == null
+																					? onChange(null)
+																					: onChange(val.value);
+																				FindVoyageFromTranshipmentDetails(
+																					val,
+																					`${formNameLowerCase}hastranshipment-${index}-transfervoyagepotvoyage`,
+																					index
+																				);
+																				onChangePOTVoyageNum(
+																					val,
+																					`${formNameLowerCase}hastranshipment-${index}-transfervoyagepotvoyage`,
+																					index
+																				);
+																			}}
+																			options={item.optionFromVoyage}
+																			className={`transhipmentQuickform TransferVoyageVoyageNum AllocateVoyage form-control`}
+																			classNamePrefix='select'
+																			onMenuOpen={() => {
+																				FindPOTVoyage(index);
+																			}}
+																			styles={{
+																				...globalContext.customStyles,
+																				menuPortal: (base) => ({
+																					...base,
+																					zIndex: 9999,
+																				}),
+																			}}
+																		/>
+																	)}
+																/>
 
-                                            <div className='input-group-btn' style={{ height: "31px" }}>
-                                                <button className='btn btn-outline-secondary AllocateVoyageButton1' type='button' style={{ height: "31px" }} data-toggle='popover' onClick={val => potVoyageAllocation(val)}><i className='fa fa-info'></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class={`col-md-3 transhipmentVesseldisplay d-none`}>
-                                        <label style={{ fontSize: "12px" }}>Vessel Code</label>
-                                        <div class='form-group input-group mb-3'>
-                                            <input class='transhipmentQuickform QuickFormVesselCode form-control' {...props.register(`TransferVoyageTranshipment[${index}][TransferVoyagePOTVesselCode]`)}></input>
-                                        </div>
-                                    </div>
-                                    <div className={`col-md-2`}>
-                                        <div className={`form-group field-${formNameLowerCase}hastranshipment-${index}-dischargingdate`}>
-                                            <label className="control-label" htmlFor={`${formNameLowerCase}hastranshipment-${index}-dischargingdate`}>Discharging Date</label>
-                                            <Controller 
-                                                name={`TransferVoyageTranshipment[${index}][DischargingDate]`}
-                                                id={`${formNameLowerCase}hastranshipment-${index}-loadingdate`}
-                                                control={props.control}
-                                                render={({ field: { onChange, value } }) => (
-                                                    <>  
-                                                        <Flatpickr
-                                                            {...props.register(`TransferVoyageTranshipment[${index}][DischargingDate]`)}
-                                                            style={{backgroundColor: "white"}}
-                                                            value={(value)}
-                                                            onChange={val => {
-                                                                val == null ? onChange(null) :onChange(moment(val[0]).format("DD/MM/YYYY"),"dischargingDate");
-                                                                // val == null ? formContext.setStateHandle(null,"dischargingDate"): formContext.setStateHandle(moment(val[0]).format("DD/MM/YYYY H:mm"),"dischargingDate")
-                                                            }}
-                                                            className={`form-control flatDateTimePicker flatpickr-input-time POTDischargingDate pointerEventsStyle`}
-                                                            options={{
-                                                                dateFormat: "d/m/Y H:i",
-                                                                enableTime: true,
-                                                            }}
-                                                        />
-                                                    </>
-                                                )}
-                                            />  
-                                        </div>
-                                    </div>
-                                    <div className="col-md-2">
-                                        <div className={`form-group field-${formNameLowerCase}hastranshipment-${index}-loadingdate`}>
-                                            <label className="control-label" htmlFor={`${formNameLowerCase}hastranshipment-${index}-loadingdate`}>Loading
-                                                Date</label>
-                                            <Controller 
-                                                name={`TransferVoyageTranshipment[${index}][LoadingDate]`}
-                                                id={`${formNameLowerCase}hastranshipment-${index}-loadingdate`}
-                                                control={props.control}
-                                                render={({ field: { onChange, value } }) => (
-                                                    <>  
-                                                        <Flatpickr
-                                                            {...props.register(`TransferVoyageTranshipment[${index}][LoadingDate]`)}
-                                                            style={{backgroundColor: "white"}}
-                                                            value={(value)}
-                                                            onChange={val => {
-                                                                val == null ? onChange(null) :onChange(moment(val[0]).format("DD/MM/YYYY"),"loadingDate");
-                                                                // val == null ? formContext.setStateHandle(null,"loadingDate"): formContext.setStateHandle(moment(val[0]).format("DD/MM/YYYY H:mm"),"loadingDate")
-                                                            }}
-                                                            className={`form-control flatDateTimePicker flatpickr-input-time POTLoadingDate pointerEventsStyle`}
-                                                            options={{
-                                                                dateFormat: "d/m/Y H:i",
-                                                                enableTime: true,
-                                                            }}
-                                                        />
-                                                    </>
-                                                )}
-                                            />  
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )
+																<div
+																	className='input-group-btn'
+																	style={{height: "31px"}}>
+																	<button
+																		className='btn btn-outline-secondary AllocateVoyageButton1'
+																		type='button'
+																		style={{height: "31px"}}
+																		data-toggle='popover'
+																		onClick={(val) => potVoyageAllocation(val)}>
+																		<i className='fa fa-info'></i>
+																	</button>
+																</div>
+															</div>
+														</div>
+														<div
+															className={`col-md-3 transhipmentVesseldisplay d-none`}>
+															<label style={{fontSize: "12px"}}>
+																Vessel Code
+															</label>
+															<div className='form-group input-group mb-3'>
+																<input
+																	className='transhipmentQuickform QuickFormVesselCode form-control'
+																	{...props.register(
+																		`TransferVoyageTranshipment[${index}][TransferVoyagePOTVesselCode]`
+																	)}></input>
+															</div>
+														</div>
+														<div className={`col-md-2`}>
+															<div
+																className={`form-group field-${formNameLowerCase}hastranshipment-${index}-dischargingdate`}>
+																<label
+																	className='control-label'
+																	htmlFor={`${formNameLowerCase}hastranshipment-${index}-dischargingdate`}>
+																	Discharging Date
+																</label>
+																<Controller
+																	name={`TransferVoyageTranshipment[${index}][DischargingDate]`}
+																	id={`${formNameLowerCase}hastranshipment-${index}-loadingdate`}
+																	control={props.control}
+																	render={({field: {onChange, value}}) => (
+																		<>
+																			<Flatpickr
+																				{...props.register(
+																					`TransferVoyageTranshipment[${index}][DischargingDate]`
+																				)}
+																				style={{backgroundColor: "white"}}
+																				value={value}
+																				onChange={(val) => {
+																					val == null
+																						? onChange(null)
+																						: onChange(
+																								moment(val[0]).format(
+																									"DD/MM/YYYY"
+																								),
+																								"dischargingDate"
+																						  );
+																					// val == null ? formContext.setStateHandle(null,"dischargingDate"): formContext.setStateHandle(moment(val[0]).format("DD/MM/YYYY H:mm"),"dischargingDate")
+																				}}
+																				className={`form-control flatDateTimePicker flatpickr-input-time POTDischargingDate pointerEventsStyle`}
+																				options={{
+																					dateFormat: "d/m/Y H:i",
+																					enableTime: true,
+																				}}
+																			/>
+																		</>
+																	)}
+																/>
+															</div>
+														</div>
+														<div className='col-md-2'>
+															<div
+																className={`form-group field-${formNameLowerCase}hastranshipment-${index}-loadingdate`}>
+																<label
+																	className='control-label'
+																	htmlFor={`${formNameLowerCase}hastranshipment-${index}-loadingdate`}>
+																	Loading Date
+																</label>
+																<Controller
+																	name={`TransferVoyageTranshipment[${index}][LoadingDate]`}
+																	id={`${formNameLowerCase}hastranshipment-${index}-loadingdate`}
+																	control={props.control}
+																	render={({field: {onChange, value}}) => (
+																		<>
+																			<Flatpickr
+																				{...props.register(
+																					`TransferVoyageTranshipment[${index}][LoadingDate]`
+																				)}
+																				style={{backgroundColor: "white"}}
+																				value={value}
+																				onChange={(val) => {
+																					val == null
+																						? onChange(null)
+																						: onChange(
+																								moment(val[0]).format(
+																									"DD/MM/YYYY"
+																								),
+																								"loadingDate"
+																						  );
+																					// val == null ? formContext.setStateHandle(null,"loadingDate"): formContext.setStateHandle(moment(val[0]).format("DD/MM/YYYY H:mm"),"loadingDate")
+																				}}
+																				className={`form-control flatDateTimePicker flatpickr-input-time POTLoadingDate pointerEventsStyle`}
+																				options={{
+																					dateFormat: "d/m/Y H:i",
+																					enableTime: true,
+																				}}
+																			/>
+																		</>
+																	)}
+																/>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										);
                 })}
 
                 <div className="col-md-2">

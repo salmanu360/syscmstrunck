@@ -178,167 +178,233 @@ function UserGroupRuleSetForm(props) {
 
     });
 
-    window.$('#RuleSetUsersModal').off('show.bs.modal').on('show.bs.modal', function () {
+    window
+			.$("#RuleSetUsersModal")
+			.off("show.bs.modal")
+			.on("show.bs.modal", function () {
+				$("#RuleSetUsersModal")
+					.find('input[type="checkbox"]')
+					.prop("checked", false);
 
-        $("#RuleSetUsersModal").find('input[type="checkbox"]').prop('checked', false);
+				GetRuleSetUers(params.id, props.data.modelLink, globalContext).then(
+					(res) => {
+						$(".ruleSetUsersTbody").empty();
 
-        GetRuleSetUers(params.id, props.data.modelLink, globalContext).then(res => {
-            $(".ruleSetUsersTbody").empty();
+						$.each(res.data, function (key, value) {
+							$(".ruleSetUsersTbody").append(
+								'<tr class ="RuleSetTR"><td style="width:232px; text-align:center;vertical-align: middle;">' +
+									value.username +
+									'</td><td style="width:232px; text-align:center;vertical-align: middle;"><input type="checkbox" className="checkboxUser" value = ' +
+									value.id +
+									"></td></tr>"
+							);
+							if (value.RuleSet == null) {
+								$(".RuleSetTR")
+									.eq(key)
+									.find(".checkboxUser")
+									.prop("checked", false);
+							} else if (value.RuleSet != null && value.RuleSet == params.id) {
+								$(".RuleSetTR")
+									.eq(key)
+									.find(".checkboxUser")
+									.prop("checked", true);
+							} else {
+								$(".RuleSetTR")
+									.eq(key)
+									.find(".checkboxUser")
+									.prop("checked", false);
+							}
+						});
+					}
+				);
+			});
 
-            $.each(res.data, function (key, value) {
-                $(".ruleSetUsersTbody").append('<tr class ="RuleSetTR"><td style="width:232px; text-align:center;vertical-align: middle;">' + value.username + '</td><td style="width:232px; text-align:center;vertical-align: middle;"><input type="checkbox" class="checkboxUser" value = ' + value.id + '></td></tr>')
-                if (value.RuleSet == null) {
-                    $(".RuleSetTR").eq(key).find(".checkboxUser").prop("checked", false)
-                } else if (value.RuleSet != null && value.RuleSet == params.id) {
-                    $(".RuleSetTR").eq(key).find(".checkboxUser").prop("checked", true)
-                } else {
-                    $(".RuleSetTR").eq(key).find(".checkboxUser").prop("checked", false)
-                }
-            });
+		window
+			.$("#RuleSetRuleModal")
+			.off("show.bs.modal")
+			.on("show.bs.modal", function () {
+				$("#RuleSetRuleModal")
+					.find('input[type="checkbox"]')
+					.prop("checked", false);
 
-        })
+				GetRuleSetRule(params.id, props.data.modelLink, globalContext).then(
+					(res) => {
+						if (res.data.Scope == "BRANCH") {
+							$("#Port").parent().removeClass("d-none");
+						}
 
-    })
+						setRuleSetControldata({
+							scope: res.data.Scope,
+							port: res.data.Port,
+							freightTerm: res.data.FreightTerm,
+						});
+						$.each(res.data.Rules, function (key, value) {
+							$("#AccessControlTable")
+								.find("[type='checkbox']")
+								.each(function () {
+									if ($(this).attr("name").includes("AccessControl") == true) {
+										if (
+											$(this).attr("name") ==
+											"AccessControl[" + value + "]"
+										) {
+											$(this).prop("checked", true);
+										}
+									} else {
+										if ($(this).attr("name") == value) {
+											$(this).prop("checked", true);
+										}
+									}
+								});
+						});
+					}
+				);
+			});
 
-    window.$('#RuleSetRuleModal').off('show.bs.modal').on('show.bs.modal', function () {
-        $("#RuleSetRuleModal").find('input[type="checkbox"]').prop('checked', false);
+		function handleUpdateRuleSetUserRule() {
+			// if(getRuleSetUpdatePermission == true){
+			var data = [];
+			$("#RuleSetUsersTable")
+				.find("[type='checkbox']:checked")
+				.each(function () {
+					var value = $(this).val();
+					data.push(value);
+				});
 
-        GetRuleSetRule(params.id, props.data.modelLink, globalContext).then(res => {
-            if (res.data.Scope == "BRANCH") {
-                $("#Port").parent().removeClass("d-none")
-            }
+			UpdateRuleSetUers(
+				params.id,
+				props.data.modelLink,
+				globalContext,
+				data
+			).then((res) => {
+				if (res.message == "Success") {
+					ToastNotify("success", "Rule Set User updated successfully.");
+					window.$("#RuleSetUsersModal").modal("toggle");
+				}
+			});
+		}
 
-            setRuleSetControldata({ scope: res.data.Scope, port: res.data.Port, freightTerm: res.data.FreightTerm })
-            $.each(res.data.Rules, function (key, value) {
-                $("#AccessControlTable").find("[type='checkbox']").each(function () {
+		function handleUpdateRuleSetUserRule2() {
+			// if(getRuleSetUpdatePermission == true){
+			var data = [];
+			$("#RuleSetEffectedUsersTable")
+				.find("[type='checkbox']:checked")
+				.each(function () {
+					var value = $(this).val();
+					data.push(value);
+				});
 
-                    if ($(this).attr("name").includes("AccessControl") == true) {
-                        if ($(this).attr("name") == "AccessControl[" + value + "]") {
-                            $(this).prop("checked", true);
-                        }
-                    }
-                    else {
-                        if ($(this).attr("name") == value) {
-                            $(this).prop("checked", true);
-                        }
-                    }
+			UpdateRuleSetUers(
+				params.id,
+				props.data.modelLink,
+				globalContext,
+				data
+			).then((res) => {
+				if (res.message == "Success") {
+					ToastNotify("success", "Rule Set Rule updated successfully.");
+					window.$("#RuleSetEffectedUsersModal").modal("toggle");
+				}
+			});
+		}
 
-                });
+		function handleClearRule() {
+			$("#RuleSetUsersTable")
+				.find("input[type='checkbox']")
+				.prop("checked", false);
+		}
+		function handleClearRule2() {
+			$("#RuleSetEffectedUsersTable")
+				.find("input[type='checkbox']")
+				.prop("checked", false);
+		}
 
-            })
+		function handleGrandAllRuleSet() {
+			$("#RuleSetRuleModal")
+				.find("input[type='checkbox']")
+				.prop("checked", true);
+		}
 
-        })
+		function handleRevokeAllRuleSet() {
+			$("#RuleSetRuleModal")
+				.find("input[type='checkbox']")
+				.prop("checked", false);
+		}
 
+		function handleSaveRuleAcess() {
+			// if(getRuleSetUpdatePermission == true){
+			var tempArray = [];
+			var data = [];
+			var objAccessControl = {};
+			$("input[name='AccessControl[Port][]']").each(function (key, value) {
+				$(value).val() !== "" && tempArray.push($(value).val());
+			});
+			$("#RuleSetRuleModal")
+				.find("[type='checkbox']:checked")
+				.each(function () {
+					var value = $(this).attr("name");
+					data.push(value);
+					objAccessControl[value] = true;
+				});
 
-    })
+			if (tempArray.length > 0) {
+				var ob = {
+					Scope: $("input[name='AccessControl[Scope]']").val(),
+					Port: tempArray,
+					FreightTerm: $("input[name='AccessControl[FreightTerm]']").val(),
+					rules: objAccessControl,
+				};
 
+				GetUserRuleByRuleSet(
+					params.id,
+					props.data.modelLink,
+					globalContext,
+					ob
+				).then((res) => {
+					if (res.data && res.data.length > 0) {
+						window.$("#RuleSetEffectedUsersModal").modal("toggle");
+						window.$(".ruleSetEffectedUsersTbody").empty();
 
-
-    function handleUpdateRuleSetUserRule() {
-        // if(getRuleSetUpdatePermission == true){
-        var data = [];
-        $("#RuleSetUsersTable").find("[type='checkbox']:checked").each(function () {
-            var value = $(this).val();
-            data.push(value)
-        });
-
-        UpdateRuleSetUers(params.id, props.data.modelLink, globalContext, data).then(res => {
-            if (res.message == "Success") {
-                ToastNotify("success", "Rule Set User updated successfully.")
-                window.$("#RuleSetUsersModal").modal('toggle')
-            }
-        })
-
-    }
-
-    function handleUpdateRuleSetUserRule2() {
-        // if(getRuleSetUpdatePermission == true){
-        var data = [];
-        $("#RuleSetEffectedUsersTable").find("[type='checkbox']:checked").each(function () {
-            var value = $(this).val();
-            data.push(value)
-        });
-
-        UpdateRuleSetUers(params.id, props.data.modelLink, globalContext, data).then(res => {
-            if (res.message == "Success") {
-                ToastNotify("success", "Rule Set Rule updated successfully.")
-                window.$("#RuleSetEffectedUsersModal").modal('toggle')
-            }
-        })
-
-    }
-
-    function handleClearRule() {
-        $("#RuleSetUsersTable").find("input[type='checkbox']").prop("checked", false)
-    }
-    function handleClearRule2() {
-        $("#RuleSetEffectedUsersTable").find("input[type='checkbox']").prop("checked", false)
-    }
-
-    function handleGrandAllRuleSet() {
-        $("#RuleSetRuleModal").find("input[type='checkbox']").prop("checked", true)
-    }
-
-
-    function handleRevokeAllRuleSet() {
-        $("#RuleSetRuleModal").find("input[type='checkbox']").prop("checked", false)
-    }
-
-    function handleSaveRuleAcess() {
-
-        // if(getRuleSetUpdatePermission == true){
-        var tempArray = []
-        var data = [];
-        var objAccessControl = {};
-        $("input[name='AccessControl[Port][]']").each(function (key, value) {
-            $(value).val() !== "" && tempArray.push($(value).val())
-        })
-        $("#RuleSetRuleModal").find("[type='checkbox']:checked").each(function () {
-            var value = $(this).attr("name");
-            data.push(value)
-            objAccessControl[value] = true;
-        });
-
-        if (tempArray.length > 0) {
-            var ob = {
-                Scope: $("input[name='AccessControl[Scope]']").val(),
-                Port: tempArray,
-                FreightTerm: $("input[name='AccessControl[FreightTerm]']").val(),
-                rules: objAccessControl
-            }
-
-
-            GetUserRuleByRuleSet(params.id, props.data.modelLink, globalContext, ob).then(res => {
-
-                if (res.data && res.data.length > 0) {
-
-                    window.$('#RuleSetEffectedUsersModal').modal('toggle');
-                    window.$(".ruleSetEffectedUsersTbody").empty();
-
-                    window.$.each(res.data, function (key, value) {
-                        window.$(".ruleSetEffectedUsersTbody").append('<tr class ="RuleSetTR"><td style="width:232px; text-align:center;vertical-align: middle;">' + value.username + '</td><td style="width:232px; text-align:center;vertical-align: middle;"><input type="checkbox" class="checkboxUser" value = ' + value.id + '></td></tr>')
-                        if (value.similar == true) {
-                            window.$(".RuleSetTR").eq(key).find(".checkboxUser").prop("checked", true)
-                        } else {
-                            window.$(".RuleSetTR").eq(key).find(".checkboxUser").prop("checked", false)
-                        }
-                    });
-                }
-                else {
-                    UpdateUserRuleByRuleSet(params.id, props.data.modelLink, globalContext, ob).then(res => {
-                        if (res.message == "Success") {
-                            ToastNotify("success", "Rule Set Rule updated successfully.")
-
-                        }
-                    })
-                }
-            })
-        } else {
-            alert("Please Choose at least 1 Port for your Access Control.")
-        }
-        // }
-
-    }
+						window.$.each(res.data, function (key, value) {
+							window
+								.$(".ruleSetEffectedUsersTbody")
+								.append(
+									'<tr class ="RuleSetTR"><td style="width:232px; text-align:center;vertical-align: middle;">' +
+										value.username +
+										'</td><td style="width:232px; text-align:center;vertical-align: middle;"><input type="checkbox" className="checkboxUser" value = ' +
+										value.id +
+										"></td></tr>"
+								);
+							if (value.similar == true) {
+								window
+									.$(".RuleSetTR")
+									.eq(key)
+									.find(".checkboxUser")
+									.prop("checked", true);
+							} else {
+								window
+									.$(".RuleSetTR")
+									.eq(key)
+									.find(".checkboxUser")
+									.prop("checked", false);
+							}
+						});
+					} else {
+						UpdateUserRuleByRuleSet(
+							params.id,
+							props.data.modelLink,
+							globalContext,
+							ob
+						).then((res) => {
+							if (res.message == "Success") {
+								ToastNotify("success", "Rule Set Rule updated successfully.");
+							}
+						});
+					}
+				});
+			} else {
+				alert("Please Choose at least 1 Port for your Access Control.");
+			}
+			// }
+		}
 
     const handleSubmitForm = (e) => {
         handleSubmit(onSubmit)(e);
