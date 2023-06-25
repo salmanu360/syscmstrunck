@@ -2037,8 +2037,9 @@ function QuickFormShippingInstruction(props) {
 									</div>
 								);
 							})}
+							{/* TODO Commenting for testing */}
 
-							<div className='col-md-3'>
+							{/* <div className='col-md-3'>
 								<div className='form-group field-dynamicmodel-podportcode'>
 									<label
 										className={`control-label ${
@@ -2155,7 +2156,7 @@ function QuickFormShippingInstruction(props) {
 										)}
 									/>
 								</div>
-							</div>
+							</div> */}
 
 							<div
 								className={`col-md-3 OneOff ${

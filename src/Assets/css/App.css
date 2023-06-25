@@ -36,3 +36,8 @@
     transform: rotate(360deg);
   }
 }
+
+/* New Style */
+.ReactCollapse--collapse {
+  transition: height 700ms;
+}

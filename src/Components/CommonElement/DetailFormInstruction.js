@@ -2444,8 +2444,6 @@ function DetailFormInstruction(props) {
 												<br />
 											</>
 										))}
-								
-	
 
 									<BuildUIForInstruction
 										props={props}
